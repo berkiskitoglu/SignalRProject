@@ -21,17 +21,54 @@ namespace SignalRApi.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public IActionResult ProductList()
+        public IActionResult ProductList()       
         {
             var value = _mapper.Map<List<ResultProductDto>>(_productService.TGetListAll());
             return Ok(value);
         }
+        [HttpGet("ProductCount")]
+        public IActionResult ProductCount()
+        {
+           return Ok(_productService.TProductCount());
+        }
+        [HttpGet("ProductCountByHamburger")]
+        public IActionResult ProductCountByHamburger()
+        {
+            return Ok(_productService.TProductCountByCategoryNameHamburger());
+        }
+        [HttpGet("ProductCountByDrink")]
+        public IActionResult ProductCountByDrink()
+        {
+            return Ok(_productService.TProductCountByCategoryNameDrink());
+        }
+        [HttpGet("AveragePriceOfProducts")]
+        public IActionResult AveragePriceOfProducts()
+        {
+            return Ok(_productService.TAveragePriceOfProducts());
+        }
+        [HttpGet("MaxPriceOfProducts")]
+        public IActionResult MaxPriceOfProducts()
+        {
+            return Ok(_productService.TMaxPriceProductName());
+        }
+        [HttpGet("MinPriceOfProducts")]
+        public IActionResult MinPriceOfProducts()
+        {
+            return Ok(_productService.TMinPriceProductName());
+        }
+
         [HttpGet("ProductListWithCategory")]
         public IActionResult ProductListWithCategory()
         {
             var value = _mapper.Map<List<ResultProductWithCategory>>(_productService.TGetProductsWithCategories());
             return Ok(value);
         }
+        [HttpGet("AverageProductPriceOfHamburger")]
+        public IActionResult AverageProductPriceOfHamburger()
+        {
+            return Ok(_productService.TAverageProductPriceOfHamburger());
+        }
+
         [HttpPost]
         public IActionResult CreateProduct(CreateProductDto createProductDto)
         {

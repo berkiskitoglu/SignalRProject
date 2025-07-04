@@ -23,6 +23,16 @@ namespace SignalR.BusinessLayer.Concrete
             _productDal.Add(entity);
         }
 
+        public decimal TAveragePriceOfProducts()
+        {
+            return _productDal.AveragePriceOfProducts();
+        }
+
+        public decimal TAverageProductPriceOfHamburger()
+        {
+            return _productDal.AverageProductPriceOfHamburger();
+        }
+
         public void TDelete(Product entity)
         {
             _productDal.Delete(entity);
@@ -41,6 +51,31 @@ namespace SignalR.BusinessLayer.Concrete
         public List<Product> TGetProductsWithCategories()
         {
             return _productDal.GetProductsWithCategories();
+        }
+
+        public string TMaxPriceProductName()
+        {
+            return _productDal.MaxPriceProductName();
+        }
+
+        public string TMinPriceProductName()
+        {
+            return _productDal.MinPriceProductName();
+        }
+
+        public int TProductCount()
+        {
+            return _productDal.ProductCount();
+        }
+
+        public int TProductCountByCategoryNameDrink()
+        {
+           return _productDal.ProductCountByCategoryNameDrink();
+        }
+
+        public int TProductCountByCategoryNameHamburger()
+        {
+            return _productDal.ProductCountByCategoryNameHamburger();
         }
 
         public void TUpdate(Product entity)

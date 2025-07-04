@@ -1,8 +1,9 @@
-﻿@{
-    ViewData["Title"] = "Index";
+﻿
+@{
+    ViewData["Title"] = "Index2";
     Layout = "~/Views/AdminLayout/Index.cshtml";
-
 }
+
 
 <h1>Index</h1>
 
@@ -14,19 +15,21 @@
 
 <div class="content">
     <div class="container-fluid">
-
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <script type="text/javascript">
                         $(document).ready(()=>{
+
                             var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:7264/SignalRHub").build();
 
                             $("#connstatus").text(connection.state);
 
                             connection.start().then(()=>{
                             $("#connstatus").text(connection.state);
-                            connection.invoke("SendCategoryCount");
+                            setInterval(()=>{
+                              connection.invoke("SendCategoryCount");
+                            }, 1000);
 
                         }).catch((err) => {console.log(err)});
                             connection.on("ReceiveCategoryCount",(value) => {
@@ -35,6 +38,7 @@
                         })
 
                     </script>
+
                 </div>
             </div>
         </div>
@@ -47,3 +51,4 @@
         <div class="alert alert-info">Kategori Sayısı : <strong id="categoryCount"></strong></div>
     </div>
 </div>
+

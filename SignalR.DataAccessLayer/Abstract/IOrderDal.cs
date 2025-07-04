@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace SignalR.DataAccessLayer.Abstract
 {
-    public interface ICategoryDal : IGenericDal<Category>
+    public interface IOrderDal : IGenericDal<Order>
     {
-         int CategoryCount();
-         int ActiveCategoryCount();
-         int PassiveCategoryCount();
-
+        int GetTotalOrderCount();
+        int GetActiveOrderCount();
+        decimal GetLastOrderPrice();
+        decimal TodayTotalPrice();
 
     }
 }
