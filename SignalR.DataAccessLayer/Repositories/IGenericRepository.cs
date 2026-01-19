@@ -5,7 +5,7 @@ namespace SignalR.DataAccessLayer.Repositories
 {
     public class IGenericRepository<T> : IGenericDal<T> where T : class
     {
-        private readonly SignalRContext _context;
+        protected readonly SignalRContext _context;
 
         public IGenericRepository(SignalRContext context)
         {

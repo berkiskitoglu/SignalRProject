@@ -1,6 +1,18 @@
+using SignalRWebUI.Services.Abstract;
+using SignalRWebUI.Services.Concrete;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+
+builder.Services.AddHttpClient<ICategoryApiService, CategoryApiService>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7267/");
+});
+
+builder.Services.AddAutoMapper(cfg => { }, AppDomain.CurrentDomain.GetAssemblies());
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

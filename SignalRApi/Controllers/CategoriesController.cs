@@ -34,30 +34,40 @@ namespace SignalRApi.Controllers
             _categoryService.TAdd(category);
             return Ok("Kategori Eklendi");
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteCategory(int id)
         {
             var itemToDelete = _categoryService.TGetByID(id);
             _categoryService.TDelete(itemToDelete);
             return Ok("Kategori Silindi");
         }
-        [HttpGet("GetCategory")]
-        public IActionResult GetCategory(int id)
+
+        [HttpGet("{id}")]
+        public IActionResult GetCategoryById(int id)
         {
             var getCategoryById = _categoryService.TGetByID(id);
+            if (getCategoryById == null) return NotFound();
             return Ok(getCategoryById);
         }
-        [HttpPut]
-        public IActionResult UpdateCategory(UpdateCategoryDto updateCategoryDto)
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateCategory(int id, UpdateCategoryDto updateCategoryDto)
         {
-            var category = _categoryService.TGetByID(updateCategoryDto.CategoryID);
-            if(category == null)
-            {
+            if (updateCategoryDto == null)
+                return BadRequest("Gönderilen veri boş");
+
+
+            var category = _categoryService.TGetByID(id);
+
+            if (category is null)
                 return NotFound("Kategori bulunamadı");
-            }
+
             _mapper.Map(updateCategoryDto, category);
+
             _categoryService.TUpdate(category);
-            return Ok("Kategori Güncellendi");
+
+            return Ok("Kategori güncellendi");
         }
+
     }
 }

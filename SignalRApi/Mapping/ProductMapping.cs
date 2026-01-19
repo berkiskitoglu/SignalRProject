@@ -10,6 +10,7 @@ namespace SignalRApi.Mapping
         {
             CreateMap<Product, ResultProductDto>();
             CreateMap<Product, GetProductDto>();
+            CreateMap<Product, ResultProductWithCategory>().ForMember(dest => dest.CategoryName,opt =>opt.MapFrom(src => src.Category.CategoryName));
 
             CreateMap<CreateProductDto, Product>();
             CreateMap<UpdateProductDto, Product>();
