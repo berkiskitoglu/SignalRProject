@@ -33,23 +33,23 @@ namespace SignalRApi.Controllers
             _discountService.TAdd(discount);
             return Ok("İndirim Eklendi");
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteDiscount(int id)
         {
             var itemToDelete = _discountService.TGetByID(id);
             _discountService.TDelete(itemToDelete);
             return Ok("İndirim Silindi");
         }
-        [HttpGet("GetDiscount")]
+        [HttpGet("{id}")]
         public IActionResult GetDiscount(int id)
         {
             var getDiscountById = _discountService.TGetByID(id);
             return Ok(getDiscountById);
         }
-        [HttpPut]
-        public IActionResult UpdateDiscount(UpdateDiscountDto updateDiscountDto)
+        [HttpPut("{id}")]
+        public IActionResult UpdateDiscount(int id , UpdateDiscountDto updateDiscountDto)
         {
-            var discount = _discountService.TGetByID(updateDiscountDto.DiscountID);
+            var discount = _discountService.TGetByID(id);
             if (discount == null)
             {
                 return NotFound("İndirim bulunamadı");

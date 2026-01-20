@@ -33,23 +33,23 @@ namespace SignalRApi.Controllers
             _contactService.TAdd(contact);
             return Ok("İletişim Bilgisi Eklendi");
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteContact(int id)
         {
             var itemToDelete = _contactService.TGetByID(id);
             _contactService.TDelete(itemToDelete);
             return Ok("İletişim Bilgisi Silindi");
         }
-        [HttpGet("GetContact")]
+        [HttpGet("{id}")]
         public IActionResult GetContact(int id)
         {
             var getContactById = _contactService.TGetByID(id);
             return Ok(getContactById);
         }
-        [HttpPut]
-        public IActionResult UpdateContact(UpdateContactDto updateContactDto)
+        [HttpPut("{id}")]
+        public IActionResult UpdateContact(int id , UpdateContactDto updateContactDto)
         {
-            var contact = _contactService.TGetByID(updateContactDto.ContactID);
+            var contact = _contactService.TGetByID(id);
             if (contact == null)
             {
                 return NotFound("İletişim Bilgisi bulunamadı");

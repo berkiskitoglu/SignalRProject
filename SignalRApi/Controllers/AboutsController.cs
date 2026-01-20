@@ -34,29 +34,30 @@ namespace SignalRApi.Controllers
             _aboutService.TAdd(about);
             return Ok("Hakkımda Bilgisi Eklendi");
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteAbout(int id)
         {
             var itemToDelete = _aboutService.TGetByID(id);
             _aboutService.TDelete(itemToDelete);
             return Ok("Hakkımda Bilgisi Silindi");
         }
-        [HttpGet("GetAbout")]
+        [HttpGet("{id}")]
         public IActionResult GetAbout(int id)
         {
             var getAboutById = _aboutService.TGetByID(id);
             return Ok(getAboutById);
         }
-        [HttpPut]
-        public IActionResult UpdateAbout(UpdateAboutDto updateAboutDto)
+        [HttpPut("{id}")]
+        public IActionResult UpdateAbout(int id , UpdateAboutDto updateAboutDto)
         {
-            var about = _aboutService.TGetByID(updateAboutDto.AboutID);
-            if (about == null)
-            {
-                return NotFound("Hakkımda Bilgisi bulunamadı");
-            }
+
+            var about = _aboutService.TGetByID(id);
+            if (about is null)
+                return NotFound("Hakkımda bilgisi bulunamadı");
             _mapper.Map(updateAboutDto, about);
+
             _aboutService.TUpdate(about);
+
             return Ok("Hakkımda Bilgisi Güncellendi");
         }
     }

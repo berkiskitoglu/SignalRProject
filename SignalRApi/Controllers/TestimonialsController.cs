@@ -33,23 +33,23 @@ namespace SignalRApi.Controllers
             _testimonialService.TAdd(testimonial);
             return Ok("Referans Eklendi");
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteTestimonial(int id)
         {
             var itemToDelete = _testimonialService.TGetByID(id);
             _testimonialService.TDelete(itemToDelete);
             return Ok("Referans Silindi");
         }
-        [HttpGet("GetTestimonial")]
+        [HttpGet("{id}")]
         public IActionResult GetTestimonial(int id)
         {
             var getTestimonialById = _testimonialService.TGetByID(id);
             return Ok(getTestimonialById);
         }
-        [HttpPut]
-        public IActionResult UpdateTestimonial(UpdateTestimonialDto updateTestimonialDto)
+        [HttpPut("{id}")]
+        public IActionResult UpdateTestimonial(int id , UpdateTestimonialDto updateTestimonialDto)
         {
-            var testimonial = _testimonialService.TGetByID(updateTestimonialDto.TestimonialID);
+            var testimonial = _testimonialService.TGetByID(id);
             if (testimonial == null)
             {
                 return NotFound("Referans bulunamadı");

@@ -33,23 +33,23 @@ namespace SignalRApi.Controllers
             _socialMediaService.TAdd(socialMedia);
             return Ok("Sosyal Medya Bilgisi Eklendi");
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteSocialMedia(int id)
         {
             var itemToDelete = _socialMediaService.TGetByID(id);
             _socialMediaService.TDelete(itemToDelete);
             return Ok("Sosyal Medya Bilgisi Silindi");
         }
-        [HttpGet("GetSocialMedia")]
+        [HttpGet("{id}")]
         public IActionResult GetSocialMedia(int id)
         {
             var getSocialMediaById = _socialMediaService.TGetByID(id);
             return Ok(getSocialMediaById);
         }
-        [HttpPut]
-        public IActionResult UpdateSocialMedia(UpdateSocialMediaDto updateSocialMediaDto)
+        [HttpPut("{id}")]
+        public IActionResult UpdateSocialMedia(int id , UpdateSocialMediaDto updateSocialMediaDto)
         {
-            var socialMedia = _socialMediaService.TGetByID(updateSocialMediaDto.SocialMediaID);
+            var socialMedia = _socialMediaService.TGetByID(id);
             if (socialMedia == null)
             {
                 return NotFound("Sosyal Medya Bilgisi bulunamadı");

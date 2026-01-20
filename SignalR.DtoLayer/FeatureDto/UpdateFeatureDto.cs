@@ -2,7 +2,6 @@
 {
     public class UpdateFeatureDto
     {
-        public int FeatureID { get; set; }
         public required string Title1 { get; set; }
         public required string Description1 { get; set; } 
         public required string Title2 { get; set; } 

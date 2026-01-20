@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
 using SignalR.DtoLayer.BookingDto;
-using SignalR.DtoLayer.BookingDto;
 using SignalR.EntityLayer.Entities;
 
 namespace SignalRApi.Controllers
@@ -33,7 +32,7 @@ namespace SignalRApi.Controllers
             _bookingService.TAdd(booking);
             return Ok("Rezervasyon Bilgisi Eklendi");
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteBooking(int id)
         {
             var itemToDelete = _bookingService.TGetByID(id);
@@ -46,14 +45,12 @@ namespace SignalRApi.Controllers
             var getBookingById = _bookingService.TGetByID(id);
             return Ok(getBookingById);
         }
-        [HttpPut]
-        public IActionResult UpdateBooking(UpdateBookingDto updateBookingDto)
+        [HttpPut("{id}")]
+        public IActionResult UpdateBooking(int id , UpdateBookingDto updateBookingDto)
         {
-            var booking = _bookingService.TGetByID(updateBookingDto.BookingID);
-            if (booking == null)
-            {
-                return NotFound("Rezervasyon Bilgisi bulunamadı");
-            }
+            var booking = _bookingService.TGetByID(id);
+            if (booking is null)
+                return NotFound("Kategori Bulunamadı");
             _mapper.Map(updateBookingDto, booking);
             _bookingService.TUpdate(booking);
             return Ok("Rezervasyon Bilgisi Güncellendi");

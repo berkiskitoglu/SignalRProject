@@ -33,23 +33,23 @@ namespace SignalRApi.Controllers
             _featureService.TAdd(feature);
             return Ok("Öne Çıkan Alan Eklendi");
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult DeleteFeature(int id)
         {
             var itemToDelete = _featureService.TGetByID(id);
             _featureService.TDelete(itemToDelete);
             return Ok("Öne Çıkan Alan Silindi");
         }
-        [HttpGet("GetFeature")]
+        [HttpGet("{id}")]
         public IActionResult GetFeature(int id)
         {
             var getFeatureById = _featureService.TGetByID(id);
             return Ok(getFeatureById);
         }
-        [HttpPut]
-        public IActionResult UpdateFeature(UpdateFeatureDto updateFeatureDto)
+        [HttpPut("{id}")]
+        public IActionResult UpdateFeature(int id , UpdateFeatureDto updateFeatureDto)
         {
-            var feature = _featureService.TGetByID(updateFeatureDto.FeatureID);
+            var feature = _featureService.TGetByID(id);
             if (feature == null)
             {
                 return NotFound("Öne Çıkan Alan bulunamadı");

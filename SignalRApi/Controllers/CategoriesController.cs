@@ -52,11 +52,7 @@ namespace SignalRApi.Controllers
 
         [HttpPut("{id}")]
         public IActionResult UpdateCategory(int id, UpdateCategoryDto updateCategoryDto)
-        {
-            if (updateCategoryDto == null)
-                return BadRequest("Gönderilen veri boş");
-
-
+        {          
             var category = _categoryService.TGetByID(id);
 
             if (category is null)
