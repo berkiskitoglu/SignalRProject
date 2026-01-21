@@ -1,4 +1,5 @@
-﻿using SignalR.DataAccessLayer.Abstract;
+﻿using Microsoft.EntityFrameworkCore;
+using SignalR.DataAccessLayer.Abstract;
 using SignalR.DataAccessLayer.Concrete;
 
 namespace SignalR.DataAccessLayer.Repositories
@@ -31,7 +32,7 @@ namespace SignalR.DataAccessLayer.Repositories
 
         public List<T> GetListAll()
         {
-            return _context.Set<T>().ToList();
+            return _context.Set<T>().AsNoTracking().ToList();
         }
 
         public void Update(T entity)

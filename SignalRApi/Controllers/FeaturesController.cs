@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
+using SignalR.DtoLayer.CategoryDto;
 using SignalR.DtoLayer.FeatureDto;
 using SignalR.EntityLayer.Entities;
 
@@ -43,8 +44,12 @@ namespace SignalRApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetFeature(int id)
         {
-            var getFeatureById = _featureService.TGetByID(id);
-            return Ok(getFeatureById);
+            var feature = _featureService.TGetByID(id);
+            if (feature == null)
+                return NotFound();
+
+            var dto = _mapper.Map<ResultFeatureDto>(feature);
+            return Ok(dto);
         }
         [HttpPut("{id}")]
         public IActionResult UpdateFeature(int id , UpdateFeatureDto updateFeatureDto)

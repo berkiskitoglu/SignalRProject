@@ -44,9 +44,14 @@ namespace SignalRApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetAbout(int id)
         {
-            var getAboutById = _aboutService.TGetByID(id);
-            return Ok(getAboutById);
+            var about= _aboutService.TGetByID(id);
+            if (about == null)
+                return NotFound();
+
+            var dto = _mapper.Map<ResultAboutDto>(about);
+            return Ok(dto);
         }
+
         [HttpPut("{id}")]
         public IActionResult UpdateAbout(int id , UpdateAboutDto updateAboutDto)
         {

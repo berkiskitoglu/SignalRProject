@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SignalRWebUI.Dtos.CategoryDtos;
+﻿using SignalRWebUI.Dtos.CategoryDtos;
 using SignalRWebUI.Services.Abstract;
 
 namespace SignalRWebUI.Services.Concrete
@@ -30,15 +29,15 @@ namespace SignalRWebUI.Services.Concrete
             return values ?? new List<ResultCategoryDto>();
         }
 
-        [HttpGet]
         public async Task<GetCategoryDto?> GetByIdAsync(int id)
         {
             return await _client.GetFromJsonAsync<GetCategoryDto>($"api/Categories/{id}");
         }
-        [HttpPost]
         public async Task UpdateAsync(int id , UpdateCategoryDto updateCategoryDto)
         {
             await _client.PutAsJsonAsync($"api/Categories/{id}", updateCategoryDto);
         }
+
+    
     }
 }

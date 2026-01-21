@@ -1,0 +1,50 @@
+﻿@model AboutViewModel
+
+@{
+    ViewData["Title"] = "UpdateAbout";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+
+
+<div class="content">
+	<div class="container-fluid">
+		<h4 class="page-title">Yeni Hakkımızda Yazı Girişi</h4>
+		<div class="row">
+			<div class="col-md-12">
+				<form asp-action="UpdateAbout" asp-route-id="@Model.AboutID" method="post">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">Yeni Hakkımda Girişi</div>
+						</div>
+						<div class="card-body">
+
+							<div class="form-group">
+								<label for="Title">Başlığı Giriniz</label>
+								<input type="text" class="form-control" id="Title" asp-for="Title">
+							</div>
+
+							<div class="form-group">
+								<label for="ImageUrl">Görsel Url'ini Giriniz</label>
+								<input type="text" class="form-control" id="ImageUrl" asp-for="ImageUrl">
+							</div>
+
+							<div class="form-group">
+								<label for="Description">Açıklamayı Giriniz</label>
+								<textarea rows="5" class="form-control" asp-for="Description"></textarea>
+							</div>
+
+						</div>
+						<div class="card-action">
+							<button class="btn btn-primary">Hakkımda Bilgisini Güncelle</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+

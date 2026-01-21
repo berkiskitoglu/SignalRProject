@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
+using SignalR.DtoLayer.AboutDto;
 using SignalR.DtoLayer.BookingDto;
 using SignalR.EntityLayer.Entities;
 
@@ -39,11 +40,15 @@ namespace SignalRApi.Controllers
             _bookingService.TDelete(itemToDelete);
             return Ok("Rezervasyon Bilgisi Silindi");
         }
-        [HttpGet("GetBooking")]
+        [HttpGet("{id}")]
         public IActionResult GetBooking(int id)
         {
-            var getBookingById = _bookingService.TGetByID(id);
-            return Ok(getBookingById);
+            var booking = _bookingService.TGetByID(id);
+            if (booking == null)
+                return NotFound();
+
+            var dto = _mapper.Map<ResultBookingDto>(booking);
+            return Ok(dto);
         }
         [HttpPut("{id}")]
         public IActionResult UpdateBooking(int id , UpdateBookingDto updateBookingDto)

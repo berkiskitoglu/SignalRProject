@@ -43,8 +43,12 @@ namespace SignalRApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetDiscount(int id)
         {
-            var getDiscountById = _discountService.TGetByID(id);
-            return Ok(getDiscountById);
+            var discount = _discountService.TGetByID(id);
+            if (discount == null)
+                return NotFound();
+
+            var dto = _mapper.Map<ResultDiscountDto>(discount);
+            return Ok(dto);
         }
         [HttpPut("{id}")]
         public IActionResult UpdateDiscount(int id , UpdateDiscountDto updateDiscountDto)

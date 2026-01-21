@@ -2,12 +2,8 @@
 
 namespace SignalRWebUI.Services.Abstract
 {
-    public interface ICategoryApiService
+    public interface ICategoryApiService : IGenericApiService<ResultCategoryDto,CreateCategoryDto,UpdateCategoryDto,GetCategoryDto>
     {
-        Task<List<ResultCategoryDto>> GetAllAsync();
-        Task<GetCategoryDto?> GetByIdAsync(int id);
-        Task CreateAsync(CreateCategoryDto createCategoryDto);
-        Task UpdateAsync(int id , UpdateCategoryDto updateCategoryDto);
-        Task DeleteAsync(int id);
+       
     }
 }

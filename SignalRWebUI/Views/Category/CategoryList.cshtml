@@ -1,4 +1,4 @@
-﻿@model List<SignalRWebUI.Dtos.CategoryDtos.ResultCategoryDto>
+﻿@model List<ResultCategoryDto>
 
 @{
     ViewData["Title"] = "CategoryList";
@@ -34,7 +34,7 @@
 									<tr>
 										<td>@item.CategoryID</td>
 										<td>@item.CategoryName</td>
-										<td>@item.Status</td>
+										<td>@(item.Status ? "Aktif" : "Pasif")</td>
 										<td><a href="/Category/DeleteCategory/@item.CategoryID" class="btn btn-outline-danger">Sil</a></td>
 										<td><a href="/Category/UpdateCategory/@item.CategoryID" class="btn btn-outline-warning">Güncelle</a></td>
 									</tr>

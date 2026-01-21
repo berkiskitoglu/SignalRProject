@@ -43,8 +43,12 @@ namespace SignalRApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetTestimonial(int id)
         {
-            var getTestimonialById = _testimonialService.TGetByID(id);
-            return Ok(getTestimonialById);
+            var testimonial = _testimonialService.TGetByID(id);
+            if (testimonial == null)
+                return NotFound();
+
+            var dto = _mapper.Map<ResultTestimonialDto>(testimonial);
+            return Ok(dto);
         }
         [HttpPut("{id}")]
         public IActionResult UpdateTestimonial(int id , UpdateTestimonialDto updateTestimonialDto)

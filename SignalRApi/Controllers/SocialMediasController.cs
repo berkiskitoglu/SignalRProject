@@ -43,8 +43,12 @@ namespace SignalRApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetSocialMedia(int id)
         {
-            var getSocialMediaById = _socialMediaService.TGetByID(id);
-            return Ok(getSocialMediaById);
+            var socailMedia = _socialMediaService.TGetByID(id);
+            if (socailMedia == null)
+                return NotFound();
+
+            var dto = _mapper.Map<ResultSocialMediaDto>(socailMedia);
+            return Ok(dto);
         }
         [HttpPut("{id}")]
         public IActionResult UpdateSocialMedia(int id , UpdateSocialMediaDto updateSocialMediaDto)

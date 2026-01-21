@@ -7,5 +7,7 @@
         public decimal Price { get; set; }
         public required string ImageUrl { get; set; }
         public bool ProductStatus { get; set; }
+        public int CategoryID { get; set; }
+
     }
 }

@@ -49,9 +49,14 @@ namespace SignalRApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetProduct(int id)
         {
-            var getProductById = _productService.TGetByID(id);
-            return Ok(getProductById);
+            var product = _productService.TGetByID(id);
+            if (product == null)
+                return NotFound();
+
+            var dto = _mapper.Map<ResultProductDto>(product);
+            return Ok(dto);
         }
+
         [HttpPut("{id}")]
         public IActionResult UpdateProduct(int id ,UpdateProductDto updateProductDto)
         {

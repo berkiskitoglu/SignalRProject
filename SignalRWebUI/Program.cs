@@ -1,15 +1,26 @@
-using SignalRWebUI.Services.Abstract;
-using SignalRWebUI.Services.Concrete;
+using SignalRWebUI.Extensions;
+using SignalRWebUI.Helpers.Dropdown;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowWebUI", policy =>
+    {
+        policy.WithOrigins(
+            "https://localhost:7249",  // WebUI HTTPS
+            "http://localhost:5176"    // WebUI HTTP
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+
+
 // Add services to the container.
 
-
-builder.Services.AddHttpClient<ICategoryApiService, CategoryApiService>(client =>
-{
-    client.BaseAddress = new Uri("https://localhost:7267/");
-});
+builder.Services.AddApiServices(builder.Configuration);
+builder.Services.AddScoped<IDropdownHelper, DropdownHelper>();
 
 builder.Services.AddAutoMapper(cfg => { }, AppDomain.CurrentDomain.GetAssemblies());
 
@@ -24,6 +35,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+app.UseCors("AllowWebUI");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

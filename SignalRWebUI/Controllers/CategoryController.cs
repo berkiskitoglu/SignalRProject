@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using SignalRWebUI.Dtos.CategoryDtos;
 using SignalRWebUI.Services.Abstract;
-using SignalRWebUI.ViewModels.CategoryViewModel;
-using System.Text;
-using System.Threading.Tasks;
+using SignalRWebUI.ViewModels;
 
 namespace SignalRWebUI.Controllers
 {
@@ -35,9 +32,11 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCategory(CreateCategoryDto createCategoryDto)
+        public async Task<IActionResult> CreateCategory(CategoryViewModel categoryViewModel)
         {
-            createCategoryDto.Status = true;
+            categoryViewModel.Status = true;
+
+            var createCategoryDto = _mapper.Map<CreateCategoryDto>(categoryViewModel);
             await _categoryApiService.CreateAsync(createCategoryDto);
             return RedirectToAction("CategoryList");
         }
@@ -53,24 +52,17 @@ namespace SignalRWebUI.Controllers
         public async Task<IActionResult> UpdateCategory(int id)
         {
             var value = await _categoryApiService.GetByIdAsync(id);
-
-            if(value is null) return NotFound();
-
-            var viewModel = _mapper.Map<UpdateCategoryViewModel>(value);
+            var viewModel = _mapper.Map<CategoryViewModel>(value);
             return View(viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateCategory(int id, UpdateCategoryViewModel updateCategoryViewModel)
+        public async Task<IActionResult> UpdateCategory(int id, CategoryViewModel categoryViewModel)
         {
-      
-            updateCategoryViewModel.Status = true;
-            // AutoMapper ile ViewModel → DTO
-            var dto = _mapper.Map<UpdateCategoryDto>(updateCategoryViewModel);
 
-            // ID URL üzerinden gönderiliyor
+            categoryViewModel.Status = true;
+            var dto = _mapper.Map<UpdateCategoryDto>(categoryViewModel);
             await _categoryApiService.UpdateAsync(id, dto);
-
             return RedirectToAction("CategoryList");
         }
 

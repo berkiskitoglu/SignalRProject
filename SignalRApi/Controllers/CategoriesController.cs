@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
+using SignalR.DtoLayer.BookingDto;
 using SignalR.DtoLayer.CategoryDto;
 using SignalR.EntityLayer.Entities;
 
@@ -43,11 +44,14 @@ namespace SignalRApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetCategoryById(int id)
+        public IActionResult GetCategory(int id)
         {
-            var getCategoryById = _categoryService.TGetByID(id);
-            if (getCategoryById == null) return NotFound();
-            return Ok(getCategoryById);
+            var category = _categoryService.TGetByID(id);
+            if (category == null)
+                return NotFound();
+
+            var dto = _mapper.Map<ResultCategoryDto>(category);
+            return Ok(dto);
         }
 
         [HttpPut("{id}")]

@@ -1,0 +1,54 @@
+﻿@model DiscountViewModel
+
+@{
+    ViewData["Title"] = "UpdateDiscount";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+-
+<div class="content">
+	<div class="container-fluid">
+		<h4 class="page-title">İndirimleri Ürün İşlemleri</h4>
+		<div class="row">
+			<div class="col-md-12">
+				<form asp-action="CreateDiscount" asp-route-id="@Model.DiscountID" method="post">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">Yeni İndirimli Ürün Bilgisi Girişi</div>
+						</div>
+						<div class="card-body">
+
+							<div class="form-group">
+								<label for="Title">Ürün Adını Giriniz</label>
+								<input type="text" class="form-control" id="Title" asp-for="Title">
+							</div>
+							<div class="form-group">
+								<label for="Amount">Ürün İndirim Oranını Giriniz</label>
+								<input type="text" class="form-control" id="Amount" asp-for="Amount">
+							</div>
+							<div class="form-group">
+								<label for="ImageUrl">Ürün Görselini  Giriniz</label>
+								<input type="text" class="form-control" id="ImageUrl" asp-for="ImageUrl">
+							</div>
+							<div class="form-group">
+								<label for="Description">Ürün Açıklamasını Giriniz</label>
+								<textarea rows="5" class="form-control" id:"Location" asp-for="Description"></textarea>
+							</div>
+
+
+						</div>
+						<div class="card-action">
+							<button class="btn btn-primary">İndirimli Ürün Bilgisini Güncelle</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
