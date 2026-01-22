@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
-using SignalR.DtoLayer.CategoryDto;
 using SignalR.DtoLayer.FeatureDto;
 using SignalR.EntityLayer.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SignalRApi.Controllers
 {
@@ -15,52 +15,52 @@ namespace SignalRApi.Controllers
         private readonly IFeatureService _featureService;
         private readonly IMapper _mapper;
 
-        public FeaturesController(IFeatureService FeatureService, IMapper mapper)
+        public FeaturesController(IFeatureService featureService, IMapper mapper)
         {
-            _featureService = FeatureService;
+            _featureService = featureService;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public IActionResult FeatureList()
-        {
-            var featureList = _mapper.Map<List<ResultFeatureDto>>(_featureService.TGetListAll());
-            return Ok(featureList);
-        }
+        public async Task<IActionResult> FeatureList()
+            => Ok(_mapper.Map<List<ResultFeatureDto>>(await _featureService.TGetListAllAsync()));
+
         [HttpPost]
-        public IActionResult CreateFeature(CreateFeatureDto createFeatureDto)
+        public async Task<IActionResult> CreateFeature(CreateFeatureDto createFeatureDto)
         {
             var feature = _mapper.Map<Feature>(createFeatureDto);
-            _featureService.TAdd(feature);
+            await _featureService.TAddAsync(feature);
             return Ok("Öne Çıkan Alan Eklendi");
         }
+
         [HttpDelete("{id}")]
-        public IActionResult DeleteFeature(int id)
+        public async Task<IActionResult> DeleteFeature(int id)
         {
-            var itemToDelete = _featureService.TGetByID(id);
-            _featureService.TDelete(itemToDelete);
+            var itemToDelete = await _featureService.TGetByIDAsync(id);
+            if (itemToDelete == null)
+                return NotFound("Öne Çıkan Alan bulunamadı");
+            await _featureService.TDeleteAsync(itemToDelete);
             return Ok("Öne Çıkan Alan Silindi");
         }
+
         [HttpGet("{id}")]
-        public IActionResult GetFeature(int id)
+        public async Task<IActionResult> GetFeature(int id)
         {
-            var feature = _featureService.TGetByID(id);
+            var feature = await _featureService.TGetByIDAsync(id);
             if (feature == null)
                 return NotFound();
-
             var dto = _mapper.Map<ResultFeatureDto>(feature);
             return Ok(dto);
         }
+
         [HttpPut("{id}")]
-        public IActionResult UpdateFeature(int id , UpdateFeatureDto updateFeatureDto)
+        public async Task<IActionResult> UpdateFeature(int id, UpdateFeatureDto updateFeatureDto)
         {
-            var feature = _featureService.TGetByID(id);
+            var feature = await _featureService.TGetByIDAsync(id);
             if (feature == null)
-            {
                 return NotFound("Öne Çıkan Alan bulunamadı");
-            }
             _mapper.Map(updateFeatureDto, feature);
-            _featureService.TUpdate(feature);
+            await _featureService.TUpdateAsync(feature);
             return Ok("Öne Çıkan Alan Güncellendi");
         }
     }

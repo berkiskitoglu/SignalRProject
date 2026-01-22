@@ -5,7 +5,7 @@ using SignalR.EntityLayer.Entities;
 
 namespace SignalR.DataAccessLayer.EntityFramework
 {
-    public class EfAboutDal : IGenericRepository<About>, IAboutDal
+    public class EfAboutDal : GenericRepository<About>, IAboutDal
     {
         public EfAboutDal(SignalRContext context) : base(context)
         {

@@ -1,11 +1,6 @@
 ﻿using SignalR.BusinessLayer.Abstract;
 using SignalR.DataAccessLayer.Abstract;
 using SignalR.EntityLayer.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SignalR.BusinessLayer.Concrete
 {
@@ -18,34 +13,31 @@ namespace SignalR.BusinessLayer.Concrete
             _productDal = productDal;
         }
 
-        public void TAdd(Product entity)
-        {
-            _productDal.Add(entity);
-        }
+        public async Task TAddAsync(Product entity) => await _productDal.AddAsync(entity);
 
-        public void TDelete(Product enttiy)
-        {
-            _productDal.Delete(enttiy);
-        }
+        public async Task TDeleteAsync(Product entity) => await _productDal.DeleteAsync(entity);
 
-        public Product? TGetByID(int id)
-        {
-            return _productDal.GetByID(id);
-        }
+        public async Task TUpdateAsync(Product entity) => await _productDal.UpdateAsync(entity);
 
-        public List<Product> TGetListAll()
-        {
-            return _productDal.GetListAll();
-        }
+        public async Task<Product?> TGetByIDAsync(int id) => await _productDal.GetByIDAsync(id);
 
-        public List<Product> TGetProductsWithCategories()
-        {
-            return _productDal.GetProductsWithCategories();
-        }
+        public async Task<List<Product>> TGetListAllAsync() => await _productDal.GetListAllAsync();
 
-        public void TUpdate(Product entity)
-        {
-            _productDal.Update(entity);
-        }
+        public async Task<List<Product>> TGetProductsWithCategoriesAsync() => await _productDal.GetProductsWithCategoriesAsync();
+
+        public async Task<int> TProductCount() => await _productDal.ProductCount();
+
+        public async Task<int> TProductCountByCategoryNameHamburger() => await _productDal.ProductCountByCategoryNameHamburger();
+
+        public async Task<int> TProductCountByCategoryNameDrink() => await _productDal.ProductCountByCategoryNameDrink();
+
+        public async Task<decimal> TProductPriceAverage() => await _productDal.ProductPricaAverage();
+
+        public async Task<string> TProductNameByMaxPrice() => await _productDal.ProductNameByMaxPrice();
+
+        public async Task<string> TProductNameByMinPrice() => await _productDal.ProductNameByMinPrice();
+
+        public async Task<decimal> TAverageProductPriceHamburger() => await _productDal.AverageProductPriceHamburger();
+
     }
 }

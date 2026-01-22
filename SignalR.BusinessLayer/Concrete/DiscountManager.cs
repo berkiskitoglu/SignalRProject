@@ -1,11 +1,6 @@
 ﻿using SignalR.BusinessLayer.Abstract;
 using SignalR.DataAccessLayer.Abstract;
 using SignalR.EntityLayer.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SignalR.BusinessLayer.Concrete
 {
@@ -18,29 +13,14 @@ namespace SignalR.BusinessLayer.Concrete
             _discountDal = discountDal;
         }
 
-        public void TAdd(Discount entity)
-        {
-             _discountDal.Add(entity);
-        }
+        public async Task TAddAsync(Discount entity) => await _discountDal.AddAsync(entity);
 
-        public void TDelete(Discount enttiy)
-        {
-            _discountDal.Delete(enttiy);
-        }
+        public async Task TDeleteAsync(Discount entity) => await _discountDal.DeleteAsync(entity);
 
-        public Discount? TGetByID(int id)
-        {
-           return _discountDal.GetByID(id);
-        }
+        public async Task TUpdateAsync(Discount entity) => await _discountDal.UpdateAsync(entity);
 
-        public List<Discount> TGetListAll()
-        {
-            return _discountDal.GetListAll();
-        }
+        public async Task<Discount?> TGetByIDAsync(int id) => await _discountDal.GetByIDAsync(id);
 
-        public void TUpdate(Discount entity)
-        {
-            _discountDal.Update(entity);
-        }
+        public async Task<List<Discount>> TGetListAllAsync() => await _discountDal.GetListAllAsync();
     }
 }

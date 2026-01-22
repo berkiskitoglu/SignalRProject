@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
 using SignalR.DtoLayer.DiscountDto;
 using SignalR.EntityLayer.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SignalRApi.Controllers
 {
@@ -14,52 +15,52 @@ namespace SignalRApi.Controllers
         private readonly IDiscountService _discountService;
         private readonly IMapper _mapper;
 
-        public DiscountsController(IDiscountService DiscountService, IMapper mapper)
+        public DiscountsController(IDiscountService discountService, IMapper mapper)
         {
-            _discountService = DiscountService;
+            _discountService = discountService;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public IActionResult DiscountList()
-        {
-            var discountList = _mapper.Map<List<ResultDiscountDto>>(_discountService.TGetListAll());
-            return Ok(discountList);
-        }
+        public async Task<IActionResult> DiscountList()
+            => Ok(_mapper.Map<List<ResultDiscountDto>>(await _discountService.TGetListAllAsync()));
+
         [HttpPost]
-        public IActionResult CreateDiscount(CreateDiscountDto createDiscountDto)
+        public async Task<IActionResult> CreateDiscount(CreateDiscountDto createDiscountDto)
         {
             var discount = _mapper.Map<Discount>(createDiscountDto);
-            _discountService.TAdd(discount);
+            await _discountService.TAddAsync(discount);
             return Ok("İndirim Eklendi");
         }
+
         [HttpDelete("{id}")]
-        public IActionResult DeleteDiscount(int id)
+        public async Task<IActionResult> DeleteDiscount(int id)
         {
-            var itemToDelete = _discountService.TGetByID(id);
-            _discountService.TDelete(itemToDelete);
+            var itemToDelete = await _discountService.TGetByIDAsync(id);
+            if (itemToDelete == null)
+                return NotFound("İndirim bulunamadı");
+            await _discountService.TDeleteAsync(itemToDelete);
             return Ok("İndirim Silindi");
         }
+
         [HttpGet("{id}")]
-        public IActionResult GetDiscount(int id)
+        public async Task<IActionResult> GetDiscount(int id)
         {
-            var discount = _discountService.TGetByID(id);
+            var discount = await _discountService.TGetByIDAsync(id);
             if (discount == null)
                 return NotFound();
-
             var dto = _mapper.Map<ResultDiscountDto>(discount);
             return Ok(dto);
         }
+
         [HttpPut("{id}")]
-        public IActionResult UpdateDiscount(int id , UpdateDiscountDto updateDiscountDto)
+        public async Task<IActionResult> UpdateDiscount(int id, UpdateDiscountDto updateDiscountDto)
         {
-            var discount = _discountService.TGetByID(id);
+            var discount = await _discountService.TGetByIDAsync(id);
             if (discount == null)
-            {
                 return NotFound("İndirim bulunamadı");
-            }
             _mapper.Map(updateDiscountDto, discount);
-            _discountService.TUpdate(discount);
+            await _discountService.TUpdateAsync(discount);
             return Ok("İndirim Güncellendi");
         }
     }

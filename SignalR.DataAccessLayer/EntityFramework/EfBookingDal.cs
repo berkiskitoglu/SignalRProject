@@ -5,7 +5,7 @@ using SignalR.EntityLayer.Entities;
 
 namespace SignalR.DataAccessLayer.EntityFramework
 {
-    public class EfBookingDal : IGenericRepository<Booking>, IBookingDal
+    public class EfBookingDal : GenericRepository<Booking>, IBookingDal
     {
         public EfBookingDal(SignalRContext context) : base(context)
         {

@@ -1,11 +1,6 @@
 ﻿using SignalR.BusinessLayer.Abstract;
 using SignalR.DataAccessLayer.Abstract;
 using SignalR.EntityLayer.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SignalR.BusinessLayer.Concrete
 {
@@ -18,29 +13,14 @@ namespace SignalR.BusinessLayer.Concrete
             _aboutDal = aboutDal;
         }
 
-        public void TAdd(About entity)
-        {
-            _aboutDal.Add(entity);
-        }
+        public async Task TAddAsync(About entity) => await _aboutDal.AddAsync(entity);
 
-        public void TDelete(About enttiy)
-        {
-            _aboutDal.Delete(enttiy);
-        }
+        public async Task TUpdateAsync(About entity) => await _aboutDal.UpdateAsync(entity);
 
-        public About? TGetByID(int id)
-        {
-            return _aboutDal.GetByID(id);
-        }
+        public async Task TDeleteAsync(About entity) => await _aboutDal.DeleteAsync(entity);
 
-        public List<About> TGetListAll()
-        {
-            return _aboutDal.GetListAll();
-        }
+        public async Task<About?> TGetByIDAsync(int id) => await _aboutDal.GetByIDAsync(id);
 
-        public void TUpdate(About entity)
-        {
-            _aboutDal.Update(entity);
-        }
+        public async Task<List<About>> TGetListAllAsync() => await _aboutDal.GetListAllAsync();
     }
 }

@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SignalR.BusinessLayer.Abstract
+﻿namespace SignalR.BusinessLayer.Abstract
 {
     public interface IGenericService<T> where T: class
     {
-        void TAdd(T entity);
-        void TDelete(T enttiy);
-        void TUpdate(T entity);
-        T? TGetByID(int id);
-        List<T> TGetListAll();
+        Task TAddAsync(T entity);
+        Task TDeleteAsync(T entity);
+        Task TUpdateAsync(T entity);
+        Task<T?> TGetByIDAsync(int id);
+        Task<List<T>> TGetListAllAsync();
     }
 }

@@ -1,11 +1,6 @@
 ﻿using SignalR.BusinessLayer.Abstract;
 using SignalR.DataAccessLayer.Abstract;
 using SignalR.EntityLayer.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SignalR.BusinessLayer.Concrete
 {
@@ -18,30 +13,14 @@ namespace SignalR.BusinessLayer.Concrete
             _testimonialDal = testimonialDal;
         }
 
-        public void TAdd(Testimonial entity)
-        {
-            _testimonialDal.Add(entity);
-        }
+        public async Task TAddAsync(Testimonial entity) => await _testimonialDal.AddAsync(entity);
 
-        public void TDelete(Testimonial enttiy)
-        {
-            _testimonialDal.Delete(enttiy);
-        }
+        public async Task TDeleteAsync(Testimonial entity) => await _testimonialDal.DeleteAsync(entity);
 
-        public Testimonial? TGetByID(int id)
-        {
-            return _testimonialDal.GetByID(id);
-        }
+        public async Task TUpdateAsync(Testimonial entity) => await _testimonialDal.UpdateAsync(entity);
 
-        public List<Testimonial> TGetListAll()
-        {
-            return _testimonialDal.GetListAll();
-        }
+        public async Task<Testimonial?> TGetByIDAsync(int id) => await _testimonialDal.GetByIDAsync(id);
 
-        public void TUpdate(Testimonial entity)
-        {
-             _testimonialDal.Update(entity);
-
-        }
+        public async Task<List<Testimonial>> TGetListAllAsync() => await _testimonialDal.GetListAllAsync();
     }
 }

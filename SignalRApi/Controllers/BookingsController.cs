@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
-using SignalR.DtoLayer.AboutDto;
 using SignalR.DtoLayer.BookingDto;
 using SignalR.EntityLayer.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SignalRApi.Controllers
 {
@@ -14,50 +15,50 @@ namespace SignalRApi.Controllers
         private readonly IBookingService _bookingService;
         private readonly IMapper _mapper;
 
-        public BookingsController(IBookingService BookingService, IMapper mapper)
+        public BookingsController(IBookingService bookingService, IMapper mapper)
         {
-            _bookingService = BookingService;
+            _bookingService = bookingService;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public IActionResult BookingList()
-        {
-            var bookingList = _mapper.Map<List<ResultBookingDto>>(_bookingService.TGetListAll());
-            return Ok(bookingList);
-        }
+        public async Task<IActionResult> BookingList()
+            => Ok(_mapper.Map<List<ResultBookingDto>>(await _bookingService.TGetListAllAsync()));
+
         [HttpPost]
-        public IActionResult CreateBooking(CreateBookingDto createBookingDto)
+        public async Task<IActionResult> CreateBooking(CreateBookingDto createBookingDto)
         {
             var booking = _mapper.Map<Booking>(createBookingDto);
-            _bookingService.TAdd(booking);
+            await _bookingService.TAddAsync(booking);
             return Ok("Rezervasyon Bilgisi Eklendi");
         }
+
         [HttpDelete("{id}")]
-        public IActionResult DeleteBooking(int id)
+        public async Task<IActionResult> DeleteBooking(int id)
         {
-            var itemToDelete = _bookingService.TGetByID(id);
-            _bookingService.TDelete(itemToDelete);
+            var itemToDelete = await _bookingService.TGetByIDAsync(id);
+            if (itemToDelete == null)
+                return NotFound("Rezervasyon bulunamadı");
+            await _bookingService.TDeleteAsync(itemToDelete);
             return Ok("Rezervasyon Bilgisi Silindi");
         }
-        [HttpGet("{id}")]
-        public IActionResult GetBooking(int id)
-        {
-            var booking = _bookingService.TGetByID(id);
-            if (booking == null)
-                return NotFound();
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetBooking(int id)
+        {
+            var booking = await _bookingService.TGetByIDAsync(id);
             var dto = _mapper.Map<ResultBookingDto>(booking);
             return Ok(dto);
         }
+
         [HttpPut("{id}")]
-        public IActionResult UpdateBooking(int id , UpdateBookingDto updateBookingDto)
+        public async Task<IActionResult> UpdateBooking(int id, UpdateBookingDto updateBookingDto)
         {
-            var booking = _bookingService.TGetByID(id);
-            if (booking is null)
-                return NotFound("Kategori Bulunamadı");
+            var booking = await _bookingService.TGetByIDAsync(id);
+            if (booking == null)
+                return NotFound("Rezervasyon bulunamadı");
             _mapper.Map(updateBookingDto, booking);
-            _bookingService.TUpdate(booking);
+            await _bookingService.TUpdateAsync(booking);
             return Ok("Rezervasyon Bilgisi Güncellendi");
         }
     }

@@ -2,10 +2,10 @@
 {
     public interface IGenericDal<T> where T : class
     {
-        void Add(T entity);
-        void Delete(T enttiy);
-        void Update(T entity);
-        T? GetByID(int id);
-        List<T> GetListAll();
+        Task AddAsync(T entity);
+        Task DeleteAsync(T entity);
+        Task UpdateAsync(T entity);
+        Task<T?> GetByIDAsync(int id);
+        Task<List<T>> GetListAllAsync();
     }
 }

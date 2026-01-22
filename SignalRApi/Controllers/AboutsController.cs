@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
 using SignalR.DtoLayer.AboutDto;
-using SignalR.DtoLayer.AboutDto;
 using SignalR.EntityLayer.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SignalRApi.Controllers
 {
@@ -15,54 +15,52 @@ namespace SignalRApi.Controllers
         private readonly IAboutService _aboutService;
         private readonly IMapper _mapper;
 
-        public AboutsController(IAboutService AboutService, IMapper mapper)
+        public AboutsController(IAboutService aboutService, IMapper mapper)
         {
-            _aboutService = AboutService;
+            _aboutService = aboutService;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public IActionResult AboutList()
-        {
-            var aboutList = _mapper.Map<List<ResultAboutDto>>(_aboutService.TGetListAll());
-            return Ok(aboutList);
-        }
+        public async Task<IActionResult> AboutList()
+            => Ok(_mapper.Map<List<ResultAboutDto>>(await _aboutService.TGetListAllAsync()));
+
         [HttpPost]
-        public IActionResult CreateAbout(CreateAboutDto createAboutDto)
+        public async Task<IActionResult> CreateAbout(CreateAboutDto createAboutDto)
         {
             var about = _mapper.Map<About>(createAboutDto);
-            _aboutService.TAdd(about);
+            await _aboutService.TAddAsync(about);
             return Ok("Hakkımda Bilgisi Eklendi");
         }
+
         [HttpDelete("{id}")]
-        public IActionResult DeleteAbout(int id)
+        public async Task<IActionResult> DeleteAbout(int id)
         {
-            var itemToDelete = _aboutService.TGetByID(id);
-            _aboutService.TDelete(itemToDelete);
+            var itemToDelete = await _aboutService.TGetByIDAsync(id);
+            if (itemToDelete == null)
+                return NotFound("Hakkımda bilgisi bulunamadı");
+            await _aboutService.TDeleteAsync(itemToDelete);
             return Ok("Hakkımda Bilgisi Silindi");
         }
+
         [HttpGet("{id}")]
-        public IActionResult GetAbout(int id)
+        public async Task<IActionResult> GetAbout(int id)
         {
-            var about= _aboutService.TGetByID(id);
+            var about = await _aboutService.TGetByIDAsync(id);
             if (about == null)
                 return NotFound();
-
             var dto = _mapper.Map<ResultAboutDto>(about);
             return Ok(dto);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateAbout(int id , UpdateAboutDto updateAboutDto)
+        public async Task<IActionResult> UpdateAbout(int id, UpdateAboutDto updateAboutDto)
         {
-
-            var about = _aboutService.TGetByID(id);
-            if (about is null)
+            var about = await _aboutService.TGetByIDAsync(id);
+            if (about == null)
                 return NotFound("Hakkımda bilgisi bulunamadı");
             _mapper.Map(updateAboutDto, about);
-
-            _aboutService.TUpdate(about);
-
+            await _aboutService.TUpdateAsync(about);
             return Ok("Hakkımda Bilgisi Güncellendi");
         }
     }

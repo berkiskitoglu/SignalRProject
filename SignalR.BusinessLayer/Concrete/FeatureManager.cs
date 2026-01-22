@@ -1,11 +1,6 @@
 ﻿using SignalR.BusinessLayer.Abstract;
 using SignalR.DataAccessLayer.Abstract;
 using SignalR.EntityLayer.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SignalR.BusinessLayer.Concrete
 {
@@ -18,29 +13,14 @@ namespace SignalR.BusinessLayer.Concrete
             _featureDal = featureDal;
         }
 
-        public void TAdd(Feature entity)
-        {
-            _featureDal.Add(entity);
-        }
+        public async Task TAddAsync(Feature entity) => await _featureDal.AddAsync(entity);
 
-        public void TDelete(Feature enttiy)
-        {
-            _featureDal.Delete(enttiy);
-        }
+        public async Task TDeleteAsync(Feature entity) => await _featureDal.DeleteAsync(entity);
 
-        public Feature? TGetByID(int id)
-        {
-            return _featureDal.GetByID(id);
-        } 
+        public async Task TUpdateAsync(Feature entity) => await _featureDal.UpdateAsync(entity);
 
-        public List<Feature> TGetListAll()
-        {
-            return _featureDal.GetListAll();
-        }
+        public async Task<Feature?> TGetByIDAsync(int id) => await _featureDal.GetByIDAsync(id);
 
-        public void TUpdate(Feature entity)
-        {
-            _featureDal.Update(entity);
-        }
+        public async Task<List<Feature>> TGetListAllAsync() => await _featureDal.GetListAllAsync();
     }
 }

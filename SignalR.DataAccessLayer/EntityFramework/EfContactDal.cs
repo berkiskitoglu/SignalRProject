@@ -5,7 +5,7 @@ using SignalR.EntityLayer.Entities;
 
 namespace SignalR.DataAccessLayer.EntityFramework
 {
-    public class EfContactDal : IGenericRepository<Contact>, IContactDal
+    public class EfContactDal : GenericRepository<Contact>, IContactDal
     {
         public EfContactDal(SignalRContext context) : base(context)
         {

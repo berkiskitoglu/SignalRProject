@@ -1,11 +1,6 @@
 ﻿using SignalR.BusinessLayer.Abstract;
 using SignalR.DataAccessLayer.Abstract;
 using SignalR.EntityLayer.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SignalR.BusinessLayer.Concrete
 {
@@ -18,29 +13,14 @@ namespace SignalR.BusinessLayer.Concrete
             _socialMediaDal = socialMediaDal;
         }
 
-        public void TAdd(SocialMedia entity)
-        {
-            _socialMediaDal.Add(entity);
-        }
+        public async Task TAddAsync(SocialMedia entity) => await _socialMediaDal.AddAsync(entity);
 
-        public void TDelete(SocialMedia enttiy)
-        {
-            _socialMediaDal.Delete(enttiy);
-        }
+        public async Task TDeleteAsync(SocialMedia entity) => await _socialMediaDal.DeleteAsync(entity);
 
-        public SocialMedia? TGetByID(int id)
-        {
-            return _socialMediaDal.GetByID(id);
-        }
+        public async Task TUpdateAsync(SocialMedia entity) => await _socialMediaDal.UpdateAsync(entity);
 
-        public List<SocialMedia> TGetListAll()
-        {
-            return _socialMediaDal.GetListAll();
-        }
+        public async Task<SocialMedia?> TGetByIDAsync(int id) => await _socialMediaDal.GetByIDAsync(id);
 
-        public void TUpdate(SocialMedia entity)
-        {
-            _socialMediaDal.Update(entity);
-        }
+        public async Task<List<SocialMedia>> TGetListAllAsync() => await _socialMediaDal.GetListAllAsync();
     }
 }

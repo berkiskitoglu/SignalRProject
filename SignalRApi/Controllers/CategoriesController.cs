@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
-using SignalR.DtoLayer.BookingDto;
 using SignalR.DtoLayer.CategoryDto;
 using SignalR.EntityLayer.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SignalRApi.Controllers
 {
@@ -22,52 +22,59 @@ namespace SignalRApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult CategoryList()
-        {
-            var categoryList = _mapper.Map<List<ResultCategoryDto>>(_categoryService.TGetListAll());
-            return Ok(categoryList);
-        }
+        public async Task<IActionResult> CategoryList()
+            => Ok(_mapper.Map<List<ResultCategoryDto>>(await _categoryService.TGetListAllAsync()));
+
+        [HttpGet("CategoryCount")]
+        public async Task<IActionResult> CategoryCount()
+            => Ok(await _categoryService.TCategoryCountAsync());
+
+        [HttpGet("ActiveCategoryCount")]
+        public async Task<IActionResult> ActiveCategoryCount()
+            => Ok(await _categoryService.TActiveCategoryCount());
+
+        [HttpGet("PassiveCategoryCount")]
+        public async Task<IActionResult> PassiveCategoryCount()
+            => Ok(await _categoryService.TPassiveCategoryCount());
+
         [HttpPost]
-        public IActionResult CreateCategory(CreateCategoryDto createCategoryDto)
+        public async Task<IActionResult> CreateCategory(CreateCategoryDto createCategoryDto)
         {
             var category = _mapper.Map<Category>(createCategoryDto);
             category.Status = true;
-            _categoryService.TAdd(category);
+            await _categoryService.TAddAsync(category);
             return Ok("Kategori Eklendi");
         }
+
         [HttpDelete("{id}")]
-        public IActionResult DeleteCategory(int id)
+        public async Task<IActionResult> DeleteCategory(int id)
         {
-            var itemToDelete = _categoryService.TGetByID(id);
-            _categoryService.TDelete(itemToDelete);
+            var itemToDelete = await _categoryService.TGetByIDAsync(id);
+            if (itemToDelete == null)
+                return NotFound("Kategori bulunamadı");
+            await _categoryService.TDeleteAsync(itemToDelete);
             return Ok("Kategori Silindi");
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetCategory(int id)
+        public async Task<IActionResult> GetCategory(int id)
         {
-            var category = _categoryService.TGetByID(id);
+            var category = await _categoryService.TGetByIDAsync(id);
             if (category == null)
                 return NotFound();
-
             var dto = _mapper.Map<ResultCategoryDto>(category);
             return Ok(dto);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateCategory(int id, UpdateCategoryDto updateCategoryDto)
-        {          
-            var category = _categoryService.TGetByID(id);
-
-            if (category is null)
+        public async Task<IActionResult> UpdateCategory(int id, UpdateCategoryDto updateCategoryDto)
+        {
+            var category = await _categoryService.TGetByIDAsync(id);
+            if (category == null)
                 return NotFound("Kategori bulunamadı");
-
             _mapper.Map(updateCategoryDto, category);
-
-            _categoryService.TUpdate(category);
-
+            await _categoryService.TUpdateAsync(category);
             return Ok("Kategori güncellendi");
         }
-
     }
 }

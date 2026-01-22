@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
 using SignalR.DtoLayer.ContactDto;
 using SignalR.EntityLayer.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SignalRApi.Controllers
 {
@@ -14,52 +15,52 @@ namespace SignalRApi.Controllers
         private readonly IContactService _contactService;
         private readonly IMapper _mapper;
 
-        public ContactsController(IContactService ContactService, IMapper mapper)
+        public ContactsController(IContactService contactService, IMapper mapper)
         {
-            _contactService = ContactService;
+            _contactService = contactService;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public IActionResult ContactList()
-        {
-            var contactList = _mapper.Map<List<ResultContactDto>>(_contactService.TGetListAll());
-            return Ok(contactList);
-        }
+        public async Task<IActionResult> ContactList()
+            => Ok(_mapper.Map<List<ResultContactDto>>(await _contactService.TGetListAllAsync()));
+
         [HttpPost]
-        public IActionResult CreateContact(CreateContactDto createContactDto)
+        public async Task<IActionResult> CreateContact(CreateContactDto createContactDto)
         {
             var contact = _mapper.Map<Contact>(createContactDto);
-            _contactService.TAdd(contact);
+            await _contactService.TAddAsync(contact);
             return Ok("İletişim Bilgisi Eklendi");
         }
+
         [HttpDelete("{id}")]
-        public IActionResult DeleteContact(int id)
+        public async Task<IActionResult> DeleteContact(int id)
         {
-            var itemToDelete = _contactService.TGetByID(id);
-            _contactService.TDelete(itemToDelete);
+            var itemToDelete = await _contactService.TGetByIDAsync(id);
+            if (itemToDelete == null)
+                return NotFound("İletişim Bilgisi bulunamadı");
+            await _contactService.TDeleteAsync(itemToDelete);
             return Ok("İletişim Bilgisi Silindi");
         }
+
         [HttpGet("{id}")]
-        public IActionResult GetContact(int id)
+        public async Task<IActionResult> GetContact(int id)
         {
-            var contact = _contactService.TGetByID(id);
+            var contact = await _contactService.TGetByIDAsync(id);
             if (contact == null)
                 return NotFound();
-
             var dto = _mapper.Map<ResultContactDto>(contact);
             return Ok(dto);
         }
+
         [HttpPut("{id}")]
-        public IActionResult UpdateContact(int id , UpdateContactDto updateContactDto)
+        public async Task<IActionResult> UpdateContact(int id, UpdateContactDto updateContactDto)
         {
-            var contact = _contactService.TGetByID(id);
+            var contact = await _contactService.TGetByIDAsync(id);
             if (contact == null)
-            {
                 return NotFound("İletişim Bilgisi bulunamadı");
-            }
             _mapper.Map(updateContactDto, contact);
-            _contactService.TUpdate(contact);
+            await _contactService.TUpdateAsync(contact);
             return Ok("İletişim Bilgisi Güncellendi");
         }
     }
