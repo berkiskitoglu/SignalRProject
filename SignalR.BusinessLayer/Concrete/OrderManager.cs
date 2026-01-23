@@ -29,5 +29,6 @@ namespace SignalR.BusinessLayer.Concrete
 
         public async Task<decimal> TLastOrderPrice() => await _orderDal.LastOrderPrice();
 
+        public async Task<decimal> TTodayTotalPrice() => await _orderDal.TodayTotalPrice();
     }
 }

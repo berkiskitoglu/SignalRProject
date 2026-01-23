@@ -24,5 +24,8 @@ namespace SignalRApi.Controllers
 
         [HttpGet("LastOrderPrice")]
         public async Task<IActionResult> LastOrderPrice() => Ok(await _orderService.TLastOrderPrice());
+
+        [HttpGet("TodayTotalPrice")]
+        public async Task<IActionResult> TodayTotalPrice() => Ok(await _orderService.TTodayTotalPrice());
     }
 }

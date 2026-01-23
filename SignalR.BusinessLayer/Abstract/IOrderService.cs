@@ -7,6 +7,7 @@ namespace SignalR.BusinessLayer.Abstract
         Task<int> TTotalOrderCount();
         Task<int> TActiveOrderCount();
         Task<decimal> TLastOrderPrice();
+        Task<decimal> TTodayTotalPrice();
 
     }
 }

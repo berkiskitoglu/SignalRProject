@@ -7,5 +7,6 @@ namespace SignalR.DataAccessLayer.Abstract
         Task<int> TotalOrderCount();
         Task<int> ActiveOrderCount();
         Task<decimal> LastOrderPrice();
+        Task<decimal> TodayTotalPrice();
     }
 }
