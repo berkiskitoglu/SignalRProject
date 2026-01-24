@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using SignalRWebUI.Dtos.CategoryDtos;
 using SignalRWebUI.Services.Abstract;
 using SignalRWebUI.ViewModels;
@@ -10,9 +11,6 @@ namespace SignalRWebUI.Controllers
     {
         private readonly ICategoryApiService _categoryApiService;
         private readonly IMapper _mapper;
-
-
-
         public CategoryController(ICategoryApiService categoryApiService, IMapper mapper)
         {
             _categoryApiService = categoryApiService;

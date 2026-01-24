@@ -12,5 +12,6 @@ namespace SignalR.DataAccessLayer.Abstract
         Task<string> ProductNameByMaxPrice();
         Task<string> ProductNameByMinPrice();
         Task<decimal> AverageProductPriceHamburger();
+
     }
 }

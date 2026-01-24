@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using SignalR.BusinessLayer.Abstract;
 using SignalR.DtoLayer.CategoryDto;
 using SignalR.EntityLayer.Entities;
+using SignalRApi.Hubs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,11 +16,12 @@ namespace SignalRApi.Controllers
     {
         private readonly ICategoryService _categoryService;
         private readonly IMapper _mapper;
-
-        public CategoriesController(ICategoryService categoryService, IMapper mapper)
+        private readonly IHubContext<SignalRHub> _hubContext;
+        public CategoriesController(ICategoryService categoryService, IMapper mapper, IHubContext<SignalRHub> hubContext)
         {
             _categoryService = categoryService;
             _mapper = mapper;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -42,7 +45,7 @@ namespace SignalRApi.Controllers
         {
             var category = _mapper.Map<Category>(createCategoryDto);
             category.Status = true;
-            await _categoryService.TAddAsync(category);
+            await _categoryService.TAddAsync(category);   
             return Ok("Kategori Eklendi");
         }
 

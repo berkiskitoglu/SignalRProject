@@ -39,5 +39,6 @@ namespace SignalR.BusinessLayer.Concrete
 
         public async Task<decimal> TAverageProductPriceHamburger() => await _productDal.AverageProductPriceHamburger();
 
+
     }
 }

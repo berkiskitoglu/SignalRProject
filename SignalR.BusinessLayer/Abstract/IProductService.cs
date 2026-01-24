@@ -12,5 +12,7 @@ namespace SignalR.BusinessLayer.Abstract
         Task<string> TProductNameByMaxPrice();
         Task<string> TProductNameByMinPrice();
         Task<decimal> TAverageProductPriceHamburger();
+
+
     }
 }

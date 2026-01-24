@@ -24,7 +24,6 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddSignalR();
-
 builder.Services.AddDbContext<SignalRContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -73,7 +72,10 @@ builder.Services.AddScoped<IMoneyCaseDal, EFMoneyCaseDal>();
 builder.Services.AddScoped<IMenuTableService, MenuTableManager>();
 builder.Services.AddScoped<IMenuTableDal, EfMenuTableDal>();
 
+
+
 builder.Services.AddControllers();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -88,9 +90,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowWebUI");
-
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 app.MapHub<SignalRHub>("/signalrhub");
 app.MapControllers();

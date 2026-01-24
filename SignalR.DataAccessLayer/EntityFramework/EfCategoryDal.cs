@@ -12,19 +12,10 @@ namespace SignalR.DataAccessLayer.EntityFramework
         {
         }
 
-        public async Task<int> ActiveCategoryCount()
-        {
-            return await _context.Categories.Where(x => x.Status == true).CountAsync();
-        }
-
-        public async Task<int> CategoryCountAsync()
-        {
-            return await _context.Categories.CountAsync();
-        }
-
-        public async Task<int> PassiveCategoryCount()
-        {
-            return await _context.Categories.Where(x => x.Status == false).CountAsync();
-        }
+        public async Task<int> ActiveCategoryCount() => await _context.Categories.Where(x => x.Status == true).CountAsync();
+        public async Task<int> CategoryCountAsync() => await _context.Categories.CountAsync();
+        public async Task<int> PassiveCategoryCount() =>  await _context.Categories.Where(x => x.Status == false).CountAsync();
+        public async Task<int> ReceiveCategoryCount() => await _context.Categories.CountAsync();
+   
     }
 }

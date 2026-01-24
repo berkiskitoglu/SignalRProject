@@ -15,6 +15,7 @@ namespace SignalRWebUI.Extensions
             {
                 throw new InvalidOperationException("ApiSettings:BaseUrl appsettings.json içinde bulunamadı.");
             }
+
             services.AddHttpClient<ICategoryApiService, CategoryApiService>(client =>
             {
                 client.BaseAddress = new Uri(baseUrl);

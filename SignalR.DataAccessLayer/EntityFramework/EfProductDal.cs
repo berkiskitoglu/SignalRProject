@@ -19,8 +19,9 @@ namespace SignalR.DataAccessLayer.EntityFramework
         public async Task<string> ProductNameByMinPrice() => await _context.Products.OrderBy(x => x.Price).Select(x => x.ProductName).FirstAsync();
         private async Task<int> ProductCountByCategory(string categoryName) => await _context.Products.CountAsync(x => x.Category.CategoryName == categoryName);
         public async Task<int> ProductCountByCategoryNameDrink() => await ProductCountByCategory("İçecek");
-        public async Task<int> ProductCountByCategoryNameHamburger() => await ProductCountByCategory("Hamburger");
-        public async Task<decimal> AverageProductPriceHamburger()=> await _context.Products.Where(x => x.Category.CategoryName == "Hamburger").AverageAsync(x => x.Price);
+        public async Task<int> ProductCountByCategoryNameHamburger() => await ProductCountByCategory("Burger");
+        public async Task<decimal> AverageProductPriceHamburger()=> await _context.Products.Where(x => x.Category.CategoryName == "Burger").AverageAsync(x => x.Price);
+
 
     }
 }

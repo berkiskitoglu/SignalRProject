@@ -7,5 +7,6 @@ namespace SignalR.DataAccessLayer.Abstract
         Task<int> CategoryCountAsync();
         Task<int> ActiveCategoryCount();
         Task<int> PassiveCategoryCount();
+        Task<int> ReceiveCategoryCount();
     }
 }

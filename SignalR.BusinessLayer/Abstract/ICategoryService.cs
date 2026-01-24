@@ -7,6 +7,7 @@ namespace SignalR.BusinessLayer.Abstract
         Task<int> TCategoryCountAsync();
         Task<int> TActiveCategoryCount();
         Task<int> TPassiveCategoryCount();
+        Task<int> TReceiveCategoryCount();
 
     }
 }
