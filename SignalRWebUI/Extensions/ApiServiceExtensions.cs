@@ -61,6 +61,11 @@ namespace SignalRWebUI.Extensions
                 client.BaseAddress = new Uri(baseUrl);
             });
 
+            services.AddHttpClient<ISliderApiService, SliderApiService>(client =>
+            {
+                client.BaseAddress = new Uri(baseUrl);
+            });
+
             return services;
         }
 

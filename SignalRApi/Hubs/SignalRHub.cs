@@ -68,5 +68,17 @@ namespace SignalRApi.Hubs
             await Clients.All.SendAsync("ReceiveProductNameByMaxPrice", productNameByMaxPrice);
 
         }
+
+        public async Task SendProgress()
+        {
+            var totalBalance = await _moneyCaseService.TTotalMoneyCaseAmount();
+            await Clients.All.SendAsync("ReceiveTotalBalance", totalBalance.ToString("0.00" + "₺"));
+
+            var activeOrderCount = await _orderService.TActiveOrderCount();
+            await Clients.All.SendAsync("ReceiveActiveOrderCount", activeOrderCount);
+
+            var activeTableCount = await _orderService.TActiveOrderCount();
+            await Clients.All.SendAsync("ReceiveActiveTableCount", activeTableCount);
+        }
     }
 }
