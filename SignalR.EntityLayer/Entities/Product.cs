@@ -10,7 +10,9 @@
         public bool ProductStatus { get; set; }
         public int CategoryID { get; set; }
         public Category Category { get; set; } = null!;
-        public List<OrderDetail> OrderDetails { get; set; } = null!;
+        public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+        public ICollection<BasketProduct> BasketProducts { get; set; } = new HashSet<BasketProduct>();
+
 
     }
 }

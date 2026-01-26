@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace SignalR.EntityLayer.Entities
 {
-    public class OrderDetail
+    public class BasketProduct
     {
-        public int OrderDetailID { get; set; }
-        public int OrderID { get; set; }
+        public int BasketID { get; set; }
         public int ProductID { get; set; }
-        public int Count { get; set; }
-        public decimal UnitPrice { get; set; }
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
         public decimal TotalPrice { get; set; }
+        public Basket Basket { get; set; } = null!;
         public Product Product { get; set; } = null!;
 
-        public Order Order { get; set; } = null!;
+
     }
 }

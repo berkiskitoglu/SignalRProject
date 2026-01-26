@@ -11,6 +11,7 @@ namespace SignalR.EntityLayer.Entities
         public int MenuTableID { get; set; }
         public string Name { get; set; } = null!;
         public bool Status { get; set; }
-        public List<Order> Orders { get; set; } = null!;
+        public List<Order> Orders { get; set; } = new List<Order>();
+        public List<Basket> Baskets { get; set; } = new List<Basket>();
     }
 }
