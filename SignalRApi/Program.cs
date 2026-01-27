@@ -78,6 +78,9 @@ builder.Services.AddScoped<ISliderDal, EfSliderDal>();
 builder.Services.AddScoped<IBasketService, BasketManager>();
 builder.Services.AddScoped<IBasketDal, EfBasketDal>();
 
+builder.Services.AddScoped<IBasketProductService, BasketProductManager>();
+builder.Services.AddScoped<IBasketProductDal, EfBasketProductDal>();
+
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using SignalR.DtoLayer.DiscountDto;
+using SignalR.DtoLayer.DiscountDtos;
 using SignalR.EntityLayer.Entities;
 
 namespace SignalRApi.Mapping

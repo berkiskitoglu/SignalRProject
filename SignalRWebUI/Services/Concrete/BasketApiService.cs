@@ -1,5 +1,8 @@
-﻿using SignalRWebUI.Dtos.BasketDtos;
+﻿using SignalRWebUI.Dtos.AboutDtos;
+using SignalRWebUI.Dtos.BasketDtos;
+using SignalRWebUI.Dtos.BasketProductDtos;
 using SignalRWebUI.Services.Abstract;
+using SignalRWebUI.ViewModels;
 
 namespace SignalRWebUI.Services.Concrete
 {
@@ -12,9 +15,17 @@ namespace SignalRWebUI.Services.Concrete
             _client = client;
         }
 
-        public async Task<List<ResultBasketDto>> GetAllAsync()
+        public async Task CreateAsync(CreateBasketDto createBasketDto)
         {
-            return await _client.GetFromJsonAsync<List<ResultBasketDto>>("api/Baskets/GetAllBasketsWithProducts");
+             await _client.PostAsJsonAsync("api/Baskets", createBasketDto);
         }
+
+        public async Task<List<ResultBasketDto>> GetByIdAsync(int id)
+        {
+            return await _client.GetFromJsonAsync<List<ResultBasketDto>>($"api/Baskets/{id}");
+
+        }
+
+  
     }
 }

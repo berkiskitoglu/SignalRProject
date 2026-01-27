@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
-using SignalR.DtoLayer.FeatureDto;
+using SignalR.DtoLayer.FeatureDtos;
 using SignalR.EntityLayer.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;

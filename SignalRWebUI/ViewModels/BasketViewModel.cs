@@ -6,7 +6,6 @@
         public int MenuTableID { get; set; }
 
         public IEnumerable<BasketProductViewModel> Products { get; set; }
-            = Enumerable.Empty<BasketProductViewModel>();
     }
 
 }

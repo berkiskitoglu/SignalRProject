@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using SignalR.BusinessLayer.Abstract;
-using SignalR.DtoLayer.CategoryDto;
+using SignalR.DtoLayer.CategoryDtos;
 using SignalR.EntityLayer.Entities;
 using SignalRApi.Hubs;
 using System.Collections.Generic;

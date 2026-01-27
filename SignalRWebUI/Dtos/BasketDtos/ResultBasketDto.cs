@@ -1,4 +1,6 @@
-﻿namespace SignalRWebUI.Dtos.BasketDtos
+﻿using SignalRWebUI.Dtos.BasketProductDtos;
+
+namespace SignalRWebUI.Dtos.BasketDtos
 {
     public class ResultBasketDto
     {

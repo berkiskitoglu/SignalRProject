@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
-using SignalR.DtoLayer.ContactDto;
+using SignalR.DtoLayer.ContactDtos;
 using SignalR.EntityLayer.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;

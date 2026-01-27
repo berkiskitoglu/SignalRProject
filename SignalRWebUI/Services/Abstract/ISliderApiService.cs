@@ -3,7 +3,7 @@ using SignalRWebUI.Dtos.SliderDtos;
 
 namespace SignalRWebUI.Services.Abstract
 {
-    public interface ISliderApiService : IGenericApiService<ResultSliderDto>
+    public interface ISliderApiService : IReadOnlyApiService<ResultSliderDto>
     {
     }
 }

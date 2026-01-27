@@ -13,8 +13,6 @@ namespace SignalRWebUI.Services.Concrete
         }
 
         public async Task<List<ResultSliderDto>> GetAllAsync()  => await _client.GetFromJsonAsync<List<ResultSliderDto>>("api/Sliders") ?? new List<ResultSliderDto>();
-        
 
-     
     }
 }

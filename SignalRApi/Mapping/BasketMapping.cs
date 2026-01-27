@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using SignalR.DtoLayer.AboutDto;
+using SignalR.DtoLayer.AboutDtos;
 using SignalR.DtoLayer.BasketDtos;
+using SignalR.DtoLayer.BasketProductDtos;
 using SignalR.EntityLayer.Entities;
 
 namespace SignalRApi.Mapping
@@ -19,6 +20,10 @@ namespace SignalRApi.Mapping
             CreateMap<Basket, ResultBasketDto>()
                 .ForMember(dest => dest.Products,
                     opt => opt.MapFrom(src => src.BasketProducts));
+
+
+            CreateMap<CreateBasketDto, Basket>();
+    
 
         }
     }

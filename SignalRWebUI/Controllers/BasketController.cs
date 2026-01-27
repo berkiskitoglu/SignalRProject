@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using SignalRWebUI.Dtos.BasketDtos;
 using SignalRWebUI.Services.Abstract;
 using SignalRWebUI.ViewModels;
 using System.Threading.Tasks;
@@ -17,14 +18,16 @@ namespace SignalRWebUI.Controllers
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int id = 1)
         {
-            var baskets = await _basketApiService.GetAllAsync();
+
+            var baskets = await _basketApiService.GetByIdAsync(id);
             var dto = _mapper.Map<IEnumerable<BasketViewModel>>(baskets);
 
             return View(dto);
 
         }
+      
    
     }
 }

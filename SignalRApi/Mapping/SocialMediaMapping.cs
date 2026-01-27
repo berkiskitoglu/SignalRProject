@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using SignalR.DtoLayer.SocialMediaDto;
+using SignalR.DtoLayer.SocialMediaDtos;
 using SignalR.EntityLayer.Entities;
 
 namespace SignalRApi.Mapping

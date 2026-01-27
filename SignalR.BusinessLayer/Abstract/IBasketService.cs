@@ -10,7 +10,6 @@ namespace SignalR.BusinessLayer.Abstract
     public interface IBasketService : IGenericService<Basket>
     {
         Task<List<Basket>> TGetBasketByMenuTableNumber(int id);
-        Task<List<Basket>> TGetAllBasketsWithProductsAsync();
 
     }
 }
