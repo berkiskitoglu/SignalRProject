@@ -29,7 +29,6 @@ builder.Services.AddDbContext<SignalRContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddDbContext<SignalRContext>();
 builder.Services.AddAutoMapper(cfg => { } , AppDomain.CurrentDomain.GetAssemblies());
 
 
@@ -80,6 +79,11 @@ builder.Services.AddScoped<IBasketDal, EfBasketDal>();
 
 builder.Services.AddScoped<IBasketProductService, BasketProductManager>();
 builder.Services.AddScoped<IBasketProductDal, EfBasketProductDal>();
+
+
+builder.Services.AddScoped<INotificationService, NotificationManager>();
+builder.Services.AddScoped<INotificationDal, EfNotificationDal>();
+
 
 builder.Services.AddControllers();
 

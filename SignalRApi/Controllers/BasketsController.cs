@@ -66,6 +66,17 @@ namespace SignalRApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBasket(int id)
+        {
+            var basket = await _basketService.TGetByIDAsync(id);
+            if (basket == null)
+            {
+                return NotFound("Sepet bulunamadı");
+            }
+            await _basketService.TDeleteAsync(basket);
+            return Ok("Sepet silindi");
+        }
 
     }
 }

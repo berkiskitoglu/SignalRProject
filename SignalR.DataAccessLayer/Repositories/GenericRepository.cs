@@ -38,9 +38,7 @@ namespace SignalR.DataAccessLayer.Repositories
 
         public async Task<List<T>> GetListAllAsync()
         {
-            return await _context.Set<T>()
-                                 .AsNoTracking()
-                                 .ToListAsync();
+            return await _context.Set<T>().ToListAsync();
         }
     }
 }

@@ -1,4 +1,69 @@
-﻿<div class="main-header">
+﻿
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+
+<div class="main-header">
+
+	<script type="text/javascript">
+		$(document).ready(() => {
+			var connection = new signalR.HubConnectionBuilder()
+				.withUrl("https://localhost:7267/SignalRHub")
+				.build();
+
+			$("#connstatus").text(connection.state);
+
+			connection.start()
+				.then(() => {
+					$("#connstatus").text(connection.state);
+
+					setInterval(() => {
+						connection.invoke("SendNotification");
+					}, 1000);
+				})
+				.catch((err) => {
+					console.error(err.toString());
+				});
+
+			// Tarih format fonksiyonu
+			function formatDate(dateString) {
+				const date = new Date(dateString);
+
+				const day = String(date.getDate()).padStart(2, '0');
+				const month = String(date.getMonth() + 1).padStart(2, '0');
+				const year = date.getFullYear();
+				const hours = String(date.getHours()).padStart(2, '0');
+				const minutes = String(date.getMinutes()).padStart(2, '0');
+
+				return `${day}.${month}.${year} ${hours}:${minutes}`;
+			}
+
+			connection.on("ReceiveUnreadNotification", (unreadNotifications) => {
+				$("#unreadNotifications").text(unreadNotifications);
+			});
+
+			connection.on("ReceiveUnreadNotificationList", (unreadNotificationList) => {
+				$("#unreadNotificationList").empty();
+				for (var i = 0; i < unreadNotificationList.length; i++) {
+					const notificationItem = `
+						<a>
+							<div class="${unreadNotificationList[i].type}">
+								<i class="${unreadNotificationList[i].icon}"></i>
+							</div>
+							<div class="notif-content">
+								<span class="block">
+									${unreadNotificationList[i].description}
+								</span>
+								<span class="time">${formatDate(unreadNotificationList[i].date)}</span>
+							</div>
+						</a>`;
+					$("#unreadNotificationList").append(notificationItem);
+				}
+			});
+		});
+	</script>
 	<div class="logo-header">
 		<a href="index.html" class="logo">
 			SignalR Admin
@@ -36,7 +101,7 @@
 				<li class="nav-item dropdown hidden-caret">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<i class="la la-bell"></i>
-						<span class="notification">3</span>
+						<span class="notification" id="unreadNotifications"></span>
 					</a>
 					<ul class="dropdown-menu notif-box" aria-labelledby="navbarDropdown">
 						<li>
@@ -44,44 +109,7 @@
 						</li>
 						<li>
 							<div class="notif-center">
-								<a href="#">
-									<div class="notif-icon notif-primary"> <i class="la la-user-plus"></i> </div>
-									<div class="notif-content">
-										<span class="block">
-											Yeni Kullanıcı Kayıt
-										</span>
-										<span class="time">5 dakika önce</span>
-									</div>
-								</a>
-								<a href="#">
-									<div class="notif-icon notif-success"> <i class="la la-comment"></i> </div>
-									<div class="notif-content">
-										<span class="block">
-											Admindne mesaj
-										</span>
-										<span class="time">12 dakika önce</span>
-									</div>
-								</a>
-								<a href="#">
-									<div class="notif-img">
-										<img src="~/Ready-Bootstrap-Dashboard-master/assets/img/profile2.jpg" alt="Img Profile">
-									</div>
-									<div class="notif-content">
-										<span class="block">
-											Hasan sana bir mesaj gönderdi
-										</span>
-										<span class="time">12 dakika önce</span>
-									</div>
-								</a>
-								<a href="#">
-									<div class="notif-icon notif-danger"> <i class="la la-heart"></i> </div>
-									<div class="notif-content">
-										<span class="block">
-											hasad adminin mesajını beğendi
-										</span>
-										<span class="time">17 dakika önce</span>
-									</div>
-								</a>
+								<div id="unreadNotificationList"></div>
 							</div>
 						</li>
 						<li>

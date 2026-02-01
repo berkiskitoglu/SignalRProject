@@ -3,6 +3,9 @@
 @{
     Layout = null;
     int count = 0;
+    decimal basketTotalPrice = 0;
+    decimal basketTotalPriceWithTax = 0;
+    const decimal taxRate = 0.20m;
 }
 
 <!DOCTYPE html>
@@ -48,6 +51,8 @@
                         {
                             foreach (var product in basket.Products)
                             {
+                                basketTotalPrice += product.TotalPrice;
+                                basketTotalPriceWithTax = basketTotalPrice + basketTotalPrice * taxRate;
                                 count++;
                                 <tr>
                                     <td class="align-middle">@count</td>
@@ -55,7 +60,7 @@
                                     <td class="align-middle">@product.Quantity</td>
                                     <td class="align-middle">@product.Price ₺</td>
                                     <td class="align-middle">@product.TotalPrice ₺</td>
-                                    <td class="align-middle btn-delete"><button data-basketid="@basket.BasketID" id="btndeletebasketid" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button></td>
+                                    <td class="align-middle btn-delete"><a class="btn btn-sm btn-danger" href="/Basket/DeleteBasketProduct?basketId=@basket.BasketID&productId=@product.ProductID"><i class="fa fa-times"></i></a></td>
                                 </tr>
 
                             }
@@ -78,18 +83,18 @@
                     <div id="container" class="border-bottom pb-2">
                         <div class="d-flex justify-content-between mb-3">
                             <h6>Toplam Tutar</h6>
-                            <h6><span id="totalprice">200</span>₺</h6>
+                            <h6><span id="totalprice">@basketTotalPrice</span>₺</h6>
                         </div>
                         <div class="d-flex justify-content-between">
                             <h6 class="font-weight-medium">KDV Oranı</h6>
-                            <h6 id="kdv" class="font-weight-medium">50₺</h6>
+                            <h6 id="kdv" class="font-weight-medium">%@taxRate</h6>
                         </div>
                         <br />
                     </div>
                     <div class="pt-2">
                         <div class="d-flex justify-content-between mt-2">
                             <h5>Toplam Tutar</h5>
-                            <h5><span id="totalpricewithkdv">250</span>₺</h5>
+                            <h5><span id="totalpricewithkdv">@basketTotalPriceWithTax.ToString("0.00")</span>₺</h5>
                         </div>
                         <br />
                         <button id ="btnchecked" class="btn btn-block btn-warning font-weight-bold my-3">Sipariş Ver</button>

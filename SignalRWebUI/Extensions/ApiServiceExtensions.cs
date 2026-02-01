@@ -69,6 +69,16 @@ namespace SignalRWebUI.Extensions
             {
                 client.BaseAddress = new Uri(baseUrl);
             });
+            services.AddHttpClient<IBasketProductApiService, BasketProductApiService>(client =>
+            {
+                client.BaseAddress = new Uri(baseUrl);
+            });
+
+            services.AddHttpClient<INotificationApiService, NotificationApiService>(client =>
+            {
+                client.BaseAddress = new Uri(baseUrl);
+            });
+
             return services;
         }
 

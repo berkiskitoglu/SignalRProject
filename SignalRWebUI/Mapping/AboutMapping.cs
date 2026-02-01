@@ -10,6 +10,7 @@ namespace SignalRWebUI.Mapping
         {
             CreateMap<GetAboutDto, AboutViewModel>();
             CreateMap<AboutViewModel, UpdateAboutDto>();
+            CreateMap<AboutViewModel, CreateAboutDto>();
         }
     }
 }

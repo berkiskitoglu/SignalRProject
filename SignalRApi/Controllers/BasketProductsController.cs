@@ -30,13 +30,54 @@ namespace SignalRApi.Controllers
             return Ok(_mapper.Map<List<ResultBasketProductDto>>(result));
         }
 
-        
+
         [HttpPost]
-        public async Task<IActionResult> AddProductToBasket(CreateBasketProductDto createBasketProductDto)
+        public async Task<IActionResult> AddProductToBasket(CreateBasketProductDto dto)
         {
-            var basketProduct = _mapper.Map<BasketProduct>(createBasketProductDto);
-            await _basketProductService.TAddAsync(basketProduct);
+            // 1️⃣ Sepetteki ürünleri al
+            var basketProducts = await _basketProductService
+                .TGetBasketProductsByBasketIdAsync(dto.BasketID);
+
+            // 2️⃣ Aynı ürün var mı?
+            var existingProduct = basketProducts
+                .FirstOrDefault(x => x.ProductID == dto.ProductID);
+
+            if (existingProduct != null)
+            {
+                // ✅ VAR → ADET ARTIR
+                existingProduct.Quantity += dto.Quantity == 0 ? 1 : dto.Quantity;
+                await _basketProductService.TUpdateAsync(existingProduct);
+            }
+            else
+            {
+                // ❌ YOK → YENİ EKLE
+                var basketProduct = new BasketProduct
+                {
+                    BasketID = dto.BasketID,
+                    ProductID = dto.ProductID,
+                    Quantity = dto.Quantity == 0 ? 1 : dto.Quantity,
+                    Price = dto.Price
+                };
+
+                await _basketProductService.TAddAsync(basketProduct);
+            }
+
             return Ok("Ürün sepete eklendi");
         }
+        [HttpDelete("{basketId}/{productId}")]
+        public async Task<IActionResult> DeleteBasketProduct(int basketId, int productId)
+        {
+            var basketProduct =
+                await _basketProductService.TGetByBasketAndProductIdAsync(basketId, productId);
+
+            if (basketProduct == null)
+                return NotFound("Ürün sepette bulunamadı");
+
+            await _basketProductService.TDeleteAsync(basketProduct);
+            return Ok("Ürün sepetten silindi");
+        }
+
+
+
     }
 }

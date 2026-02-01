@@ -23,16 +23,16 @@ namespace SignalR.BusinessLayer.Concrete
             await _basketDal.AddAsync(entity);
         }
 
-        public Task TDeleteAsync(Basket entity)
+        public async Task TDeleteAsync(Basket entity)
         {
-            throw new NotImplementedException();
+            await _basketDal.DeleteAsync(entity);
         }
 
         public async Task<List<Basket>> TGetBasketByMenuTableNumber(int id) => await _basketDal.GetBasketByMenuTableNumber(id);
 
-        public Task<Basket?> TGetByIDAsync(int id)
+        public async Task<Basket?> TGetByIDAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _basketDal.GetByIDAsync(id);
         }
 
         public async Task<List<Basket>> TGetListAllAsync() => await _basketDal.GetListAllAsync();

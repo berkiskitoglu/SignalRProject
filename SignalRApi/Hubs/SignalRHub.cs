@@ -10,14 +10,18 @@ namespace SignalRApi.Hubs
         private readonly IOrderService _orderService;
         private readonly IMoneyCaseService _moneyCaseService;
         private readonly IMenuTableService _menuTableService;
+        private readonly IBookingService _bookingService;
+        private readonly INotificationService _notificationService;
 
-        public SignalRHub(ICategoryService categoryService, IProductService productService, IOrderService orderService, IMoneyCaseService moneyCaseService, IMenuTableService menuTableService)
+        public SignalRHub(ICategoryService categoryService, IProductService productService, IOrderService orderService, IMoneyCaseService moneyCaseService, IMenuTableService menuTableService, IBookingService bookingService, INotificationService notificationService)
         {
             _categoryService = categoryService;
             _productService = productService;
             _orderService = orderService;
             _moneyCaseService = moneyCaseService;
             _menuTableService = menuTableService;
+            _bookingService = bookingService;
+            _notificationService = notificationService;
         }
 
         public async Task SendStatistics()
@@ -79,6 +83,21 @@ namespace SignalRApi.Hubs
 
             var activeTableCount = await _orderService.TActiveOrderCount();
             await Clients.All.SendAsync("ReceiveActiveTableCount", activeTableCount);
+        }
+
+        public async Task GetBookingList() 
+        { 
+            var bookingList = await _bookingService.TGetListAllAsync();
+            await Clients.All.SendAsync("ReceiveBookingList", bookingList);
+        }
+
+        public async Task SendNotification()
+        {
+            var unreadNotifications = await _notificationService.TGetUnreadNotificationCountAsync();
+            await Clients.All.SendAsync("ReceiveUnreadNotification", unreadNotifications);
+
+            var unreadNotificationList = await _notificationService.TGetlAllUnreadNotificationAsync();
+            await Clients.All.SendAsync("ReceiveUnreadNotificationList", unreadNotificationList);
         }
     }
 }
