@@ -61,5 +61,18 @@ namespace SignalRApi.Controllers
             await _bookingService.TUpdateAsync(booking);
             return Ok("Rezervasyon Bilgisi Güncellendi");
         }
+
+        [HttpGet("BookingStatusApproved/{id}")]
+        public async Task<IActionResult> BookingStatusApproved(int id)
+        {
+           await _bookingService.TBookingStatusApproved(id);
+           return Ok("Rezervasyon Açıklaması Onaylandı Olarak Güncellendi");
+        }
+        [HttpGet("BookingStatusCancelled/{id}")]
+        public async Task<IActionResult> BookingStatusCancelled(int id)
+        {
+            await _bookingService.TBookingStatusCancelled(id);
+            return Ok("Rezervasyon Açıklaması İptal Edildi Olarak Güncellendi");
+        }
     }
 }

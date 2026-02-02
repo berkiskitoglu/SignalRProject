@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using SignalR.DtoLayer.FeatureDtos;
+using SignalR.DtoLayer.SliderDtos;
 using SignalR.EntityLayer.Entities;
 
 namespace SignalRApi.Mapping
@@ -8,11 +8,11 @@ namespace SignalRApi.Mapping
     {
         public FeatureMapping()
         {
-            CreateMap<Feature, ResultFeatureDto>();
-            CreateMap<Feature, GetFeatureDto>();
+            CreateMap<Slider, ResultSliderDto>();
+            CreateMap<Slider, GetSliderDto>();
 
-            CreateMap<CreateFeatureDto, Feature>();
-            CreateMap<UpdateFeatureDto, Feature>();
+            CreateMap<CreateSliderDto, Slider>();
+            CreateMap<UpdateSliderDto, Slider>();
         }
     }
 }

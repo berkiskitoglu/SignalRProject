@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SignalR.EntityLayer.Entities;
 
 namespace SignalR.DataAccessLayer.Concrete
 {
-    public class SignalRContext : DbContext
+    public class SignalRContext : IdentityDbContext<AppUser, AppRole, int>
     {
         public SignalRContext(DbContextOptions<SignalRContext> options)
             : base(options)
@@ -14,9 +15,6 @@ namespace SignalR.DataAccessLayer.Concrete
         {
             base.OnModelCreating(modelBuilder);
 
-            // ============================================
-            // BASKET PRODUCTS - Composite PK
-            // ============================================
             modelBuilder.Entity<BasketProduct>()
                 .HasKey(bp => new { bp.BasketID, bp.ProductID });
 
@@ -32,9 +30,6 @@ namespace SignalR.DataAccessLayer.Concrete
                 .HasForeignKey(bp => bp.ProductID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // ============================================
-            // BASKET - ORDER (1:1 optional)
-            // ============================================
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Basket)
                 .WithOne()
@@ -42,9 +37,6 @@ namespace SignalR.DataAccessLayer.Concrete
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // ============================================
-            // INDEXES
-            // ============================================
             modelBuilder.Entity<Basket>()
                 .HasIndex(b => b.MenuTableID);
 
@@ -58,7 +50,7 @@ namespace SignalR.DataAccessLayer.Concrete
                 .HasIndex(p => p.CategoryID);
         }
 
-        // DbSets
+
         public DbSet<About> Abouts { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Category> Categories { get; set; }

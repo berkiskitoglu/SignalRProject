@@ -32,8 +32,9 @@ namespace SignalRWebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBooking(BookingViewModel BookingViewModel)
         {
-
+           
             var createBookingDto = _mapper.Map<CreateBookingDto>(BookingViewModel);
+            createBookingDto.Description = "Rezervasyon Alındı";
             await _BookingApiService.CreateAsync(createBookingDto);
             return RedirectToAction("BookingList");
         }
@@ -59,6 +60,17 @@ namespace SignalRWebUI.Controllers
 
             var dto = _mapper.Map<UpdateBookingDto>(BookingViewModel);
             await _BookingApiService.UpdateAsync(id, dto);
+            return RedirectToAction("BookingList");
+        }
+        
+        public async Task<IActionResult> BookingStatusApproved(int id)
+        {
+            await _BookingApiService.BookingStatusApproved(id);
+            return RedirectToAction("BookingList");
+        }
+        public async Task<IActionResult> BookingStatusCancelled(int id)
+        {
+            await _BookingApiService.BookingStatusCancelled(id);
             return RedirectToAction("BookingList");
         }
     }

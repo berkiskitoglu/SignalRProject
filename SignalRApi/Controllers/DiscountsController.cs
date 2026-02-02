@@ -28,6 +28,7 @@ namespace SignalRApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateDiscount(CreateDiscountDto createDiscountDto)
         {
+            createDiscountDto.Status = false;
             var discount = _mapper.Map<Discount>(createDiscountDto);
             await _discountService.TAddAsync(discount);
             return Ok("İndirim Eklendi");
@@ -56,6 +57,7 @@ namespace SignalRApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateDiscount(int id, UpdateDiscountDto updateDiscountDto)
         {
+            updateDiscountDto.Status = false;
             var discount = await _discountService.TGetByIDAsync(id);
             if (discount == null)
                 return NotFound("İndirim bulunamadı");
@@ -63,5 +65,20 @@ namespace SignalRApi.Controllers
             await _discountService.TUpdateAsync(discount);
             return Ok("İndirim Güncellendi");
         }
+        [HttpGet("ChangeStatusToTrue/{id}")]
+        public async Task<IActionResult> ChangeStatusToTrue(int id)
+        {
+            await _discountService.TChangeStatusToTrue(id);
+            return Ok("İndirim Aktif Hale Getirildi");
+        }
+        [HttpGet("ChangeStatusToFalse/{id}")]
+        public async Task<IActionResult> ChangeStatusToFalse(int id)
+        {
+            await _discountService.TChangeStatusToFalse(id);
+            return Ok("İndirim Pasif Hale Getirildi");
+        }
+        [HttpGet("GetActiveDiscounts")]
+        public  async Task<IActionResult> GetActiveDiscounts()
+            => Ok(_mapper.Map<List<ResultDiscountDto>>(await _discountService.TGetAllActiveDiscounts())); 
     }
 }

@@ -1,0 +1,101 @@
+﻿@model List<ResultMenuTableDto>
+@{
+    ViewData["Title"] = "TableListByStatus";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <script type="text/javascript">
+            $(document).ready(() => {
+                // SignalR bağlantısı
+                var connection = new signalR.HubConnectionBuilder()
+                    .withUrl("https://localhost:7267/SignalRHub")
+                    .build();
+
+                connection.start()
+                    .then(() => {
+                        console.log("Bağlantı başarılı");
+
+                        // Her 2 saniyede bir çek
+                        setInterval(() => {
+                            connection.invoke("GetMenuTableStatus");
+                        }, 2000);
+                    })
+                    .catch((err) => {
+                        console.error("Bağlantı hatası:", err.toString());
+                    });
+
+                // SignalR'dan veri al
+                connection.on("ReceiveMenuTableStatus", (menuTableStatusList) => {
+                    $("#menuTableContainer").empty();
+
+                    if (menuTableStatusList && menuTableStatusList.length > 0) {
+                        menuTableStatusList.forEach((item, index) => {
+                            const color = item.status ? "card-success" : "card-danger";
+                            const statusText = item.status ? "Masa Dolu" : "Masa Boş";
+
+                            const card = `
+                                <div class="col-md-3">
+                                    <div class="card card-stats ${color}">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-5">
+                                                    <div class="icon-big text-center">
+                                                        <i class="la la-certificate"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-7 d-flex align-items-center">
+                                                    <div class="numbers">
+                                                        <p class="card-category">${item.name}</p>
+                                                        <h4 class="card-title">${statusText}</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+
+                            $("#menuTableContainer").append(card);
+                        });
+                    } else {
+                        $("#menuTableContainer").append("<div class='col-12 text-center'>Masa bilgisi yükleniyor...</div>");
+                    }
+                });
+            });
+        </script>
+
+        <h4 class="page-title">Anlık Masa Durumları Sayfası</h4>
+
+        <!-- SignalR ile doldurulacak container -->
+        <div class="row" id="menuTableContainer">
+            <!-- İlk yükleme için statik veriler -->
+            @foreach (var item in Model)
+            {
+                string color = item.Status ? "card-success" : "card-danger";
+                string status = item.Status ? "Masa Dolu" : "Masa Boş";
+
+                <div class="col-md-3">
+                    <div class="card card-stats @color">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-5">
+                                    <div class="icon-big text-center">
+                                        <i class="la la-certificate"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 d-flex align-items-center">
+                                    <div class="numbers">
+                                        <p class="card-category">@item.Name</p>
+                                        <h4 class="card-title">@status</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

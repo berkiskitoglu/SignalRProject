@@ -13,7 +13,7 @@ namespace SignalRWebUI.ViewComponents.DefaultComponents
             _discountApiService = discountApiService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync() => View(await _discountApiService.GetAllAsync());
+        public async Task<IViewComponentResult> InvokeAsync() => View(await _discountApiService.GetAllActiveDiscounts());
 
     }
 }

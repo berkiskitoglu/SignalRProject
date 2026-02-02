@@ -22,7 +22,6 @@
                             Rezervasyon ile ilgili işlemleri aşağıdan gerçekleştirebilirsiniz
                         </div>
 
-                        <!-- Tablo -->
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -36,11 +35,10 @@
                                 </tr>
                             </thead>
                             <tbody id="bookingList">
-                                <!-- SignalR ile doldurulacak -->
                             </tbody>
 
                         </table>
-                        <a href="/BookATable/Create" class="btn btn-outline-primary mb-3">Yeni Rezervasyon Girişi</a>
+                        <a href="/Booking/CreateBooking" class="btn btn-outline-primary mb-3">Yeni Rezervasyon Girişi</a>
 
                     </div>
                 </div>
@@ -81,10 +79,12 @@
                             <td>${item.phone}</td>
                             <td>${item.personCount}</td>
                             <td>${item.mail}</td>
-                            <td><span class="badge bg-success">Rezervasyon Alındı</span></td>
+                            <td><span class="badge bg-success">${item.description}</span></td>
                             <td>
-                                <a href="/BookATable/Update/${item.bookingID}" class="btn btn-sm btn-outline-warning">Güncelle</a>
-                                <a href="/BookATable/Delete/${item.bookingID}" class="btn btn-sm btn-outline-danger">Sil</a>
+                                <a href="/Booking/UpdateBooking/${item.bookingID}" class="btn btn-sm btn-outline-warning">Güncelle</a>
+                                <a href="/Booking/DeleteBooking/${item.bookingID}" class="btn btn-sm btn-outline-danger">Sil</a>
+                                <a href="/Booking/BookingStatusApproved/${item.bookingID}" class="btn btn-sm btn-outline-success">Onayla</a>
+                                <a href="/Booking/BookingStatusCancelled/${item.bookingID}" class="btn btn-sm btn-outline-dark">İptal Et</a>
                             </td>
                         </tr>
                     `;
@@ -95,7 +95,6 @@
             }
         });
 
-        // Hata olayını dinle
         connection.on("ReceiveError", (message) => {
             console.error("Hub Hatası:", message);
         });

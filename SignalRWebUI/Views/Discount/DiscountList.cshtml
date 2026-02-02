@@ -1,8 +1,9 @@
 ﻿@model List<ResultDiscountDto>
 
 @{
-    ViewData["Title"] = "DiscountList";
-    Layout = "~/Views/AdminLayout/Index.cshtml";
+	ViewData["Title"] = "DiscountList";
+	Layout = "~/Views/AdminLayout/Index.cshtml";
+	int count = 0;
 }
 
 <div class="content">
@@ -16,7 +17,7 @@
 					</div>
 					<div class="card-body">
 						<div class="card-sub">
-							İndirim ile ilgili işlemleri aşşağıdan gerçekleştirebilirsiniz. Tema bütünlüğü için sadece 2 tane indirim alanı oluşturmayı unutmayın.
+							İndirim ile ilgili işlemleri aşşağıdan gerçekleştirebilirsiniz. Tema bütünlüğü için sadece <strong>2 tane</strong>  indirim alanı oluşturmayı unutmayın.
 						</div>
 						<table class="table mt-3">
 							<thead>
@@ -24,22 +25,26 @@
 									<th scope="col">#</th>
 									<th scope="col">Ürün</th>
 									<th scope="col">İndirim Oranı</th>
-									<th scope="col">Durum</th>								
+									<th scope="col">Durum</th>
 									<th scope="col">Sil</th>
 									<th scope="col">Güncelle</th>
+									<th scope="col">Aktif Yap</th>
+									<th scope="col">Pasif Yap</th>
 								</tr>
 							</thead>
 							<tbody>
 								@foreach (var item in Model)
 								{
+                                    count++;
 									<tr>
-										<td>@item.DiscountID</td>
+										<th>@count</th>
 										<td>@item.Title</td>
 										<td>@item.Amount</td>
-										<td>Durum Gelecek</td>
-										<td><a href="/Discount/DeleteDiscount/@item.DiscountID" class="btn btn-outline-warning">Durum</a></td>
+										<td>@(item.Status ? "Aktif" : "Pasif")</td>
 										<td><a href="/Discount/DeleteDiscount/@item.DiscountID" class="btn btn-outline-danger">Sil</a></td>
 										<td><a href="/Discount/UpdateDiscount/@item.DiscountID" class="btn btn-outline-warning">Güncelle</a></td>
+										<td><a href="/Discount/ChangeStatusToTrue/@item.DiscountID" class="btn btn-outline-success">Aktif Yap</a></td>
+										<td><a href="/Discount/ChangeStatusToFalse/@item.DiscountID" class="btn btn-outline-dark">Pasif Yap</a></td>
 									</tr>
 								}
 

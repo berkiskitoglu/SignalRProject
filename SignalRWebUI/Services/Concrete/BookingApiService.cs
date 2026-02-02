@@ -12,6 +12,16 @@ namespace SignalRWebUI.Services.Concrete
             _client = client;
         }
 
+        public async Task BookingStatusApproved(int id)
+        {
+            await _client.GetAsync($"api/Bookings/BookingStatusApproved/{id}");
+        }
+
+        public async Task BookingStatusCancelled(int id)
+        {
+            await _client.GetAsync($"api/Bookings/BookingStatusCancelled/{id}");
+        }
+
         public async Task CreateAsync(CreateBookingDto createBookingDto)
         {
             await _client.PostAsJsonAsync("api/Bookings", createBookingDto);

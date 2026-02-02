@@ -61,5 +61,15 @@ namespace SignalRWebUI.Controllers
             await _DiscountApiService.UpdateAsync(id, dto);
             return RedirectToAction("DiscountList");
         }
+        public async Task<IActionResult> ChangeStatusToFalse(int id)
+        {
+            await _DiscountApiService.ChangeStatusToFalse(id);
+            return RedirectToAction("DiscountList");
+        }
+        public async Task<IActionResult> ChangeStatusToTrue(int id)
+        {
+            await _DiscountApiService.ChangeStatusToTrue(id);
+            return RedirectToAction("DiscountList");
+        }
     }
 }

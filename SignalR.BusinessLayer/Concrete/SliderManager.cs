@@ -18,27 +18,19 @@ namespace SignalR.BusinessLayer.Concrete
             _sliderDal = sliderDal;
         }
 
-        public Task TAddAsync(Slider entity)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task TAddAsync(Slider entity) => await _sliderDal.AddAsync(entity);
 
-        public Task TDeleteAsync(Slider entity)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<Slider?> TGetByIDAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task TDeleteAsync(Slider entity) => await _sliderDal.DeleteAsync(entity);
+
+
+        public async Task<Slider?> TGetByIDAsync(int id) => await _sliderDal.GetByIDAsync(id);
+
 
         public async Task<List<Slider>> TGetListAllAsync() => await _sliderDal.GetListAllAsync();
      
 
-        public Task TUpdateAsync(Slider entity)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task TUpdateAsync(Slider entity) => await _sliderDal.UpdateAsync(entity);
+
     }
 }

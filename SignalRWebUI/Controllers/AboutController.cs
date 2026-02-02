@@ -8,20 +8,20 @@ namespace SignalRWebUI.Controllers
 {
     public class AboutController : Controller
     {
-        private readonly IAboutApiService _AboutApiService;
+        private readonly IAboutApiService _aboutApiService;
         private readonly IMapper _mapper;
 
 
 
-        public AboutController(IAboutApiService AboutApiService, IMapper mapper)
+        public AboutController(IAboutApiService aboutApiService, IMapper mapper)
         {
-            _AboutApiService = AboutApiService;
+            _aboutApiService = aboutApiService;
             _mapper = mapper;
         }
 
         public async Task<IActionResult> AboutList()
         {
-            var values = await _AboutApiService.GetAllAsync();
+            var values = await _aboutApiService.GetAllAsync();
             return View(values);
         }
 
@@ -36,24 +36,22 @@ namespace SignalRWebUI.Controllers
         {
 
             var createAboutDto = _mapper.Map<CreateAboutDto>(AboutViewModel);
-            await _AboutApiService.CreateAsync(createAboutDto);
+            await _aboutApiService.CreateAsync(createAboutDto);
             return RedirectToAction("AboutList");
         }
 
         public async Task<IActionResult> DeleteAbout(int id)
         {
 
-            await _AboutApiService.DeleteAsync(id);
+            await _aboutApiService.DeleteAsync(id);
             return RedirectToAction("AboutList");
         }
 
         [HttpGet]
         public async Task<IActionResult> UpdateAbout(int id)
         {
-            var value = await _AboutApiService.GetByIdAsync(id);
-
+            var value = await _aboutApiService.GetByIdAsync(id);
             if (value is null) return NotFound();
-
             var viewModel = _mapper.Map<AboutViewModel>(value);
             return View(viewModel);
         }
@@ -63,10 +61,7 @@ namespace SignalRWebUI.Controllers
         {
 
             var dto = _mapper.Map<UpdateAboutDto>(AboutViewModel);
-
-            // ID URL üzerinden gönderiliyor
-            await _AboutApiService.UpdateAsync(id, dto);
-
+            await _aboutApiService.UpdateAsync(id, dto);
             return RedirectToAction("AboutList");
         }
 

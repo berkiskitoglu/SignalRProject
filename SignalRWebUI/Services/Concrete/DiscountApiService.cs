@@ -1,4 +1,5 @@
-﻿using SignalRWebUI.Dtos.DiscountDtos;
+﻿using SignalR.EntityLayer.Entities;
+using SignalRWebUI.Dtos.DiscountDtos;
 using SignalRWebUI.Services.Abstract;
 
 namespace SignalRWebUI.Services.Concrete
@@ -12,6 +13,16 @@ namespace SignalRWebUI.Services.Concrete
             _client = client;
         }
 
+        public async Task ChangeStatusToFalse(int id)
+        {
+            await _client.GetAsync($"api/Discounts/ChangeStatusToFalse/{id}");
+        }
+
+        public async Task ChangeStatusToTrue(int id)
+        {
+            await _client.GetAsync($"api/Discounts/ChangeStatusToTrue/{id}");
+        }
+
         public async Task CreateAsync(CreateDiscountDto createDiscountDto)
         {
             await _client.PostAsJsonAsync("api/Discounts", createDiscountDto);
@@ -22,6 +33,11 @@ namespace SignalRWebUI.Services.Concrete
             await _client.DeleteAsync($"api/Discounts/{id}");
         }
 
+        public async Task<List<ResultDiscountDto>> GetAllActiveDiscounts()
+        {
+           var values = await _client.GetFromJsonAsync<List<ResultDiscountDto>>("api/Discounts/GetActiveDiscounts");
+            return values ?? new List<ResultDiscountDto>();
+        }
 
         public async Task<List<ResultDiscountDto>> GetAllAsync()
         {

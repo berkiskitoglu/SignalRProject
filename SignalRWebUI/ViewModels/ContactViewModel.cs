@@ -13,5 +13,13 @@ namespace SignalRWebUI.ViewModels
         public string Mail { get; set; } = string.Empty;
         [Required]
         public string FooterDescription { get; set; } = string.Empty;
+        [Required]
+        public string FooterTitle { get; set; } = string.Empty;
+        [Required]
+        public string OpenDays { get; set; } = string.Empty;
+        [Required]
+        public string OpenDaysDescription { get; set; } = string.Empty;
+        [Required]
+        public string OpenHours { get; set; } = string.Empty;
     }
 }

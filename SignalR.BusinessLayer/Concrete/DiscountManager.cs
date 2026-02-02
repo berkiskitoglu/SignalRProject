@@ -22,5 +22,12 @@ namespace SignalR.BusinessLayer.Concrete
         public async Task<Discount?> TGetByIDAsync(int id) => await _discountDal.GetByIDAsync(id);
 
         public async Task<List<Discount>> TGetListAllAsync() => await _discountDal.GetListAllAsync();
+
+        public async Task TChangeStatusToTrue(int id) => await _discountDal.ChangeStatusToTrue(id);
+
+        public async Task TChangeStatusToFalse(int id) => await _discountDal.ChangeStatusToFalse(id);
+
+        public async Task<List<Discount>> TGetAllActiveDiscounts() => await _discountDal.GetAllActiveDiscounts();
+
     }
 }
