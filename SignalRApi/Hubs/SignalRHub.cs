@@ -112,6 +112,7 @@ namespace SignalRApi.Hubs
             await Clients.All.SendAsync("ReceiveMessage",user,message);
         }
 
+
         public override async Task OnConnectedAsync()
         {
             clientCount++;
@@ -124,5 +125,6 @@ namespace SignalRApi.Hubs
             await Clients.All.SendAsync("ReceiveClientCount", clientCount);
             await base.OnDisconnectedAsync(exception);
         }
+
     }
 }
