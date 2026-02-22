@@ -1,5 +1,4 @@
 ﻿using SignalRWebUI.Dtos.BasketProductDtos;
-using SignalRWebUI.ViewModels;
 
 namespace SignalRWebUI.Dtos.BasketDtos
 {
@@ -7,8 +6,8 @@ namespace SignalRWebUI.Dtos.BasketDtos
     {
         public int BasketID { get; set; }
         public int MenuTableID { get; set; }
-        public string Status { get; set; }
-        public List<CreateBasketProductDto> Products { get; set; }
+        public string? Status { get; set; }
+        public List<CreateBasketProductDto>? Products { get; set; }
 
     }
 }

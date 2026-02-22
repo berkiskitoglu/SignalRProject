@@ -1,5 +1,4 @@
 ﻿using SignalRWebUI.Dtos.BasketDtos;
-using SignalRWebUI.Dtos.BasketProductDtos;
 
 namespace SignalRWebUI.Services.Abstract
 {

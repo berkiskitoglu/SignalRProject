@@ -11,8 +11,6 @@ namespace SignalRWebUI.Controllers
         private readonly ISliderApiService _SliderApiService;
         private readonly IMapper _mapper;
 
-
-
         public SliderController(ISliderApiService SliderApiService, IMapper mapper)
         {
             _SliderApiService = SliderApiService;
@@ -32,17 +30,20 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateSlider(SliderViewModel SliderViewModel)
+        public async Task<IActionResult> CreateSlider(SliderViewModel sliderViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(sliderViewModel);
+            }
 
-            var createSliderDto = _mapper.Map<CreateSliderDto>(SliderViewModel);
+            var createSliderDto = _mapper.Map<CreateSliderDto>(sliderViewModel);
             await _SliderApiService.CreateAsync(createSliderDto);
             return RedirectToAction("SliderList");
         }
 
         public async Task<IActionResult> DeleteSlider(int id)
         {
-
             await _SliderApiService.DeleteAsync(id);
             return RedirectToAction("SliderList");
         }
@@ -56,10 +57,14 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateSlider(int id, SliderViewModel SliderViewModel)
+        public async Task<IActionResult> UpdateSlider(int id, SliderViewModel sliderViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(sliderViewModel);
+            }
 
-            var dto = _mapper.Map<UpdateSliderDto>(SliderViewModel);
+            var dto = _mapper.Map<UpdateSliderDto>(sliderViewModel);
             await _SliderApiService.UpdateAsync(id, dto);
             return RedirectToAction("SliderList");
         }

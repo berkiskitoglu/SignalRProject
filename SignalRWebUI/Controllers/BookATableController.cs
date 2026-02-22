@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SignalRWebUI.Dtos.BookingDtos;
 using SignalRWebUI.Services.Abstract;
-using System.Threading.Tasks;
 
 namespace SignalRWebUI.Controllers
 {

@@ -1,6 +1,4 @@
-﻿using SignalRWebUI.Dtos.BasketProductDtos;
-
-namespace SignalRWebUI.Services.Abstract
+﻿namespace SignalRWebUI.Services.Abstract
 {
     public interface IBasketProductApiService
     {

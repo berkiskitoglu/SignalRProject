@@ -11,8 +11,6 @@ namespace SignalRWebUI.Controllers
         private readonly IAboutApiService _aboutApiService;
         private readonly IMapper _mapper;
 
-
-
         public AboutController(IAboutApiService aboutApiService, IMapper mapper)
         {
             _aboutApiService = aboutApiService;
@@ -32,17 +30,20 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAbout(AboutViewModel AboutViewModel)
+        public async Task<IActionResult> CreateAbout(AboutViewModel aboutViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(aboutViewModel);
+            }
 
-            var createAboutDto = _mapper.Map<CreateAboutDto>(AboutViewModel);
+            var createAboutDto = _mapper.Map<CreateAboutDto>(aboutViewModel);
             await _aboutApiService.CreateAsync(createAboutDto);
             return RedirectToAction("AboutList");
         }
 
         public async Task<IActionResult> DeleteAbout(int id)
         {
-
             await _aboutApiService.DeleteAsync(id);
             return RedirectToAction("AboutList");
         }
@@ -57,13 +58,16 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateAbout(int id, AboutViewModel AboutViewModel)
+        public async Task<IActionResult> UpdateAbout(int id, AboutViewModel aboutViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(aboutViewModel);
+            }
 
-            var dto = _mapper.Map<UpdateAboutDto>(AboutViewModel);
+            var dto = _mapper.Map<UpdateAboutDto>(aboutViewModel);
             await _aboutApiService.UpdateAsync(id, dto);
             return RedirectToAction("AboutList");
         }
-
     }
 }

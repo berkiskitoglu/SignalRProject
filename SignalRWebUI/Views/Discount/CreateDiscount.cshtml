@@ -1,11 +1,8 @@
 ﻿@model DiscountViewModel
-
 @{
-    ViewData["Title"] = "CreateDiscount";
-    Layout = "~/Views/AdminLayout/Index.cshtml";
+	ViewData["Title"] = "CreateDiscount";
+	Layout = "~/Views/AdminLayout/Index.cshtml";
 }
-
-
 <div class="content">
 	<div class="container-fluid">
 		<h4 class="page-title">İndirimleri Ürün İşlemleri</h4>
@@ -17,28 +14,29 @@
 							<div class="card-title">Yeni İndirim Bilgisi Girişi</div>
 						</div>
 						<div class="card-body">
-
 							<div class="form-group">
-								<label for="Title">Ürün Adını Giriniz</label>
-								<input type="text" class="form-control" id="Title" asp-for="Title">
+								<label asp-for="Title">Ürün Adını Giriniz</label>
+								<input type="text" class="form-control" asp-for="Title">
+								<span asp-validation-for="Title" class="text-danger"></span>
 							</div>
 							<div class="form-group">
-								<label for="Amount">Ürün İndirim Oranını Giriniz</label>
-								<input type="text" class="form-control" id="Amount" asp-for="Amount">
+								<label asp-for="Amount">Ürün İndirim Oranını Giriniz</label>
+								<input type="number" class="form-control" asp-for="Amount">
+								<span asp-validation-for="Amount" class="text-danger"></span>
 							</div>
 							<div class="form-group">
-								<label for="ImageUrl">Ürün Görselini  Giriniz</label>
-								<input type="text" class="form-control" id="ImageUrl" asp-for="ImageUrl">
+								<label asp-for="ImageUrl">Ürün Görselini Giriniz</label>
+								<input type="text" class="form-control" asp-for="ImageUrl">
+								<span asp-validation-for="ImageUrl" class="text-danger"></span>
 							</div>
 							<div class="form-group">
-								<label for="Description">Ürün Açıklamasını Giriniz</label>
-								<textarea rows="5" class="form-control" id="Location" asp-for="Description"></textarea>
+								<label asp-for="Description">Ürün Açıklamasını Giriniz</label>
+								<textarea rows="5" class="form-control" asp-for="Description"></textarea>
+								<span asp-validation-for="Description" class="text-danger"></span>
 							</div>
-
-
 						</div>
 						<div class="card-action">
-							<button class="btn btn-primary">İndirimli Ürün Bilgisi Ekle</button>
+							<button type="submit" class="btn btn-primary">İndirimli Ürün Bilgisi Ekle</button>
 						</div>
 					</div>
 				</form>
@@ -46,7 +44,3 @@
 		</div>
 	</div>
 </div>
-
-
-
-

@@ -30,17 +30,20 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTestimonial(TestimonialViewModel TestimonialViewModel)
+        public async Task<IActionResult> CreateTestimonial(TestimonialViewModel testimonialViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(testimonialViewModel);
+            }
 
-            var createTestimonialDto = _mapper.Map<CreateTestimonialDto>(TestimonialViewModel);
+            var createTestimonialDto = _mapper.Map<CreateTestimonialDto>(testimonialViewModel);
             await _TestimonialApiService.CreateAsync(createTestimonialDto);
             return RedirectToAction("TestimonialList");
         }
 
         public async Task<IActionResult> DeleteTestimonial(int id)
         {
-
             await _TestimonialApiService.DeleteAsync(id);
             return RedirectToAction("TestimonialList");
         }
@@ -54,10 +57,14 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateTestimonial(int id, TestimonialViewModel TestimonialViewModel)
+        public async Task<IActionResult> UpdateTestimonial(int id, TestimonialViewModel testimonialViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(testimonialViewModel);
+            }
 
-            var dto = _mapper.Map<UpdateTestimonialDto>(TestimonialViewModel);
+            var dto = _mapper.Map<UpdateTestimonialDto>(testimonialViewModel);
             await _TestimonialApiService.UpdateAsync(id, dto);
             return RedirectToAction("TestimonialList");
         }

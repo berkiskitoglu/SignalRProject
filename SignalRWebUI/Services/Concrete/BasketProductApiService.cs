@@ -1,6 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
-using SignalRWebUI.Dtos.BasketProductDtos;
-using SignalRWebUI.Services.Abstract;
+﻿using SignalRWebUI.Services.Abstract;
 
 namespace SignalRWebUI.Services.Concrete
 {

@@ -11,8 +11,6 @@ namespace SignalRWebUI.Controllers
         private readonly INotificationApiService _notificationApiService;
         private readonly IMapper _mapper;
 
-
-
         public NotificationController(INotificationApiService NotificationApiService, IMapper mapper)
         {
             _notificationApiService = NotificationApiService;
@@ -34,6 +32,10 @@ namespace SignalRWebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateNotification(NotificationViewModel notificationViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(notificationViewModel);
+            }
 
             var createNotificationDto = _mapper.Map<CreateNotificationDto>(notificationViewModel);
             await _notificationApiService.CreateAsync(createNotificationDto);
@@ -42,7 +44,6 @@ namespace SignalRWebUI.Controllers
 
         public async Task<IActionResult> DeleteNotification(int id)
         {
-
             await _notificationApiService.DeleteAsync(id);
             return RedirectToAction("NotificationList");
         }
@@ -58,6 +59,10 @@ namespace SignalRWebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateNotification(int id, NotificationViewModel notificationViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(notificationViewModel);
+            }
 
             var dto = _mapper.Map<UpdateNotificationDto>(notificationViewModel);
             await _notificationApiService.UpdateAsync(id, dto);
@@ -67,16 +72,13 @@ namespace SignalRWebUI.Controllers
         public async Task<IActionResult> NotificationStatusChangeToTrue(int id)
         {
             await _notificationApiService.NotificationStatusChangeToTrue(id);
-
             return RedirectToAction("NotificationList");
-
         }
+
         public async Task<IActionResult> NotificationStatusChangeToFalse(int id)
         {
             await _notificationApiService.NotificationStatusChangeToFalse(id);
-
             return RedirectToAction("NotificationList");
-
         }
     }
 }

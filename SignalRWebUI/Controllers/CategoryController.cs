@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using SignalRWebUI.Dtos.CategoryDtos;
 using SignalRWebUI.Services.Abstract;
 using SignalRWebUI.ViewModels;
@@ -11,6 +10,7 @@ namespace SignalRWebUI.Controllers
     {
         private readonly ICategoryApiService _categoryApiService;
         private readonly IMapper _mapper;
+
         public CategoryController(ICategoryApiService categoryApiService, IMapper mapper)
         {
             _categoryApiService = categoryApiService;
@@ -32,8 +32,12 @@ namespace SignalRWebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCategory(CategoryViewModel categoryViewModel)
         {
-            categoryViewModel.Status = true;
+            if (!ModelState.IsValid)
+            {
+                return View(categoryViewModel);
+            }
 
+            categoryViewModel.Status = true;
             var createCategoryDto = _mapper.Map<CreateCategoryDto>(categoryViewModel);
             await _categoryApiService.CreateAsync(createCategoryDto);
             return RedirectToAction("CategoryList");
@@ -41,7 +45,6 @@ namespace SignalRWebUI.Controllers
 
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            
             await _categoryApiService.DeleteAsync(id);
             return RedirectToAction("CategoryList");
         }
@@ -57,13 +60,15 @@ namespace SignalRWebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateCategory(int id, CategoryViewModel categoryViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(categoryViewModel);
+            }
 
             categoryViewModel.Status = true;
             var dto = _mapper.Map<UpdateCategoryDto>(categoryViewModel);
             await _categoryApiService.UpdateAsync(id, dto);
             return RedirectToAction("CategoryList");
         }
-
-
     }
 }

@@ -44,7 +44,6 @@ public class MenuController : Controller
             ProductName = product.ProductName,
             Quantity = 1,
             Price = product.Price,
-            TotalPrice = product.Price * 1,            
         });
 
         // ViewModel → DTO

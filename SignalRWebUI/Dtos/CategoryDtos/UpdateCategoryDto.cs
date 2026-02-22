@@ -2,7 +2,7 @@
 {
     public class UpdateCategoryDto
     {
-        public required string CategoryName { get; set; }
+        public  string? CategoryName { get; set; }
         public bool Status { get; set; }
     }
 }

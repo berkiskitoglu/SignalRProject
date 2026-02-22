@@ -5,11 +5,11 @@
         public required string Location { get; set; }
         public required string Phone { get; set; }
         public required string Mail { get; set; }
-        public string FooterTitle { get; set; } = null!;
+        public required string FooterTitle { get; set; } 
 
-        public string FooterDescription { get; set; } = null!;
-        public string OpenDays { get; set; } = null!;
-        public string OpenDaysDescription { get; set; } = null!;
-        public string OpenHours { get; set; } = null!;
+        public required string FooterDescription { get; set; } 
+        public required string OpenDays { get; set; } 
+        public required string OpenDaysDescription { get; set; } 
+        public required string OpenHours { get; set; } 
     }
 }

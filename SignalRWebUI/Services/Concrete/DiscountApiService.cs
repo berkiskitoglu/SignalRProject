@@ -1,5 +1,4 @@
-﻿using SignalR.EntityLayer.Entities;
-using SignalRWebUI.Dtos.DiscountDtos;
+﻿using SignalRWebUI.Dtos.DiscountDtos;
 using SignalRWebUI.Services.Abstract;
 
 namespace SignalRWebUI.Services.Concrete

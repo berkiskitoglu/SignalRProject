@@ -1,11 +1,8 @@
 ﻿@model SocialMediaViewModel
-
 @{
-    ViewData["Title"] = "UpdateSocialMedia";
-    Layout = "~/Views/AdminLayout/Index.cshtml";
+	ViewData["Title"] = "UpdateSocialMedia";
+	Layout = "~/Views/AdminLayout/Index.cshtml";
 }
-
-
 <div class="content">
 	<div class="container-fluid">
 		<h4 class="page-title">Sosyal Medya İşlemleri</h4>
@@ -17,24 +14,24 @@
 							<div class="card-title">Sosyal Medya Güncelleme Sayfası</div>
 						</div>
 						<div class="card-body">
-
 							<div class="form-group">
-								<label for="Title">Başlık Giriniz</label>
-								<input type="text" class="form-control" id="Title" asp-for="Title">
+								<label asp-for="Title">Başlık Giriniz</label>
+								<input type="text" class="form-control" asp-for="Title">
+								<span asp-validation-for="Title" class="text-danger"></span>
 							</div>
 							<div class="form-group">
-								<label for="Icon">İkon Giriniz</label>
-								<input type="text" class="form-control" id="Icon" asp-for="Icon">
+								<label asp-for="Icon">İkon Giriniz</label>
+								<input type="text" class="form-control" asp-for="Icon">
+								<span asp-validation-for="Icon" class="text-danger"></span>
 							</div>
 							<div class="form-group">
-								<label for="Url">Link Giriniz</label>
-								<input type="text" class="form-control" id="Url" asp-for="Url">
+								<label asp-for="Url">Link Giriniz</label>
+								<input type="text" class="form-control" asp-for="Url">
+								<span asp-validation-for="Url" class="text-danger"></span>
 							</div>
-
-
 						</div>
 						<div class="card-action">
-							<button class="btn btn-primary">Sosyal Medya Hesabını Güncelle</button>
+							<button type="submit" class="btn btn-primary">Sosyal Medya Hesabını Güncelle</button>
 						</div>
 					</div>
 				</form>
@@ -42,9 +39,3 @@
 		</div>
 	</div>
 </div>
-
-
-
-
-
-

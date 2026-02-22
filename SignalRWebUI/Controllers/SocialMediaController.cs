@@ -11,8 +11,6 @@ namespace SignalRWebUI.Controllers
         private readonly ISocialMediaApiService _SocialMediaApiService;
         private readonly IMapper _mapper;
 
-
-
         public SocialMediaController(ISocialMediaApiService SocialMediaApiService, IMapper mapper)
         {
             _SocialMediaApiService = SocialMediaApiService;
@@ -32,17 +30,20 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateSocialMedia(SocialMediaViewModel SocialMediaViewModel)
+        public async Task<IActionResult> CreateSocialMedia(SocialMediaViewModel socialMediaViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(socialMediaViewModel);
+            }
 
-            var createSocialMediaDto = _mapper.Map<CreateSocialMediaDto>(SocialMediaViewModel);
+            var createSocialMediaDto = _mapper.Map<CreateSocialMediaDto>(socialMediaViewModel);
             await _SocialMediaApiService.CreateAsync(createSocialMediaDto);
             return RedirectToAction("SocialMediaList");
         }
 
         public async Task<IActionResult> DeleteSocialMedia(int id)
         {
-
             await _SocialMediaApiService.DeleteAsync(id);
             return RedirectToAction("SocialMediaList");
         }
@@ -56,10 +57,14 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateSocialMedia(int id, SocialMediaViewModel SocialMediaViewModel)
+        public async Task<IActionResult> UpdateSocialMedia(int id, SocialMediaViewModel socialMediaViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(socialMediaViewModel);
+            }
 
-            var dto = _mapper.Map<UpdateSocialMediaDto>(SocialMediaViewModel);
+            var dto = _mapper.Map<UpdateSocialMediaDto>(socialMediaViewModel);
             await _SocialMediaApiService.UpdateAsync(id, dto);
             return RedirectToAction("SocialMediaList");
         }

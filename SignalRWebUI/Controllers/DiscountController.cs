@@ -30,17 +30,20 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateDiscount(DiscountViewModel DiscountViewModel)
+        public async Task<IActionResult> CreateDiscount(DiscountViewModel discountViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(discountViewModel);
+            }
 
-            var createDiscountDto = _mapper.Map<CreateDiscountDto>(DiscountViewModel);
+            var createDiscountDto = _mapper.Map<CreateDiscountDto>(discountViewModel);
             await _DiscountApiService.CreateAsync(createDiscountDto);
             return RedirectToAction("DiscountList");
         }
 
         public async Task<IActionResult> DeleteDiscount(int id)
         {
-
             await _DiscountApiService.DeleteAsync(id);
             return RedirectToAction("DiscountList");
         }
@@ -54,18 +57,24 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateDiscount(int id, DiscountViewModel DiscountViewModel)
+        public async Task<IActionResult> UpdateDiscount(int id, DiscountViewModel discountViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(discountViewModel);
+            }
 
-            var dto = _mapper.Map<UpdateDiscountDto>(DiscountViewModel);
+            var dto = _mapper.Map<UpdateDiscountDto>(discountViewModel);
             await _DiscountApiService.UpdateAsync(id, dto);
             return RedirectToAction("DiscountList");
         }
+
         public async Task<IActionResult> ChangeStatusToFalse(int id)
         {
             await _DiscountApiService.ChangeStatusToFalse(id);
             return RedirectToAction("DiscountList");
         }
+
         public async Task<IActionResult> ChangeStatusToTrue(int id)
         {
             await _DiscountApiService.ChangeStatusToTrue(id);

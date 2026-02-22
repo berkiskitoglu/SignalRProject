@@ -4,7 +4,6 @@ using SignalRWebUI.Dtos.ProductDtos;
 using SignalRWebUI.Helpers.Dropdown;
 using SignalRWebUI.Services.Abstract;
 using SignalRWebUI.ViewModels;
-using System.Threading.Tasks;
 
 namespace SignalRWebUI.Controllers
 {
@@ -14,8 +13,6 @@ namespace SignalRWebUI.Controllers
         private readonly IProductApiService _productApiService;
         private readonly ICategoryApiService _categoryApiService;
         private readonly IDropdownHelper _dropdownHelper;
-
-
 
         public ProductController(IProductApiService productApiService, ICategoryApiService categoryApiService, IMapper mapper, IDropdownHelper dropdownHelper)
         {
@@ -32,7 +29,7 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpGet]
-        public  async Task<IActionResult> CreateProduct()
+        public async Task<IActionResult> CreateProduct()
         {
             var viewModel = await _dropdownHelper.BuildProductViewModelAsync();
             return View(viewModel);
@@ -41,19 +38,25 @@ namespace SignalRWebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateProduct(ProductViewModel productViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                productViewModel.CategoryList = await _dropdownHelper.GetCategoryDropdownAsync();
+                return View(productViewModel);
+            }
+
             productViewModel.ProductStatus = true;
-           var createProductDto = _mapper.Map<CreateProductDto>(productViewModel);
-           await _productApiService.CreateAsync(createProductDto);
-           return RedirectToAction("ProductList");
+            var createProductDto = _mapper.Map<CreateProductDto>(productViewModel);
+            await _productApiService.CreateAsync(createProductDto);
+            return RedirectToAction("ProductList");
         }
 
         public async Task<IActionResult> DeleteProduct(int id)
         {
-           await _productApiService.DeleteAsync(id);
-           return RedirectToAction("ProductList");
+            await _productApiService.DeleteAsync(id);
+            return RedirectToAction("ProductList");
         }
 
-        [HttpGet] 
+        [HttpGet]
         public async Task<IActionResult> UpdateProduct(int id)
         {
             var getProductById = await _productApiService.GetByIdAsync(id);
@@ -61,13 +64,19 @@ namespace SignalRWebUI.Controllers
             viewModel.CategoryList = await _dropdownHelper.GetCategoryDropdownAsync();
             return View(viewModel);
         }
+
         [HttpPost]
-        public async Task<IActionResult> UpdateProduct(int id , ProductViewModel productViewModel)
+        public async Task<IActionResult> UpdateProduct(int id, ProductViewModel productViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                productViewModel.CategoryList = await _dropdownHelper.GetCategoryDropdownAsync();
+                return View(productViewModel);
+            }
+
             var dto = _mapper.Map<UpdateProductDto>(productViewModel);
-            await _productApiService.UpdateAsync(id,dto);
+            await _productApiService.UpdateAsync(id, dto);
             return RedirectToAction("ProductList");
         }
-
     }
 }

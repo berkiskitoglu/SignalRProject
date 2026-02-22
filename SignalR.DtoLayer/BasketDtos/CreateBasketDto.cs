@@ -4,9 +4,9 @@ namespace SignalR.DtoLayer.BasketDtos
 {
     public class CreateBasketDto
     {
-        public string Status { get; set; }
+        public required string Status { get; set; }
         public int MenuTableID { get; set; }
-        public List<CreateBasketProductDto> Products { get; set; }
+        public required List<CreateBasketProductDto> Products { get; set; }
 
     }
 }

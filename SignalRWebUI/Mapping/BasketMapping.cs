@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using NuGet.ContentModel;
 using SignalRWebUI.Dtos.BasketDtos;
 using SignalRWebUI.Dtos.BasketProductDtos;
-using SignalRWebUI.Dtos.ProductDtos;
 using SignalRWebUI.ViewModels;
 
 namespace SignalRWebUI.Mapping

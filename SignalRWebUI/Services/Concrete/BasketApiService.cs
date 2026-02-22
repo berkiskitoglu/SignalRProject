@@ -1,8 +1,5 @@
-﻿using SignalRWebUI.Dtos.AboutDtos;
-using SignalRWebUI.Dtos.BasketDtos;
-using SignalRWebUI.Dtos.BasketProductDtos;
+﻿using SignalRWebUI.Dtos.BasketDtos;
 using SignalRWebUI.Services.Abstract;
-using SignalRWebUI.ViewModels;
 
 namespace SignalRWebUI.Services.Concrete
 {

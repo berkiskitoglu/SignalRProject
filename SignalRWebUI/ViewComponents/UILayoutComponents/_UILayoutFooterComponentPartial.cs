@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SignalRWebUI.Services.Abstract;
-using System.Threading.Tasks;
 
 namespace SignalRWebUI.ViewComponents.UILayoutComponents
 {

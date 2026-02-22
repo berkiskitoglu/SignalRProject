@@ -3,8 +3,6 @@ using SignalR.DataAccessLayer.Concrete;
 using SignalR.EntityLayer.Entities;
 using SignalRWebUI.Extensions;
 using SignalRWebUI.Helpers.Dropdown;
-using SignalRWebUI.Services.Abstract;
-using SignalRWebUI.Services.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SignalRContext>(options =>

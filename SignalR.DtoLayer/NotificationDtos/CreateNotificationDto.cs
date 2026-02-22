@@ -8,9 +8,9 @@ namespace SignalR.DtoLayer.NotificationDtos
 {
     public class CreateNotificationDto
     {
-        public string Type { get; set; } = null!;
-        public string Description { get; set; } = null!;
-        public string Icon { get; set; } = null!;
+        public required string Type { get; set; } 
+        public required string Description { get; set; } 
+        public required string Icon { get; set; }
         public DateTime Date { get; set; }
         public bool Status { get; set; }
     }

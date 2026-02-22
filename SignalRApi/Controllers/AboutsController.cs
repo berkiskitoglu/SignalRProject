@@ -28,6 +28,7 @@ namespace SignalRApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAbout(CreateAboutDto createAboutDto)
         {
+     
             var about = _mapper.Map<About>(createAboutDto);
             await _aboutService.TAddAsync(about);
             return Ok("Hakkımda Bilgisi Eklendi");

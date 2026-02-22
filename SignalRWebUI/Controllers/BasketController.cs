@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using SignalRWebUI.Dtos.BasketDtos;
 using SignalRWebUI.Services.Abstract;
 using SignalRWebUI.ViewModels;
-using System.Threading.Tasks;
 
 namespace SignalRWebUI.Controllers
 {

@@ -30,10 +30,14 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBooking(BookingViewModel BookingViewModel)
+        public async Task<IActionResult> CreateBooking(BookingViewModel bookingViewModel)
         {
-           
-            var createBookingDto = _mapper.Map<CreateBookingDto>(BookingViewModel);
+            if (!ModelState.IsValid)
+            {
+                return View(bookingViewModel);
+            }
+
+            var createBookingDto = _mapper.Map<CreateBookingDto>(bookingViewModel);
             createBookingDto.Description = "Rezervasyon Alındı";
             await _BookingApiService.CreateAsync(createBookingDto);
             return RedirectToAction("BookingList");
@@ -41,7 +45,6 @@ namespace SignalRWebUI.Controllers
 
         public async Task<IActionResult> DeleteBooking(int id)
         {
-
             await _BookingApiService.DeleteAsync(id);
             return RedirectToAction("BookingList");
         }
@@ -55,19 +58,24 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateBooking(int id, BookingViewModel BookingViewModel)
+        public async Task<IActionResult> UpdateBooking(int id, BookingViewModel bookingViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(bookingViewModel);
+            }
 
-            var dto = _mapper.Map<UpdateBookingDto>(BookingViewModel);
+            var dto = _mapper.Map<UpdateBookingDto>(bookingViewModel);
             await _BookingApiService.UpdateAsync(id, dto);
             return RedirectToAction("BookingList");
         }
-        
+
         public async Task<IActionResult> BookingStatusApproved(int id)
         {
             await _BookingApiService.BookingStatusApproved(id);
             return RedirectToAction("BookingList");
         }
+
         public async Task<IActionResult> BookingStatusCancelled(int id)
         {
             await _BookingApiService.BookingStatusCancelled(id);

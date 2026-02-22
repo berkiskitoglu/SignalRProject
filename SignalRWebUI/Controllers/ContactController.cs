@@ -11,8 +11,6 @@ namespace SignalRWebUI.Controllers
         private readonly IContactApiService _ContactApiService;
         private readonly IMapper _mapper;
 
-
-
         public ContactController(IContactApiService ContactApiService, IMapper mapper)
         {
             _ContactApiService = ContactApiService;
@@ -32,17 +30,20 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateContact(ContactViewModel ContactViewModel)
+        public async Task<IActionResult> CreateContact(ContactViewModel contactViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(contactViewModel);
+            }
 
-            var createContactDto = _mapper.Map<CreateContactDto>(ContactViewModel);
+            var createContactDto = _mapper.Map<CreateContactDto>(contactViewModel);
             await _ContactApiService.CreateAsync(createContactDto);
             return RedirectToAction("ContactList");
         }
 
         public async Task<IActionResult> DeleteContact(int id)
         {
-
             await _ContactApiService.DeleteAsync(id);
             return RedirectToAction("ContactList");
         }
@@ -56,10 +57,14 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateContact(int id, ContactViewModel ContactViewModel)
+        public async Task<IActionResult> UpdateContact(int id, ContactViewModel contactViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(contactViewModel);
+            }
 
-            var dto = _mapper.Map<UpdateContactDto>(ContactViewModel);
+            var dto = _mapper.Map<UpdateContactDto>(contactViewModel);
             await _ContactApiService.UpdateAsync(id, dto);
             return RedirectToAction("ContactList");
         }

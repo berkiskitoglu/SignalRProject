@@ -2,8 +2,8 @@
 {
     public class UpdateSocialMediaDto
     {
-        public string Title { get; set; } = null!;
-        public string Url { get; set; } = null!;
-        public string Icon { get; set; } = null!;
+        public string? Title { get; set; } 
+        public string? Url { get; set; } 
+        public string? Icon { get; set; }
     }
 }
