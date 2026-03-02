@@ -83,6 +83,10 @@ namespace SignalRWebUI.Extensions
             {
                 client.BaseAddress = new Uri(baseUrl);
             });
+            services.AddHttpClient<IMessageApiService, MessageApiService>(client =>
+            {
+                client.BaseAddress = new Uri(baseUrl);
+            });
 
             return services;
         }

@@ -1,4 +1,4 @@
-﻿namespace SignalR.DtoLayer.MessageDtos
+﻿namespace SignalRWebUI.Dtos.MessageDtos
 {
     public class GetMessageDto
     {

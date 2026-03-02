@@ -1,0 +1,70 @@
+﻿@model MessageViewModel
+@{
+    Layout = null;
+}
+<section class="book_section layout_padding">
+    <div class="container">
+        <div class="heading_container">
+            <h2>
+                Bize Ulaşın
+            </h2>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form_container">
+                    <form asp-action="SendMessage" method="post" id="messageForm">
+                        <div>
+                            <input type="text" class="form-control" placeholder="Adınız Soyadınız" asp-for="NameSurname" />
+                            <span asp-validation-for="NameSurname" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <input type="tel" class="form-control" placeholder="Telefon Numaranız" asp-for="Phone" />
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <input type="email" class="form-control" placeholder="Email Adresiniz" asp-for="Mail" />
+                            <span asp-validation-for="Mail" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <input type="text" class="form-control" placeholder="Konu" asp-for="Subject" />
+                            <span asp-validation-for="Subject" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <textarea asp-for="MessageContent" placeholder="Buraya Mesajınızı Yazabilirsiniz" rows="5" class="form-control"></textarea>
+                            <span asp-validation-for="MessageContent" class="text-danger"></span>
+                        </div>
+                        <div class="btn_box">
+                            <button type="submit" id ="sendBtn">
+                                Mesajı Gönder
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="map_container ">
+                    <div id="googleMap"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.getElementById('messageForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        fetch('@Url.Action("SendMessage", "Default")', {
+            method: 'POST',
+            body: new FormData(this)
+        })
+        .then(r => r.json())
+        .then(data => {
+            if(data.success) {
+                document.getElementById('messageForm').reset();
+                alert('Mesaj gönderildi!');
+            }
+        })
+        .catch(err => console.log(err));
+    });
+</script>

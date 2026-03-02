@@ -14,8 +14,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowWebUI", policy =>
     {
         policy.WithOrigins(
-            "https://localhost:7249",  
-            "http://localhost:5176"    
+            "https://localhost:3001",  
+            "http://localhost:3000"    
         )
         .AllowAnyHeader()
         .AllowAnyMethod()

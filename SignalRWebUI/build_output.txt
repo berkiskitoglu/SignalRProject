@@ -1,0 +1,15 @@
+  Geri yüklenecek projeler belirleniyor...
+  Geri yükleme için tüm projeler güncel.
+  SignalR.EntityLayer -> C:\Users\iskit\source\repos\SignalRProject\SignalR.EntityLayer\bin\Debug\net8.0\SignalR.EntityLayer.dll
+  SignalR.DataAccessLayer -> C:\Users\iskit\source\repos\SignalRProject\SignalR.DataAccessLayer\bin\Debug\net8.0\SignalR.DataAccessLayer.dll
+C:\Users\iskit\source\repos\SignalRProject\SignalRWebUI\Controllers\MailController.cs(2,7): error CS0246: 'MimeKit' türü veya ad alanı adı bulunamadı (bir using yönergeniz veya derleme başvurunuz mu eksik?) [C:\Users\iskit\source\repos\SignalRProject\SignalRWebUI\SignalRWebUI.csproj]
+C:\Users\iskit\source\repos\SignalRProject\SignalRWebUI\Services\Concrete\MessageApiService.cs(2,7): warning CS0105: 'SignalRWebUI.Dtos.MessageDtos' için using yönergesi bu ad alanında daha önce göründü [C:\Users\iskit\source\repos\SignalRProject\SignalRWebUI\SignalRWebUI.csproj]
+
+Oluşturma BAŞARISIZ OLDU.
+
+C:\Users\iskit\source\repos\SignalRProject\SignalRWebUI\Services\Concrete\MessageApiService.cs(2,7): warning CS0105: 'SignalRWebUI.Dtos.MessageDtos' için using yönergesi bu ad alanında daha önce göründü [C:\Users\iskit\source\repos\SignalRProject\SignalRWebUI\SignalRWebUI.csproj]
+C:\Users\iskit\source\repos\SignalRProject\SignalRWebUI\Controllers\MailController.cs(2,7): error CS0246: 'MimeKit' türü veya ad alanı adı bulunamadı (bir using yönergeniz veya derleme başvurunuz mu eksik?) [C:\Users\iskit\source\repos\SignalRProject\SignalRWebUI\SignalRWebUI.csproj]
+    1 Uyarı
+    1 Hata
+
+Geçen Süre 00:00:03.16

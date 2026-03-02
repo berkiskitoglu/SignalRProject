@@ -9,6 +9,7 @@ namespace SignalRWebUI.Mapping
         public SocialMediaMapping()
         {
             CreateMap<GetSocialMediaDto, SocialMediaViewModel>();
+            CreateMap<ResultSocialMediaDto, SocialMediaViewModel>();
             CreateMap<SocialMediaViewModel, CreateSocialMediaDto>();
             CreateMap<SocialMediaViewModel, UpdateSocialMediaDto>();
         }

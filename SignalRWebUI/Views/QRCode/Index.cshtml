@@ -1,0 +1,59 @@
+﻿@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+<div class="content">
+	<div class="container-fluid">
+		<h4 class="page-title">QR Kod İşlemleri</h4>
+		<div class="row">
+			<div class="col-md-12">
+				<!-- QR Kod Oluştur -->
+				<div class="card mb-4">
+					<div class="card-header">
+						<div class="card-title">QR Kod Oluştur</div>
+					</div>
+					<div class="card-body">
+						<form method="post" asp-action="CreateQRCode" asp-controller="QRCode">
+							<div class="form-group">
+								<input type="text" name="value" class="form-control" placeholder="QR Kod değerini giriniz" required />
+							</div>
+							<button type="submit" class="btn btn-warning">QR Kod Oluştur</button>
+						</form>
+						@if (ViewBag.QRCodeImage != null)
+						{
+							<img src="@ViewBag.QRCodeImage" alt="QR Code" style="width:400px; height:400px; margin-top: 20px;" />
+						}
+					</div>
+				</div>
+
+				<!-- QR Kod Oku -->
+				<div class="card">
+					<div class="card-header">
+						<div class="card-title">QR Kod Oku</div>
+					</div>
+					<div class="card-body">
+						<form method="post" asp-action="DecodeQRCode" asp-controller="QRCode" enctype="multipart/form-data">
+							<div class="form-group">
+								<label for="qrImage">QR Kod Resimini Seçiniz</label>
+								<input type="file" id="qrImage" name="qrImage" class="form-control" accept="image/*" required />
+							</div>
+							<button type="submit" class="btn btn-info">QR Kodu Oku</button>
+						</form>
+						@if (ViewBag.DecodedValue != null)
+						{
+							<div class="alert alert-success mt-3">
+								<strong>Okunan Değer:</strong> @ViewBag.DecodedValue
+							</div>
+						}
+						@if (ViewBag.DecodeError != null)
+						{
+							<div class="alert alert-danger mt-3">
+								<strong>Hata:</strong> @ViewBag.DecodeError
+							</div>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
