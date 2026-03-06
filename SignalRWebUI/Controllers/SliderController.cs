@@ -8,19 +8,20 @@ namespace SignalRWebUI.Controllers
 {
     public class SliderController : Controller
     {
-        private readonly ISliderApiService _SliderApiService;
+        private readonly ISliderApiService _sliderApiService;
         private readonly IMapper _mapper;
 
-        public SliderController(ISliderApiService SliderApiService, IMapper mapper)
+        public SliderController(ISliderApiService sliderApiService, IMapper mapper)
         {
-            _SliderApiService = SliderApiService;
+            _sliderApiService = sliderApiService;
             _mapper = mapper;
         }
 
         public async Task<IActionResult> SliderList()
         {
-            var values = await _SliderApiService.GetAllAsync();
-            return View(values);
+            var values = await _sliderApiService.GetAllAsync();
+            var viewModels = _mapper.Map<List<SliderViewModel>>(values);
+            return View(viewModels);
         }
 
         [HttpGet]
@@ -30,42 +31,37 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateSlider(SliderViewModel sliderViewModel)
+        public async Task<IActionResult> CreateSlider(CreateSliderDto createSliderDto)
         {
             if (!ModelState.IsValid)
-            {
-                return View(sliderViewModel);
-            }
+                return View(createSliderDto);
 
-            var createSliderDto = _mapper.Map<CreateSliderDto>(sliderViewModel);
-            await _SliderApiService.CreateAsync(createSliderDto);
+            await _sliderApiService.CreateAsync(createSliderDto);
             return RedirectToAction("SliderList");
         }
 
         public async Task<IActionResult> DeleteSlider(int id)
         {
-            await _SliderApiService.DeleteAsync(id);
+            await _sliderApiService.DeleteAsync(id);
             return RedirectToAction("SliderList");
         }
 
         [HttpGet]
         public async Task<IActionResult> UpdateSlider(int id)
         {
-            var value = await _SliderApiService.GetByIdAsync(id);
-            var viewModel = _mapper.Map<SliderViewModel>(value);
-            return View(viewModel);
+            var value = await _sliderApiService.GetByIdAsync(id);
+            if (value is null) return NotFound();
+            var dto = _mapper.Map<UpdateSliderDto>(value);
+            return View(dto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateSlider(int id, SliderViewModel sliderViewModel)
+        public async Task<IActionResult> UpdateSlider(int id, UpdateSliderDto updateSliderDto)
         {
             if (!ModelState.IsValid)
-            {
-                return View(sliderViewModel);
-            }
+                return View(updateSliderDto);
 
-            var dto = _mapper.Map<UpdateSliderDto>(sliderViewModel);
-            await _SliderApiService.UpdateAsync(id, dto);
+            await _sliderApiService.UpdateAsync(id, updateSliderDto);
             return RedirectToAction("SliderList");
         }
     }

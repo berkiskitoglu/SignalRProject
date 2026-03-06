@@ -11,16 +11,17 @@ namespace SignalRWebUI.Controllers
         private readonly INotificationApiService _notificationApiService;
         private readonly IMapper _mapper;
 
-        public NotificationController(INotificationApiService NotificationApiService, IMapper mapper)
+        public NotificationController(INotificationApiService notificationApiService, IMapper mapper)
         {
-            _notificationApiService = NotificationApiService;
+            _notificationApiService = notificationApiService;
             _mapper = mapper;
         }
 
         public async Task<IActionResult> NotificationList()
         {
             var values = await _notificationApiService.GetAllAsync();
-            return View(values);
+            var viewModels = _mapper.Map<List<NotificationViewModel>>(values);
+            return View(viewModels);
         }
 
         [HttpGet]
@@ -30,14 +31,11 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateNotification(NotificationViewModel notificationViewModel)
+        public async Task<IActionResult> CreateNotification(CreateNotificationDto createNotificationDto)
         {
             if (!ModelState.IsValid)
-            {
-                return View(notificationViewModel);
-            }
+                return View(createNotificationDto);
 
-            var createNotificationDto = _mapper.Map<CreateNotificationDto>(notificationViewModel);
             await _notificationApiService.CreateAsync(createNotificationDto);
             return RedirectToAction("NotificationList");
         }
@@ -52,20 +50,18 @@ namespace SignalRWebUI.Controllers
         public async Task<IActionResult> UpdateNotification(int id)
         {
             var value = await _notificationApiService.GetByIdAsync(id);
-            var viewModel = _mapper.Map<NotificationViewModel>(value);
-            return View(viewModel);
+            if (value is null) return NotFound();
+            var dto = _mapper.Map<UpdateNotificationDto>(value);
+            return View(dto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateNotification(int id, NotificationViewModel notificationViewModel)
+        public async Task<IActionResult> UpdateNotification(int id, UpdateNotificationDto updateNotificationDto)
         {
             if (!ModelState.IsValid)
-            {
-                return View(notificationViewModel);
-            }
+                return View(updateNotificationDto);
 
-            var dto = _mapper.Map<UpdateNotificationDto>(notificationViewModel);
-            await _notificationApiService.UpdateAsync(id, dto);
+            await _notificationApiService.UpdateAsync(id, updateNotificationDto);
             return RedirectToAction("NotificationList");
         }
 

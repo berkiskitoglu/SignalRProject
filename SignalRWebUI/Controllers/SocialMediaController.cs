@@ -8,19 +8,20 @@ namespace SignalRWebUI.Controllers
 {
     public class SocialMediaController : Controller
     {
-        private readonly ISocialMediaApiService _SocialMediaApiService;
+        private readonly ISocialMediaApiService _socialMediaApiService;
         private readonly IMapper _mapper;
 
-        public SocialMediaController(ISocialMediaApiService SocialMediaApiService, IMapper mapper)
+        public SocialMediaController(ISocialMediaApiService socialMediaApiService, IMapper mapper)
         {
-            _SocialMediaApiService = SocialMediaApiService;
+            _socialMediaApiService = socialMediaApiService;
             _mapper = mapper;
         }
 
         public async Task<IActionResult> SocialMediaList()
         {
-            var values = await _SocialMediaApiService.GetAllAsync();
-            return View(values);
+            var values = await _socialMediaApiService.GetAllAsync();
+            var viewModels = _mapper.Map<List<SocialMediaViewModel>>(values);
+            return View(viewModels);
         }
 
         [HttpGet]
@@ -30,42 +31,37 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateSocialMedia(SocialMediaViewModel socialMediaViewModel)
+        public async Task<IActionResult> CreateSocialMedia(CreateSocialMediaDto createSocialMediaDto)
         {
             if (!ModelState.IsValid)
-            {
-                return View(socialMediaViewModel);
-            }
+                return View(createSocialMediaDto);
 
-            var createSocialMediaDto = _mapper.Map<CreateSocialMediaDto>(socialMediaViewModel);
-            await _SocialMediaApiService.CreateAsync(createSocialMediaDto);
+            await _socialMediaApiService.CreateAsync(createSocialMediaDto);
             return RedirectToAction("SocialMediaList");
         }
 
         public async Task<IActionResult> DeleteSocialMedia(int id)
         {
-            await _SocialMediaApiService.DeleteAsync(id);
+            await _socialMediaApiService.DeleteAsync(id);
             return RedirectToAction("SocialMediaList");
         }
 
         [HttpGet]
         public async Task<IActionResult> UpdateSocialMedia(int id)
         {
-            var value = await _SocialMediaApiService.GetByIdAsync(id);
-            var viewModel = _mapper.Map<SocialMediaViewModel>(value);
-            return View(viewModel);
+            var value = await _socialMediaApiService.GetByIdAsync(id);
+            if (value is null) return NotFound();
+            var dto = _mapper.Map<UpdateSocialMediaDto>(value);
+            return View(dto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateSocialMedia(int id, SocialMediaViewModel socialMediaViewModel)
+        public async Task<IActionResult> UpdateSocialMedia(int id, UpdateSocialMediaDto updateSocialMediaDto)
         {
             if (!ModelState.IsValid)
-            {
-                return View(socialMediaViewModel);
-            }
+                return View(updateSocialMediaDto);
 
-            var dto = _mapper.Map<UpdateSocialMediaDto>(socialMediaViewModel);
-            await _SocialMediaApiService.UpdateAsync(id, dto);
+            await _socialMediaApiService.UpdateAsync(id, updateSocialMediaDto);
             return RedirectToAction("SocialMediaList");
         }
     }

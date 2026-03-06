@@ -9,7 +9,6 @@ namespace SignalRWebUI.Mapping
         public ProductMapping()
         {
             CreateMap<GetProductDto, ProductViewModel>();
-
             CreateMap<ProductViewModel, CreateProductDto>();
             CreateMap<ProductViewModel, UpdateProductDto>();
         }

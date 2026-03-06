@@ -9,8 +9,7 @@ namespace SignalRWebUI.Mapping
         public BookingMapping()
         {
             CreateMap<GetBookingDto, BookingViewModel>();
-            CreateMap<BookingViewModel, UpdateBookingDto>();
-            CreateMap<BookingViewModel, CreateBookingDto>();
+            CreateMap<GetBookingDto, UpdateBookingDto>();
         }
     }
 }

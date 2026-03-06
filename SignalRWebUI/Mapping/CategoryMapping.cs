@@ -8,14 +8,8 @@ namespace SignalRWebUI.Mapping
     {
         public CategoryMapping()
         {
-            // GET için: DTO → ViewModel
-            CreateMap<GetCategoryDto, CategoryViewModel>();
-
-            // POST için: ViewModel → DTO
-            CreateMap<CategoryViewModel, UpdateCategoryDto>();
-
-             // Create => Viewmodel => Dto
-            CreateMap<CategoryViewModel, CreateCategoryDto>();
+            CreateMap<ResultCategoryDto, CategoryViewModel>();
+            CreateMap<GetCategoryDto, UpdateCategoryDto>();
 
         }
     }

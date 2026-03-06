@@ -8,19 +8,21 @@ namespace SignalRWebUI.Controllers
 {
     public class BookingController : Controller
     {
-        private readonly IBookingApiService _BookingApiService;
+        private readonly IBookingApiService _bookingApiService;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        public BookingController(IBookingApiService BookingApiService, IMapper mapper)
+        public BookingController(IBookingApiService bookingApiService, IMapper mapper, IConfiguration configuration)
         {
-            _BookingApiService = BookingApiService;
+            _bookingApiService = bookingApiService;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         public async Task<IActionResult> BookingList()
         {
-            var values = await _BookingApiService.GetAllAsync();
-            return View(values);
+            ViewBag.HubUrl = _configuration["ApiSettings:BaseUrl"] + "SignalRHub";
+            return View();
         }
 
         [HttpGet]
@@ -30,55 +32,50 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBooking(BookingViewModel bookingViewModel)
+        public async Task<IActionResult> CreateBooking(CreateBookingDto createBookingDto)
         {
             if (!ModelState.IsValid)
-            {
-                return View(bookingViewModel);
-            }
+                return View(createBookingDto);
 
-            var createBookingDto = _mapper.Map<CreateBookingDto>(bookingViewModel);
             createBookingDto.Description = "Rezervasyon Alındı";
-            await _BookingApiService.CreateAsync(createBookingDto);
+            await _bookingApiService.CreateAsync(createBookingDto);
             return RedirectToAction("BookingList");
         }
 
         public async Task<IActionResult> DeleteBooking(int id)
         {
-            await _BookingApiService.DeleteAsync(id);
+            await _bookingApiService.DeleteAsync(id);
             return RedirectToAction("BookingList");
         }
 
         [HttpGet]
         public async Task<IActionResult> UpdateBooking(int id)
         {
-            var value = await _BookingApiService.GetByIdAsync(id);
-            var viewModel = _mapper.Map<BookingViewModel>(value);
-            return View(viewModel);
+            var value = await _bookingApiService.GetByIdAsync(id);
+            if (value is null) return NotFound();
+            var dto = _mapper.Map<UpdateBookingDto>(value);
+            return View(dto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateBooking(int id, BookingViewModel bookingViewModel)
+        public async Task<IActionResult> UpdateBooking(int id, UpdateBookingDto updateBookingDto)
         {
             if (!ModelState.IsValid)
-            {
-                return View(bookingViewModel);
-            }
-
-            var dto = _mapper.Map<UpdateBookingDto>(bookingViewModel);
-            await _BookingApiService.UpdateAsync(id, dto);
+                return View(updateBookingDto);
+            updateBookingDto.Description = "Rezervasyon Alındı";
+            await _bookingApiService.UpdateAsync(id, updateBookingDto);
             return RedirectToAction("BookingList");
         }
 
         public async Task<IActionResult> BookingStatusApproved(int id)
         {
-            await _BookingApiService.BookingStatusApproved(id);
+            await _bookingApiService.BookingStatusApproved(id);
             return RedirectToAction("BookingList");
         }
 
         public async Task<IActionResult> BookingStatusCancelled(int id)
         {
-            await _BookingApiService.BookingStatusCancelled(id);
+            await _bookingApiService.BookingStatusCancelled(id);
             return RedirectToAction("BookingList");
         }
     }

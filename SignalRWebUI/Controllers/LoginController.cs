@@ -21,23 +21,25 @@ namespace SignalRWebUI.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Index(LoginDto loginDto)
         {
+            if (!ModelState.IsValid)
+                return View(loginDto);
+
             var result = await _signInManager.PasswordSignInAsync(loginDto.Username, loginDto.Password, false, false);
             if (result.Succeeded)
-            {
                 return RedirectToAction("CategoryList", "Category");
-            }
-            return View();
+
+            ModelState.AddModelError("", "Kullanıcı adı veya şifre hatalı");
+            return View(loginDto);
         }
 
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Login");
-
         }
     }
-
 }

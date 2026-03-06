@@ -1,73 +1,51 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SignalRWebUI.Dtos.BasketDtos;
+using SignalRWebUI.Dtos.BasketProductDtos;
 using SignalRWebUI.Services.Abstract;
-using SignalRWebUI.ViewModels;
 
-public class MenuController : Controller
+namespace SignalRWebUI.Controllers
 {
-    private readonly IProductApiService _productApiService;
-    private readonly IBasketApiService _basketApiService;
-    private readonly IMapper _mapper;
-
-    public MenuController(IProductApiService productApiService, IMapper mapper, IBasketApiService basketApiService)
+    public class MenuController : Controller
     {
-        _productApiService = productApiService;
-        _mapper = mapper;
-        _basketApiService = basketApiService;
-    }
+        private readonly IProductApiService _productApiService;
+        private readonly IBasketApiService _basketApiService;
 
-    public async Task<IActionResult> Index() => View(await _productApiService.GetAllAsync());
-
-    [HttpPost]
-    public async Task<IActionResult> AddBasket(int id)
-    {
-        // Ortak tablo / Product tablosundan bilgileri çek
-        var product = await _productApiService.GetByIdAsync(id); // ProductName, Price vs.
-
-        if (product == null)
-            return BadRequest("Ürün bulunamadı");
-
-        // Sepete ekleme
-        var basketViewModel = new CreateBasketViewModel
+        public MenuController(IProductApiService productApiService, IBasketApiService basketApiService)
         {
-            ProductID = id,
-            MenuTableID = 1,
-            Status = "Aktif", 
-            Products = new List<BasketProductViewModel>()
-        };
+            _productApiService = productApiService;
+            _basketApiService = basketApiService;
+        }
 
-        // Ürünü Products listesine ekle
-        basketViewModel.Products.Add(new BasketProductViewModel
+        public async Task<IActionResult> Index()
         {
-            ProductID = product.ProductID,
-            ProductName = product.ProductName,
-            Quantity = 1,
-            Price = product.Price,
-        });
+            var values = await _productApiService.GetAllAsync();
+            return View(values);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddBasket(int id)
+        {
+            var product = await _productApiService.GetByIdAsync(id);
+            if (product == null)
+                return BadRequest("Ürün bulunamadı");
 
-        // ViewModel → DTO
-        var createBasketDto = _mapper.Map<CreateBasketDto>(basketViewModel);
+            var createBasketDto = new CreateBasketDto
+            {
+                MenuTableID = 1,
+                Status = "Aktif",
+                Products = new List<CreateBasketProductDto>
+        {
+            new CreateBasketProductDto
+            {
+                ProductID = product.ProductID,
+                ProductName = product.ProductName,
+                Price = product.Price,
+                Quantity = 1
+            }
+        }
+            };
 
-        await _basketApiService.CreateAsync(createBasketDto);
-
-        return Ok();
+            await _basketApiService.CreateAsync(createBasketDto);
+            return Ok();
+        }
     }
-
-
-
-
 }
-
-
-    //[HttpPost]
-    //public async Task<IActionResult> AddBasket(int id , CreateBasketViewModel createBasketViewModel)
-    //{
-    //    createBasketViewModel.ProductID = id;
-    //    createBasketViewModel.MenuTableID = 2;
-    //    createBasketViewModel.Status = "Aktif";
-    //    var createBasketDto = _mapper.Map<CreateBasketDto>(createBasketViewModel);
-    //    await _basketApiService.CreateAsync(createBasketDto);
-    //    return RedirectToAction("Index");
-    //}
-

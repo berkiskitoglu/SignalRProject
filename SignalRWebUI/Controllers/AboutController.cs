@@ -20,7 +20,8 @@ namespace SignalRWebUI.Controllers
         public async Task<IActionResult> AboutList()
         {
             var values = await _aboutApiService.GetAllAsync();
-            return View(values);
+            var viewModels = _mapper.Map<List<AboutViewModel>>(values);
+            return View(viewModels);
         }
 
         [HttpGet]
@@ -53,20 +54,17 @@ namespace SignalRWebUI.Controllers
         {
             var value = await _aboutApiService.GetByIdAsync(id);
             if (value is null) return NotFound();
-            var viewModel = _mapper.Map<AboutViewModel>(value);
-            return View(viewModel);
+            var  updateAboutDto = _mapper.Map<UpdateAboutDto>(value);
+            return View(updateAboutDto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateAbout(int id, AboutViewModel aboutViewModel)
+        public async Task<IActionResult> UpdateAbout(int id, UpdateAboutDto updateAboutDto)
         {
             if (!ModelState.IsValid)
-            {
-                return View(aboutViewModel);
-            }
+                return View(updateAboutDto);
 
-            var dto = _mapper.Map<UpdateAboutDto>(aboutViewModel);
-            await _aboutApiService.UpdateAsync(id, dto);
+            await _aboutApiService.UpdateAsync(id, updateAboutDto);
             return RedirectToAction("AboutList");
         }
     }

@@ -8,9 +8,8 @@ namespace SignalRWebUI.Mapping
     {
         public TestimonialMapping()
         {
-            CreateMap<GetTestimonialDto, TestimonialViewModel>();
-            CreateMap<TestimonialViewModel, CreateTestimonialDto>();
-            CreateMap<TestimonialViewModel, UpdateTestimonialDto>();
+            CreateMap<ResultTestimonialDto, TestimonialViewModel>();
+            CreateMap<GetTestimonialDto, UpdateTestimonialDto>();
         }
     }
 }

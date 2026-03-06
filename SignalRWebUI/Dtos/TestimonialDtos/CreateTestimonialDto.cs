@@ -1,11 +1,31 @@
-﻿namespace SignalRWebUI.Dtos.TestimonialDtos
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SignalRWebUI.Dtos.TestimonialDtos
 {
     public class CreateTestimonialDto
     {
-        public string? Name { get; set; } 
-        public string? Title { get; set; } 
-        public string? Comment { get; set; } 
-        public string? ImageUrl { get; set; } 
+        [Required(ErrorMessage = "Ad zorunludur")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "Ad en az 2, en fazla 100 karakter olmalıdır")]
+        [Display(Name = "Ad")]
+        public string Name { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Başlık zorunludur")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "Başlık en az 2, en fazla 200 karakter olmalıdır")]
+        [Display(Name = "Başlık")]
+        public string Title { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Yorum zorunludur")]
+        [StringLength(1000, MinimumLength = 10, ErrorMessage = "Yorum en az 10, en fazla 1000 karakter olmalıdır")]
+        [DataType(DataType.MultilineText)]
+        [Display(Name = "Yorum")]
+        public string Comment { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Resim URL'si zorunludur")]
+        [Url(ErrorMessage = "Geçerli bir URL giriniz")]
+        [StringLength(500, MinimumLength = 10, ErrorMessage = "URL en az 10, en fazla 500 karakter olmalıdır")]
+        [Display(Name = "Resim URL'si")]
+        public string ImageUrl { get; set; } = string.Empty;
+
         public bool Status { get; set; }
     }
 }

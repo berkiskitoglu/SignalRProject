@@ -1,5 +1,4 @@
 ﻿using SignalRWebUI.Dtos.MessageDtos;
-using SignalRWebUI.Dtos.MessageDtos;
 using SignalRWebUI.Services.Abstract;
 
 namespace SignalRWebUI.Services.Concrete

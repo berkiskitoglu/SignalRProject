@@ -2,11 +2,19 @@
 
 namespace SignalRWebUI.ViewComponents.LayoutComponents
 {
-    public class _LayoutNavbarComponentPartial : ViewComponent
+    public class _LayoutNavbarComponentPartialViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        private readonly IConfiguration _configuration;
+
+        public _LayoutNavbarComponentPartialViewComponent(IConfiguration configuration)
         {
-            return View();
+            _configuration = configuration;
+        }
+
+        public  IViewComponentResult Invoke()
+        {
+            var hubUrl =  _configuration["ApiSettings:BaseUrl"] + "SignalRHub";
+            return View(model: hubUrl);
         }
     }
 }

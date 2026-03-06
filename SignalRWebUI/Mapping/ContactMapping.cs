@@ -8,9 +8,8 @@ namespace SignalRWebUI.Mapping
     {
         public ContactMapping()
         {
-            CreateMap<GetContactDto, ContactViewModel>();
-            CreateMap<ContactViewModel, CreateContactDto>();
-            CreateMap<ContactViewModel, UpdateContactDto>();
+            CreateMap<ResultContactDto, ContactViewModel>();
+            CreateMap<GetContactDto, UpdateContactDto>();
         }
     }
 }

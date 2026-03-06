@@ -4,87 +4,12 @@
     Layout = "~/Views/AdminLayout/Index.cshtml";
 }
 
-<script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/js/signalr-dashboard.js"></script>
 
 
 <div class="content">
 	<div class="container-fluid">
 
-		<script type="text/javascript">
-			$(document).ready(() => {
-				// SignalR bağlantısı oluştur
-				var connection = new signalR.HubConnectionBuilder()
-					.withUrl("https://localhost:5001/SignalRHub")
-					.build();
-
-				$("#connstatus").text(connection.state);
-
-				connection.start()
-					.then(() => {
-						$("#connstatus").text(connection.state);
-
-						setInterval(() => {
-							connection.invoke("SendStatistics");
-						}, 1000); 
-					})
-					.catch((err) => {
-						console.error(err.toString());
-					});
-
-				connection.on("ReceiveCategoryCount", (categoryCount) => {
-					$("#categorycount").text(categoryCount);
-				});
-				connection.on("ReceiveProductCount", (productCount) => {
-					$("#productCount").text(productCount);
-				});
-				connection.on("ReceiveActiveCategoryCount", (activeCategoryCount) => {
-					$("#activeCategoryCount").text(activeCategoryCount);
-				});
-				connection.on("ReceivePassiveCategoryCount", (passiveCategoryCount) => {
-					$("#passiveCategoryCount").text(passiveCategoryCount);
-				});
-				connection.on("ReceiveProductCountByCategoryNameHamburger", (productCountByCategoryNameHamburger) => {
-					$("#productCountByCategoryNameHamburger").text(productCountByCategoryNameHamburger);
-				});
-				connection.on("ReceiveProductCountByCategoryNameDrink", (productCountByCategoryNameDrink) => {
-					$("#productCountByCategoryNameDrink").text(productCountByCategoryNameDrink);
-				});
-				connection.on("ReceiveProductPriceAvg", (avgProductPrice) => {
-					$("#avgProductPrice").text(avgProductPrice);
-				});
-				connection.on("ReceiveProductNameByMinPrice", (productNameByMinPrice) => {
-					$("#productNameByMinPrice").text(productNameByMinPrice);
-				});
-				connection.on("ReceiveAvgHamburgerPrice", (avgHamburgerPrice) => {
-					$("#avgHamburgerPrice").text(avgHamburgerPrice);
-				});
-				connection.on("ReceiveOrderCount", (orderCount) => {
-					$("#orderCount").text(orderCount);
-				});
-				connection.on("ReceiveActiveOrderCount", (activeOrderCount) => {
-					$("#activeOrderCount").text(activeOrderCount);
-				});
-			connection.on("ReceiveLastOrderPrice", (lastOrderPrice) => {
-					$("#lastOrderPrice").text(lastOrderPrice);
-				});
-				connection.on("ReceiveTotalMoneyCase", (totalMoneyCase) => {
-					$("#totalMoneyCase").text(totalMoneyCase);
-				});
-				// connection.on("ReceiveTotalMoneyCase", (totalMoneyCase) => {
-				// 	$("#totalMoneyCase").text(totalMoneyCase);
-				// });
-				connection.on("ReceiveTotalTableCount", (totalTableCount) => {
-					$("#totalTableCount").text(totalTableCount);
-				});
-				connection.on("ReceiveProductNameByMaxPrice", (productNameByMaxPrice) => {
-					$("#productNameByMaxPrice").text(productNameByMaxPrice);
-				});
-			});
-
-		</script>
 
 		
 
@@ -406,3 +331,9 @@
 	</div>
 	
 </div>
+
+<script>
+	$(document).ready(() => {
+		StatisticsHub.init("@ViewBag.HubUrl");
+	});
+</script>

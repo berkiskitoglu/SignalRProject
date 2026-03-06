@@ -9,9 +9,8 @@ namespace SignalRWebUI.Mapping
         public MenuTableMapping()
         {
 
-            CreateMap<GetMenuTableDto, MenuTableViewModel>();
-            CreateMap<MenuTableViewModel, UpdateMenuTableDto>();
-            CreateMap<MenuTableViewModel, CreateMenuTableDto>();
+            CreateMap<ResultMenuTableDto, MenuTableViewModel>();
+            CreateMap<GetMenuTableDto, UpdateMenuTableDto>();
         }
     }
 }

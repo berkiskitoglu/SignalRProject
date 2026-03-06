@@ -25,7 +25,12 @@ namespace SignalRWebUI.Controllers
         public async Task<IActionResult> ProductList()
         {
             var values = await _productApiService.GetProductsWithCategoryAsync();
-            return View(values);
+            var viewModel = new ProductListViewModel
+            {
+                Products = values.ToList(),
+                Categories = values.Select(x => x.CategoryName).Distinct().ToList()
+            };
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -43,9 +48,8 @@ namespace SignalRWebUI.Controllers
                 productViewModel.CategoryList = await _dropdownHelper.GetCategoryDropdownAsync();
                 return View(productViewModel);
             }
-
-            productViewModel.ProductStatus = true;
             var createProductDto = _mapper.Map<CreateProductDto>(productViewModel);
+            createProductDto.ProductStatus = true;
             await _productApiService.CreateAsync(createProductDto);
             return RedirectToAction("ProductList");
         }
@@ -59,8 +63,9 @@ namespace SignalRWebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateProduct(int id)
         {
-            var getProductById = await _productApiService.GetByIdAsync(id);
-            var viewModel = _mapper.Map<ProductViewModel>(getProductById);
+            var value = await _productApiService.GetByIdAsync(id);
+            if (value is null) return NotFound();
+            var viewModel = _mapper.Map<ProductViewModel>(value);
             viewModel.CategoryList = await _dropdownHelper.GetCategoryDropdownAsync();
             return View(viewModel);
         }
@@ -73,7 +78,6 @@ namespace SignalRWebUI.Controllers
                 productViewModel.CategoryList = await _dropdownHelper.GetCategoryDropdownAsync();
                 return View(productViewModel);
             }
-
             var dto = _mapper.Map<UpdateProductDto>(productViewModel);
             await _productApiService.UpdateAsync(id, dto);
             return RedirectToAction("ProductList");

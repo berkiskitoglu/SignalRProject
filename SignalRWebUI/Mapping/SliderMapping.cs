@@ -8,9 +8,8 @@ namespace SignalRWebUI.Mapping
     {
         public SliderMapping()
         {
-            CreateMap<GetSliderDto, SliderViewModel>();
-            CreateMap<SliderViewModel, CreateSliderDto>();
-            CreateMap<SliderViewModel, UpdateSliderDto>();
+            CreateMap<ResultSliderDto, SliderViewModel>();
+            CreateMap<GetSliderDto, UpdateSliderDto>();
         }
     }
 }

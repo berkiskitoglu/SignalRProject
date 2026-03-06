@@ -8,19 +8,20 @@ namespace SignalRWebUI.Controllers
 {
     public class DiscountController : Controller
     {
-        private readonly IDiscountApiService _DiscountApiService;
+        private readonly IDiscountApiService _discountApiService;
         private readonly IMapper _mapper;
 
-        public DiscountController(IDiscountApiService DiscountApiService, IMapper mapper)
+        public DiscountController(IDiscountApiService discountApiService, IMapper mapper)
         {
-            _DiscountApiService = DiscountApiService;
+            _discountApiService = discountApiService;
             _mapper = mapper;
         }
 
         public async Task<IActionResult> DiscountList()
         {
-            var values = await _DiscountApiService.GetAllAsync();
-            return View(values);
+            var values = await _discountApiService.GetAllAsync();
+            var viewModels = _mapper.Map<List<DiscountViewModel>>(values);
+            return View(viewModels);
         }
 
         [HttpGet]
@@ -30,54 +31,49 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateDiscount(DiscountViewModel discountViewModel)
+        public async Task<IActionResult> CreateDiscount(CreateDiscountDto createDiscountDto)
         {
             if (!ModelState.IsValid)
-            {
-                return View(discountViewModel);
-            }
+                return View(createDiscountDto);
 
-            var createDiscountDto = _mapper.Map<CreateDiscountDto>(discountViewModel);
-            await _DiscountApiService.CreateAsync(createDiscountDto);
+            await _discountApiService.CreateAsync(createDiscountDto);
             return RedirectToAction("DiscountList");
         }
 
         public async Task<IActionResult> DeleteDiscount(int id)
         {
-            await _DiscountApiService.DeleteAsync(id);
+            await _discountApiService.DeleteAsync(id);
             return RedirectToAction("DiscountList");
         }
 
         [HttpGet]
         public async Task<IActionResult> UpdateDiscount(int id)
         {
-            var value = await _DiscountApiService.GetByIdAsync(id);
-            var viewModel = _mapper.Map<DiscountViewModel>(value);
-            return View(viewModel);
+            var value = await _discountApiService.GetByIdAsync(id);
+            if (value is null) return NotFound();
+            var dto = _mapper.Map<UpdateDiscountDto>(value);
+            return View(dto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateDiscount(int id, DiscountViewModel discountViewModel)
+        public async Task<IActionResult> UpdateDiscount(int id, UpdateDiscountDto updateDiscountDto)
         {
             if (!ModelState.IsValid)
-            {
-                return View(discountViewModel);
-            }
+                return View(updateDiscountDto);
 
-            var dto = _mapper.Map<UpdateDiscountDto>(discountViewModel);
-            await _DiscountApiService.UpdateAsync(id, dto);
+            await _discountApiService.UpdateAsync(id, updateDiscountDto);
             return RedirectToAction("DiscountList");
         }
 
         public async Task<IActionResult> ChangeStatusToFalse(int id)
         {
-            await _DiscountApiService.ChangeStatusToFalse(id);
+            await _discountApiService.ChangeStatusToFalse(id);
             return RedirectToAction("DiscountList");
         }
 
         public async Task<IActionResult> ChangeStatusToTrue(int id)
         {
-            await _DiscountApiService.ChangeStatusToTrue(id);
+            await _discountApiService.ChangeStatusToTrue(id);
             return RedirectToAction("DiscountList");
         }
     }

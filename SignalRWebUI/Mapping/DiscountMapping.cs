@@ -8,9 +8,8 @@ namespace SignalRWebUI.Mapping
     {
         public DiscountMapping()
         {
-            CreateMap<GetDiscountDto, DiscountViewModel>();
-            CreateMap<DiscountViewModel, CreateDiscountDto>();
-            CreateMap<DiscountViewModel, UpdateDiscountDto>();
+            CreateMap<ResultDiscountDto, DiscountViewModel>();
+            CreateMap<GetDiscountDto, UpdateDiscountDto>();
         }
     }
 }

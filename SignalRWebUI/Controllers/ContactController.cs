@@ -8,19 +8,20 @@ namespace SignalRWebUI.Controllers
 {
     public class ContactController : Controller
     {
-        private readonly IContactApiService _ContactApiService;
+        private readonly IContactApiService _contactApiService;
         private readonly IMapper _mapper;
 
-        public ContactController(IContactApiService ContactApiService, IMapper mapper)
+        public ContactController(IContactApiService contactApiService, IMapper mapper)
         {
-            _ContactApiService = ContactApiService;
+            _contactApiService = contactApiService;
             _mapper = mapper;
         }
 
         public async Task<IActionResult> ContactList()
         {
-            var values = await _ContactApiService.GetAllAsync();
-            return View(values);
+            var values = await _contactApiService.GetAllAsync();
+            var viewModels = _mapper.Map<List<ContactViewModel>>(values);
+            return View(viewModels);
         }
 
         [HttpGet]
@@ -30,42 +31,37 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateContact(ContactViewModel contactViewModel)
+        public async Task<IActionResult> CreateContact(CreateContactDto createContactDto)
         {
             if (!ModelState.IsValid)
-            {
-                return View(contactViewModel);
-            }
+                return View(createContactDto);
 
-            var createContactDto = _mapper.Map<CreateContactDto>(contactViewModel);
-            await _ContactApiService.CreateAsync(createContactDto);
+            await _contactApiService.CreateAsync(createContactDto);
             return RedirectToAction("ContactList");
         }
 
         public async Task<IActionResult> DeleteContact(int id)
         {
-            await _ContactApiService.DeleteAsync(id);
+            await _contactApiService.DeleteAsync(id);
             return RedirectToAction("ContactList");
         }
 
         [HttpGet]
         public async Task<IActionResult> UpdateContact(int id)
         {
-            var value = await _ContactApiService.GetByIdAsync(id);
-            var viewModel = _mapper.Map<ContactViewModel>(value);
-            return View(viewModel);
+            var value = await _contactApiService.GetByIdAsync(id);
+            if (value is null) return NotFound();
+            var dto = _mapper.Map<UpdateContactDto>(value);
+            return View(dto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateContact(int id, ContactViewModel contactViewModel)
+        public async Task<IActionResult> UpdateContact(int id, UpdateContactDto updateContactDto)
         {
             if (!ModelState.IsValid)
-            {
-                return View(contactViewModel);
-            }
+                return View(updateContactDto);
 
-            var dto = _mapper.Map<UpdateContactDto>(contactViewModel);
-            await _ContactApiService.UpdateAsync(id, dto);
+            await _contactApiService.UpdateAsync(id, updateContactDto);
             return RedirectToAction("ContactList");
         }
     }

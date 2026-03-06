@@ -8,19 +8,20 @@ namespace SignalRWebUI.Controllers
 {
     public class TestimonialController : Controller
     {
-        private readonly ITestimonialApiService _TestimonialApiService;
+        private readonly ITestimonialApiService _testimonialApiService;
         private readonly IMapper _mapper;
 
-        public TestimonialController(ITestimonialApiService TestimonialApiService, IMapper mapper)
+        public TestimonialController(ITestimonialApiService testimonialApiService, IMapper mapper)
         {
-            _TestimonialApiService = TestimonialApiService;
+            _testimonialApiService = testimonialApiService;
             _mapper = mapper;
         }
 
         public async Task<IActionResult> TestimonialList()
         {
-            var values = await _TestimonialApiService.GetAllAsync();
-            return View(values);
+            var values = await _testimonialApiService.GetAllAsync();
+            var viewModels = _mapper.Map<List<TestimonialViewModel>>(values);
+            return View(viewModels);
         }
 
         [HttpGet]
@@ -30,42 +31,37 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTestimonial(TestimonialViewModel testimonialViewModel)
+        public async Task<IActionResult> CreateTestimonial(CreateTestimonialDto createTestimonialDto)
         {
             if (!ModelState.IsValid)
-            {
-                return View(testimonialViewModel);
-            }
+                return View(createTestimonialDto);
 
-            var createTestimonialDto = _mapper.Map<CreateTestimonialDto>(testimonialViewModel);
-            await _TestimonialApiService.CreateAsync(createTestimonialDto);
+            await _testimonialApiService.CreateAsync(createTestimonialDto);
             return RedirectToAction("TestimonialList");
         }
 
         public async Task<IActionResult> DeleteTestimonial(int id)
         {
-            await _TestimonialApiService.DeleteAsync(id);
+            await _testimonialApiService.DeleteAsync(id);
             return RedirectToAction("TestimonialList");
         }
 
         [HttpGet]
         public async Task<IActionResult> UpdateTestimonial(int id)
         {
-            var value = await _TestimonialApiService.GetByIdAsync(id);
-            var viewModel = _mapper.Map<TestimonialViewModel>(value);
-            return View(viewModel);
+            var value = await _testimonialApiService.GetByIdAsync(id);
+            if (value is null) return NotFound();
+            var dto = _mapper.Map<UpdateTestimonialDto>(value);
+            return View(dto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateTestimonial(int id, TestimonialViewModel testimonialViewModel)
+        public async Task<IActionResult> UpdateTestimonial(int id, UpdateTestimonialDto updateTestimonialDto)
         {
             if (!ModelState.IsValid)
-            {
-                return View(testimonialViewModel);
-            }
+                return View(updateTestimonialDto);
 
-            var dto = _mapper.Map<UpdateTestimonialDto>(testimonialViewModel);
-            await _TestimonialApiService.UpdateAsync(id, dto);
+            await _testimonialApiService.UpdateAsync(id, updateTestimonialDto);
             return RedirectToAction("TestimonialList");
         }
     }
