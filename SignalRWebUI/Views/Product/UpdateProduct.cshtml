@@ -1,4 +1,4 @@
-﻿@model ProductViewModel
+﻿@model UpdateProductViewModel
 @{
 	ViewData["Title"] = "UpdateProduct";
 	Layout = "~/Views/AdminLayout/Index.cshtml";
@@ -31,7 +31,9 @@
 							</div>
 							<div class="form-group">
 								<label for="categoryId">Ürün Kategorisini Giriniz</label>
-								@Html.DropDownListFor(x => x.CategoryID, (List<SelectListItem>)Model.CategoryList, "Kategori Seçiniz", new { @class = "form-control" })
+								<select asp-for="CategoryID" asp-items="Model.CategoryList" class="form-control">
+									<option value="">Kategori Seçiniz</option>
+								</select>
 								<span asp-validation-for="CategoryID" class="text-danger"></span>
 							</div>
 							<div class="form-group">

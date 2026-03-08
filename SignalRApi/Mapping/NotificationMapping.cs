@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using SignalR.DtoLayer.AboutDtos;
 using SignalR.DtoLayer.NotificationDtos;
 using SignalR.EntityLayer.Entities;
 

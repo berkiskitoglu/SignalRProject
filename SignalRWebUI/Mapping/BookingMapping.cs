@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SignalRWebUI.Dtos.BookingDtos;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.BookingViewModels;
 
 namespace SignalRWebUI.Mapping
 {
@@ -8,8 +8,10 @@ namespace SignalRWebUI.Mapping
     {
         public BookingMapping()
         {
-            CreateMap<GetBookingDto, BookingViewModel>();
-            CreateMap<GetBookingDto, UpdateBookingDto>();
+            CreateMap<ResultBookingDto, ResultBookingViewModel>();
+            CreateMap<GetBookingDto, UpdateBookingViewModel>();
+            CreateMap<CreateBookingViewModel, CreateBookingDto>();
+            CreateMap<UpdateBookingViewModel, UpdateBookingDto>();
         }
     }
 }

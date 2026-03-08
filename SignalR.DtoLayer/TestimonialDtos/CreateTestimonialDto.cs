@@ -2,10 +2,10 @@
 {
     public class CreateTestimonialDto
     {
-        public required string Name { get; set; }
-        public required string Title { get; set; }
-        public required string Comment { get; set; }
-        public required string ImageUrl { get; set; }
-        public required bool Status { get; set; }
+        public string? Name { get; set; }
+        public string? Title { get; set; }
+        public string? Comment { get; set; }
+        public string? ImageUrl { get; set; }
+        public bool Status { get; set; }
     }
 }

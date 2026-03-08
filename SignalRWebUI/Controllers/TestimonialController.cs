@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SignalRWebUI.Dtos.TestimonialDtos;
 using SignalRWebUI.Services.Abstract;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.TestimonialViewModels;
 
 namespace SignalRWebUI.Controllers
 {
@@ -19,23 +19,21 @@ namespace SignalRWebUI.Controllers
 
         public async Task<IActionResult> TestimonialList()
         {
-            var values = await _testimonialApiService.GetAllAsync();
-            var viewModels = _mapper.Map<List<TestimonialViewModel>>(values);
-            return View(viewModels);
+            List<ResultTestimonialDto> values = await _testimonialApiService.GetAllAsync();
+            List<ResultTestimonialViewModel> resultTestimonialViewModels = _mapper.Map<List<ResultTestimonialViewModel>>(values);
+            return View(resultTestimonialViewModels);
         }
 
         [HttpGet]
-        public IActionResult CreateTestimonial()
-        {
-            return View();
-        }
+        public IActionResult CreateTestimonial() => View();
 
         [HttpPost]
-        public async Task<IActionResult> CreateTestimonial(CreateTestimonialDto createTestimonialDto)
+        public async Task<IActionResult> CreateTestimonial(CreateTestimonialViewModel createTestimonialViewModel)
         {
             if (!ModelState.IsValid)
-                return View(createTestimonialDto);
+                return View(createTestimonialViewModel);
 
+            CreateTestimonialDto createTestimonialDto = _mapper.Map<CreateTestimonialDto>(createTestimonialViewModel);
             await _testimonialApiService.CreateAsync(createTestimonialDto);
             return RedirectToAction("TestimonialList");
         }
@@ -49,18 +47,19 @@ namespace SignalRWebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateTestimonial(int id)
         {
-            var value = await _testimonialApiService.GetByIdAsync(id);
-            if (value is null) return NotFound();
-            var dto = _mapper.Map<UpdateTestimonialDto>(value);
-            return View(dto);
+            GetTestimonialDto getTestimonialDto = await _testimonialApiService.GetByIdAsync(id);
+            if (getTestimonialDto is null) return NotFound();
+            UpdateTestimonialViewModel updateTestimonialViewModel = _mapper.Map<UpdateTestimonialViewModel>(getTestimonialDto);
+            return View(updateTestimonialViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateTestimonial(int id, UpdateTestimonialDto updateTestimonialDto)
+        public async Task<IActionResult> UpdateTestimonial(int id, UpdateTestimonialViewModel updateTestimonialViewModel)
         {
             if (!ModelState.IsValid)
-                return View(updateTestimonialDto);
+                return View(updateTestimonialViewModel);
 
+            UpdateTestimonialDto updateTestimonialDto = _mapper.Map<UpdateTestimonialDto>(updateTestimonialViewModel);
             await _testimonialApiService.UpdateAsync(id, updateTestimonialDto);
             return RedirectToAction("TestimonialList");
         }

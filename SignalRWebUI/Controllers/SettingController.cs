@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.EntityLayer.Entities;
-using SignalRWebUI.Dtos.IdentityDtos;
+using SignalRWebUI.ViewModels.IdentityViewModels;
 
 namespace SignalRWebUI.Controllers
 {
@@ -17,39 +17,51 @@ namespace SignalRWebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var values = await _userManager.FindByNameAsync(User.Identity.Name);
-            UserEditDto userEditDto = new UserEditDto()
+            AppUser values = await _userManager.FindByNameAsync(User.Identity.Name);
+            UserEditViewModel userEditViewModel = new UserEditViewModel
             {
                 Name = values.Name,
                 Surname = values.Surname,
                 Username = values.UserName,
-                Mail = values.Email,
+                Mail = values.Email
             };
-            return View(userEditDto);
+            return View(userEditViewModel);
         }
+
         [HttpPost]
-        public async Task<IActionResult> Index(UserEditDto userEditDto)
+        public async Task<IActionResult> Index(UserEditViewModel userEditViewModel)
         {
-            if(userEditDto.Password == userEditDto.ConfirmPassword)
+            if (!ModelState.IsValid)
+                return View(userEditViewModel);
+
+            if (userEditViewModel.Password != userEditViewModel.ConfirmPassword)
             {
-                var user = await _userManager.FindByNameAsync(User.Identity.Name);
-                user.Name = userEditDto.Name;
-                user.Surname = userEditDto.Surname;
-                user.UserName = userEditDto.Username;
-                user.Email = userEditDto.Mail;
-                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, userEditDto.Password);
-                var result = await _userManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    if (!string.IsNullOrEmpty(userEditDto.Password))
-                    {
-                        await _userManager.RemovePasswordAsync(user);
-                        await _userManager.AddPasswordAsync(user, userEditDto.Password);
-                    }
-                    return RedirectToAction("CategoryList", "Category");
-                }
+                ModelState.AddModelError("", "Şifreler eşleşmiyor");
+                return View(userEditViewModel);
             }
-            return View();
+
+            AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+            user.Name = userEditViewModel.Name;
+            user.Surname = userEditViewModel.Surname;
+            user.UserName = userEditViewModel.Username;
+            user.Email = userEditViewModel.Mail;
+
+            IdentityResult result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                if (!string.IsNullOrEmpty(userEditViewModel.Password))
+                {
+                    await _userManager.RemovePasswordAsync(user);
+                    await _userManager.AddPasswordAsync(user, userEditViewModel.Password);
+                }
+                return RedirectToAction("CategoryList", "Category");
+            }
+
+            foreach (IdentityError item in result.Errors)
+                ModelState.AddModelError("", item.Description);
+
+            return View(userEditViewModel);
         }
     }
 }

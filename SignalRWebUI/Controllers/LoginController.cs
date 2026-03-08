@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.EntityLayer.Entities;
-using SignalRWebUI.Dtos.IdentityDtos;
+using SignalRWebUI.ViewModels.IdentityViewModels;
 
 namespace SignalRWebUI.Controllers
 {
@@ -17,23 +17,25 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
 
         [HttpPost]
-        public async Task<IActionResult> Index(LoginDto loginDto)
+        public async Task<IActionResult> Index(LoginViewModel loginViewModel)
         {
             if (!ModelState.IsValid)
-                return View(loginDto);
+                return View(loginViewModel);
 
-            var result = await _signInManager.PasswordSignInAsync(loginDto.Username, loginDto.Password, false, false);
+            Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(
+                loginViewModel.Username,
+                loginViewModel.Password,
+                false,
+                false);
+
             if (result.Succeeded)
                 return RedirectToAction("CategoryList", "Category");
 
             ModelState.AddModelError("", "Kullanıcı adı veya şifre hatalı");
-            return View(loginDto);
+            return View(loginViewModel);
         }
 
         public async Task<IActionResult> Logout()

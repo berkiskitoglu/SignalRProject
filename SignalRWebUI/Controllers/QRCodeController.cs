@@ -3,7 +3,6 @@ using QRCoder;
 using System.Drawing;
 using ZXing;
 using ZXing.Common;
-using ZXing.QrCode;
 using ZXing.Windows.Compatibility;
 
 namespace SignalRWebUI.Controllers

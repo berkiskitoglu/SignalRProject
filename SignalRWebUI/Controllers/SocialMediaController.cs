@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SignalRWebUI.Dtos.SocialMediaDtos;
 using SignalRWebUI.Services.Abstract;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.SocialMediaViewModels;
 
 namespace SignalRWebUI.Controllers
 {
@@ -19,23 +19,21 @@ namespace SignalRWebUI.Controllers
 
         public async Task<IActionResult> SocialMediaList()
         {
-            var values = await _socialMediaApiService.GetAllAsync();
-            var viewModels = _mapper.Map<List<SocialMediaViewModel>>(values);
-            return View(viewModels);
+            List<ResultSocialMediaDto> values = await _socialMediaApiService.GetAllAsync();
+            List<ResultSocialMediaViewModel> resultSocialMediaViewModels = _mapper.Map<List<ResultSocialMediaViewModel>>(values);
+            return View(resultSocialMediaViewModels);
         }
 
         [HttpGet]
-        public IActionResult CreateSocialMedia()
-        {
-            return View();
-        }
+        public IActionResult CreateSocialMedia() => View();
 
         [HttpPost]
-        public async Task<IActionResult> CreateSocialMedia(CreateSocialMediaDto createSocialMediaDto)
+        public async Task<IActionResult> CreateSocialMedia(CreateSocialMediaViewModel createSocialMediaViewModel)
         {
             if (!ModelState.IsValid)
-                return View(createSocialMediaDto);
+                return View(createSocialMediaViewModel);
 
+            CreateSocialMediaDto createSocialMediaDto = _mapper.Map<CreateSocialMediaDto>(createSocialMediaViewModel);
             await _socialMediaApiService.CreateAsync(createSocialMediaDto);
             return RedirectToAction("SocialMediaList");
         }
@@ -49,18 +47,19 @@ namespace SignalRWebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateSocialMedia(int id)
         {
-            var value = await _socialMediaApiService.GetByIdAsync(id);
-            if (value is null) return NotFound();
-            var dto = _mapper.Map<UpdateSocialMediaDto>(value);
-            return View(dto);
+            GetSocialMediaDto getSocialMediaDto = await _socialMediaApiService.GetByIdAsync(id);
+            if (getSocialMediaDto is null) return NotFound();
+            UpdateSocialMediaViewModel updateSocialMediaViewModel = _mapper.Map<UpdateSocialMediaViewModel>(getSocialMediaDto);
+            return View(updateSocialMediaViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateSocialMedia(int id, UpdateSocialMediaDto updateSocialMediaDto)
+        public async Task<IActionResult> UpdateSocialMedia(int id, UpdateSocialMediaViewModel updateSocialMediaViewModel)
         {
             if (!ModelState.IsValid)
-                return View(updateSocialMediaDto);
+                return View(updateSocialMediaViewModel);
 
+            UpdateSocialMediaDto updateSocialMediaDto = _mapper.Map<UpdateSocialMediaDto>(updateSocialMediaViewModel);
             await _socialMediaApiService.UpdateAsync(id, updateSocialMediaDto);
             return RedirectToAction("SocialMediaList");
         }

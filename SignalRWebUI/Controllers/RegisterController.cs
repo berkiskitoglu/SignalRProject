@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.EntityLayer.Entities;
-using SignalRWebUI.Dtos.IdentityDtos;
+using SignalRWebUI.ViewModels.IdentityViewModels;
 
 namespace SignalRWebUI.Controllers
 {
@@ -14,33 +14,31 @@ namespace SignalRWebUI.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
+
         [HttpPost]
-        public async Task<IActionResult> Index(RegisterDto registerDto)
+        public async Task<IActionResult> Index(RegisterViewModel registerViewModel)
         {
-            var appUser = new AppUser
+            if (!ModelState.IsValid)
+                return View(registerViewModel);
+
+            AppUser appUser = new AppUser
             {
-                Name = registerDto.Name,
-                Surname = registerDto.Surname,
-                UserName = registerDto.Username,
-                Email = registerDto.Mail
+                Name = registerViewModel.Name,
+                Surname = registerViewModel.Surname,
+                UserName = registerViewModel.Username,
+                Email = registerViewModel.Mail
             };
-            var result = await _userManager.CreateAsync(appUser, registerDto.Password);
+
+            IdentityResult result = await _userManager.CreateAsync(appUser, registerViewModel.Password);
+
             if (result.Succeeded)
-            {
                 return RedirectToAction("Index", "Login");
-            }
-            else
-            {
-                foreach (var item in result.Errors)
-                {
-                    ModelState.AddModelError("", item.Description);
-                }
-                return View(registerDto);
-            }
+
+            foreach (IdentityError item in result.Errors)
+                ModelState.AddModelError("", item.Description);
+
+            return View(registerViewModel);
         }
     }
 }

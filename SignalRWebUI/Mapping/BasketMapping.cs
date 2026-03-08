@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using SignalRWebUI.Dtos.BasketDtos;
 using SignalRWebUI.Dtos.BasketProductDtos;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.BasketViewModels;
 
 namespace SignalRWebUI.Mapping
 {
@@ -9,13 +9,12 @@ namespace SignalRWebUI.Mapping
     {
         public BasketMapping()
         {
-            CreateMap<ResultBasketProductDto, BasketProductViewModel>();
-            CreateMap<ResultBasketDto, BasketViewModel>();
-
-            CreateMap<ResultBasketProductDto, BasketViewModel>();
+            CreateMap<ResultBasketDto, ResultBasketViewModel>();
+            CreateMap<ResultBasketProductDto, ResultBasketProductViewModel>();
+            CreateMap<ResultBasketProductViewModel, CreateBasketProductDto>();
+            CreateMap<ResultBasketViewModel, CreateBasketDto>();
             CreateMap<CreateBasketViewModel, CreateBasketDto>();
             CreateMap<CreateBasketProductViewModel, CreateBasketProductDto>();
-            CreateMap<BasketProductViewModel, CreateBasketProductDto>();
         }
     }
 }

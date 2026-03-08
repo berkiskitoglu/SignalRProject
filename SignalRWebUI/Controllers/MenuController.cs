@@ -18,7 +18,7 @@ namespace SignalRWebUI.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var values = await _productApiService.GetAllAsync();
+            var values = await _productApiService.GetProductsWithCategoryAsync();
             return View(values);
         }
         [HttpPost]

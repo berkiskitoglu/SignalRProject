@@ -2,8 +2,8 @@
 {
     public class CreateMailDto
     {
-        public required string ReceiverMail { get; set; }
-        public required string Subject { get; set; }
-        public required string Content { get; set; }
+        public string? ReceiverMail { get; set; }
+        public string? Subject { get; set; }
+        public string? Content { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SignalRWebUI.Dtos.MenuTableDtos;
 using SignalRWebUI.Services.Abstract;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.MenuTableViewModels;
 
 namespace SignalRWebUI.Controllers
 {
@@ -19,23 +19,21 @@ namespace SignalRWebUI.Controllers
 
         public async Task<IActionResult> MenuTableList()
         {
-            var values = await _menuTableApiService.GetAllAsync();
-            var viewModels = _mapper.Map<List<MenuTableViewModel>>(values);
-            return View(viewModels);
+            List<ResultMenuTableDto> values = await _menuTableApiService.GetAllAsync();
+            List<ResultMenuTableViewModel> resultMenuTableViewModels = _mapper.Map<List<ResultMenuTableViewModel>>(values);
+            return View(resultMenuTableViewModels);
         }
 
         [HttpGet]
-        public IActionResult CreateMenuTable()
-        {
-            return View();
-        }
+        public IActionResult CreateMenuTable() => View();
 
         [HttpPost]
-        public async Task<IActionResult> CreateMenuTable(CreateMenuTableDto createMenuTableDto)
+        public async Task<IActionResult> CreateMenuTable(CreateMenuTableViewModel createMenuTableViewModel)
         {
             if (!ModelState.IsValid)
-                return View(createMenuTableDto);
+                return View(createMenuTableViewModel);
 
+            CreateMenuTableDto createMenuTableDto = _mapper.Map<CreateMenuTableDto>(createMenuTableViewModel);
             createMenuTableDto.Status = true;
             await _menuTableApiService.CreateAsync(createMenuTableDto);
             return RedirectToAction("MenuTableList");
@@ -50,18 +48,19 @@ namespace SignalRWebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateMenuTable(int id)
         {
-            var value = await _menuTableApiService.GetByIdAsync(id);
-            if (value is null) return NotFound();
-            var dto = _mapper.Map<UpdateMenuTableDto>(value);
-            return View(dto);
+            GetMenuTableDto getMenuTableDto = await _menuTableApiService.GetByIdAsync(id);
+            if (getMenuTableDto is null) return NotFound();
+            UpdateMenuTableViewModel updateMenuTableViewModel = _mapper.Map<UpdateMenuTableViewModel>(getMenuTableDto);
+            return View(updateMenuTableViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateMenuTable(int id, UpdateMenuTableDto updateMenuTableDto)
+        public async Task<IActionResult> UpdateMenuTable(int id, UpdateMenuTableViewModel updateMenuTableViewModel)
         {
             if (!ModelState.IsValid)
-                return View(updateMenuTableDto);
+                return View(updateMenuTableViewModel);
 
+            UpdateMenuTableDto updateMenuTableDto = _mapper.Map<UpdateMenuTableDto>(updateMenuTableViewModel);
             await _menuTableApiService.UpdateAsync(id, updateMenuTableDto);
             return RedirectToAction("MenuTableList");
         }
@@ -69,9 +68,9 @@ namespace SignalRWebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> TableListByStatus()
         {
-            var values = await _menuTableApiService.GetAllAsync();
-            var viewModels = _mapper.Map<List<MenuTableViewModel>>(values);
-            return View(viewModels);
+            List<ResultMenuTableDto> values = await _menuTableApiService.GetAllAsync();
+            List<ResultMenuTableViewModel> resultMenuTableViewModels = _mapper.Map<List<ResultMenuTableViewModel>>(values);
+            return View(resultMenuTableViewModels);
         }
     }
 }

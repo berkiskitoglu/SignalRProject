@@ -2,10 +2,10 @@
 {
     public class CreateBookingDto
     {
-        public required string Name { get; set; }
-        public required string Description { get; set; } 
-        public required string Phone { get; set; } 
-        public required string Mail { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public string? Phone { get; set; }
+        public string? Mail { get; set; }
         public int PersonCount { get; set; }
         public DateTime Date { get; set; }
     }

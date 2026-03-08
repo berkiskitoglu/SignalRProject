@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using SignalR.DataAccessLayer.Concrete;
@@ -16,9 +15,19 @@ builder.Services.AddIdentity<AppUser, AppRole>()
 builder.Services.AddApiServices(builder.Configuration);
 builder.Services.AddScoped<IDropdownHelper, DropdownHelper>();
 builder.Services.AddAutoMapper(cfg => { }, AppDomain.CurrentDomain.GetAssemblies());
+
 builder.Services.AddControllersWithViews(opt =>
 {
     opt.Filters.Add(new AuthorizeFilter(requireAuthorizedPolicy));
+})
+.AddDataAnnotationsLocalization()
+.ConfigureApiBehaviorOptions(options => { })
+.AddMvcOptions(options =>
+{
+    options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(x => "Bu alan zorunludur.");
+    options.ModelBindingMessageProvider.SetAttemptedValueIsInvalidAccessor((x, y) => $"'{x}' geçerli bir değer değildir.");
+    options.ModelBindingMessageProvider.SetValueIsInvalidAccessor(x => $"'{x}' geçerli bir değer değildir.");
+    options.ModelBindingMessageProvider.SetMissingBindRequiredValueAccessor(x => $"'{x}' alanı zorunludur.");
 });
 builder.Services.ConfigureApplicationCookie(opts =>
 {

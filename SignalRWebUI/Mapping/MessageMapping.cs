@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SignalRWebUI.Dtos.MessageDtos;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.MessageViewModels;
 
 namespace SignalRWebUI.Mapping
 {
@@ -8,9 +8,9 @@ namespace SignalRWebUI.Mapping
     {
         public MessageMapping()
         {
-            CreateMap<GetMessageDto, MessageViewModel>();
-            CreateMap<MessageViewModel, UpdateMessageDto>();
-            CreateMap<MessageViewModel, CreateMessageDto>();
+            CreateMap<GetMessageDto, ResultMessageViewModel>();
+            CreateMap<ResultMessageViewModel, UpdateMessageDto>();
+            CreateMap<ResultMessageViewModel, CreateMessageDto>();
         }
     }
 }

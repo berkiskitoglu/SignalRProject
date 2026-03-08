@@ -5,10 +5,10 @@ namespace SignalRWebUI.Dtos.BasketDtos
     public class ResultBasketDto
     {
         public int BasketID { get; set; }
-        public string Status { get; set; } = null!;
+        public string? Status { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public int MenuTableID { get; set; }
-        public List<ResultBasketProductDto> Products { get; set; } = null!;
+        public List<ResultBasketProductDto>? Products { get; set; }
     }
 }

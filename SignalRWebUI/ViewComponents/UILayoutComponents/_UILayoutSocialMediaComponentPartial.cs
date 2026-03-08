@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using SignalRWebUI.Dtos.SocialMediaDtos;
 using SignalRWebUI.Services.Abstract;
 using SignalRWebUI.ViewModels;
 

@@ -2,11 +2,10 @@
 {
     public class CreateDiscountDto
     {
-        public required string Title { get; set; }
-        public required int Amount { get; set; }
-        public required string Description { get; set; }
-        public required string ImageUrl { get; set; }
-        public required bool Status { get; set; }
-
+        public string? Title { get; set; }
+        public int Amount { get; set; }
+        public string? Description { get; set; }
+        public string? ImageUrl { get; set; }
+        public bool Status { get; set; }
     }
 }

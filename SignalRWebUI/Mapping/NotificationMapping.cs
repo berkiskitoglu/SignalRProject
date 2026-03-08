@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SignalRWebUI.Dtos.NotificationDtos;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.NotificationViewModels;
 
 namespace SignalRWebUI.Mapping
 {
@@ -8,9 +8,10 @@ namespace SignalRWebUI.Mapping
     {
         public NotificationMapping()
         {
-            CreateMap<GetNotificationDto, NotificationViewModel>();
-            CreateMap<NotificationViewModel, CreateNotificationDto>();
-            CreateMap<NotificationViewModel, UpdateNotificationDto>();
+            CreateMap<ResultNotificationDto, ResultNotificationViewModel>();
+            CreateMap<GetNotificationDto, UpdateNotificationViewModel>();
+            CreateMap<CreateNotificationViewModel, CreateNotificationDto>();
+            CreateMap<UpdateNotificationViewModel, UpdateNotificationDto>();
         }
     }
 }

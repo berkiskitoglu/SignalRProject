@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SignalRWebUI.Dtos.TestimonialDtos;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.TestimonialViewModels;
 
 namespace SignalRWebUI.Mapping
 {
@@ -8,8 +8,10 @@ namespace SignalRWebUI.Mapping
     {
         public TestimonialMapping()
         {
-            CreateMap<ResultTestimonialDto, TestimonialViewModel>();
-            CreateMap<GetTestimonialDto, UpdateTestimonialDto>();
+            CreateMap<ResultTestimonialDto, ResultTestimonialViewModel>();
+            CreateMap<GetTestimonialDto, UpdateTestimonialViewModel>();
+            CreateMap<CreateTestimonialViewModel, CreateTestimonialDto>();
+            CreateMap<UpdateTestimonialViewModel, UpdateTestimonialDto>();
         }
     }
 }

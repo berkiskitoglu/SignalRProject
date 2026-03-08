@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SignalRWebUI.Dtos.ProductDtos;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.ProductViewModels;
 
 namespace SignalRWebUI.Mapping
 {
@@ -8,9 +8,10 @@ namespace SignalRWebUI.Mapping
     {
         public ProductMapping()
         {
-            CreateMap<GetProductDto, ProductViewModel>();
-            CreateMap<ProductViewModel, CreateProductDto>();
-            CreateMap<ProductViewModel, UpdateProductDto>();
+            CreateMap<ResultProductWithCategoryDto, ResultProductViewModel>();
+            CreateMap<GetProductDto, UpdateProductViewModel>();
+            CreateMap<CreateProductViewModel, CreateProductDto>();
+            CreateMap<UpdateProductViewModel, UpdateProductDto>();
         }
     }
 }

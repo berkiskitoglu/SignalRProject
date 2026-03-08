@@ -1,4 +1,4 @@
-﻿using SignalRWebUI.ViewModels;
+﻿using SignalRWebUI.ViewModels.RapidApiViewModels;
 
 namespace SignalRWebUI.Services.Abstract
 {

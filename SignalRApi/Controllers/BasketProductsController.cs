@@ -1,12 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
-using SignalR.DtoLayer.AboutDtos;
-using SignalR.DtoLayer.BasketDtos;
 using SignalR.DtoLayer.BasketProductDtos;
 using SignalR.EntityLayer.Entities;
-using System.Threading.Tasks;
 
 namespace SignalRApi.Controllers
 {

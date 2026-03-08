@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SignalRWebUI.Dtos.SliderDtos;
 using SignalRWebUI.Services.Abstract;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.SliderViewModels;
 
 namespace SignalRWebUI.Controllers
 {
@@ -19,23 +19,21 @@ namespace SignalRWebUI.Controllers
 
         public async Task<IActionResult> SliderList()
         {
-            var values = await _sliderApiService.GetAllAsync();
-            var viewModels = _mapper.Map<List<SliderViewModel>>(values);
-            return View(viewModels);
+            List<ResultSliderDto> values = await _sliderApiService.GetAllAsync();
+            List<ResultSliderViewModel> resultSliderViewModels = _mapper.Map<List<ResultSliderViewModel>>(values);
+            return View(resultSliderViewModels);
         }
 
         [HttpGet]
-        public IActionResult CreateSlider()
-        {
-            return View();
-        }
+        public IActionResult CreateSlider() => View();
 
         [HttpPost]
-        public async Task<IActionResult> CreateSlider(CreateSliderDto createSliderDto)
+        public async Task<IActionResult> CreateSlider(CreateSliderViewModel createSliderViewModel)
         {
             if (!ModelState.IsValid)
-                return View(createSliderDto);
+                return View(createSliderViewModel);
 
+            CreateSliderDto createSliderDto = _mapper.Map<CreateSliderDto>(createSliderViewModel);
             await _sliderApiService.CreateAsync(createSliderDto);
             return RedirectToAction("SliderList");
         }
@@ -49,18 +47,19 @@ namespace SignalRWebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateSlider(int id)
         {
-            var value = await _sliderApiService.GetByIdAsync(id);
-            if (value is null) return NotFound();
-            var dto = _mapper.Map<UpdateSliderDto>(value);
-            return View(dto);
+            GetSliderDto getSliderDto = await _sliderApiService.GetByIdAsync(id);
+            if (getSliderDto is null) return NotFound();
+            UpdateSliderViewModel updateSliderViewModel = _mapper.Map<UpdateSliderViewModel>(getSliderDto);
+            return View(updateSliderViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateSlider(int id, UpdateSliderDto updateSliderDto)
+        public async Task<IActionResult> UpdateSlider(int id, UpdateSliderViewModel updateSliderViewModel)
         {
             if (!ModelState.IsValid)
-                return View(updateSliderDto);
+                return View(updateSliderViewModel);
 
+            UpdateSliderDto updateSliderDto = _mapper.Map<UpdateSliderDto>(updateSliderViewModel);
             await _sliderApiService.UpdateAsync(id, updateSliderDto);
             return RedirectToAction("SliderList");
         }

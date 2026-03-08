@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using SignalR.DtoLayer.AboutDtos;
 using SignalR.DtoLayer.BasketDtos;
 using SignalR.DtoLayer.BasketProductDtos;
 using SignalR.EntityLayer.Entities;

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SignalRWebUI.Dtos.AboutDtos;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.AboutViewModels;
 
 namespace SignalRWebUI.Mapping
 {
@@ -8,9 +8,10 @@ namespace SignalRWebUI.Mapping
     {
         public AboutMapping()
         {
-            CreateMap<GetAboutDto, AboutViewModel>();
-            CreateMap<AboutViewModel, UpdateAboutDto>();
-            CreateMap<AboutViewModel, CreateAboutDto>();
+            CreateMap<ResultAboutDto, ResultAboutViewModel>();
+            CreateMap<GetAboutDto, UpdateAboutViewModel>();
+            CreateMap<CreateAboutViewModel, CreateAboutDto>();
+            CreateMap<UpdateAboutViewModel, UpdateAboutDto>();
         }
     }
 }

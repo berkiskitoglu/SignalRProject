@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SignalRWebUI.Dtos.ProductDtos;
 using SignalRWebUI.Helpers.Dropdown;
 using SignalRWebUI.Services.Abstract;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.ProductViewModels;
 
 namespace SignalRWebUI.Controllers
 {
@@ -24,31 +24,35 @@ namespace SignalRWebUI.Controllers
 
         public async Task<IActionResult> ProductList()
         {
-            var values = await _productApiService.GetProductsWithCategoryAsync();
-            var viewModel = new ProductListViewModel
+            List<ResultProductWithCategoryDto> values = await _productApiService.GetProductsWithCategoryAsync();
+            List<ResultProductViewModel> resultProductViewModels = _mapper.Map<List<ResultProductViewModel>>(values);
+
+            ProductListViewModel productListViewModel = new ProductListViewModel
             {
-                Products = values.ToList(),
-                Categories = values.Select(x => x.CategoryName).Distinct().ToList()
+                Products = resultProductViewModels,
+                Categories = resultProductViewModels.Select(x => x.CategoryName).Distinct().ToList()
             };
-            return View(viewModel);
+
+            return View(productListViewModel);
         }
 
         [HttpGet]
         public async Task<IActionResult> CreateProduct()
         {
-            var viewModel = await _dropdownHelper.BuildProductViewModelAsync();
-            return View(viewModel);
+            CreateProductViewModel createProductViewModel = await _dropdownHelper.BuildCreateProductViewModelAsync();
+            return View(createProductViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(ProductViewModel productViewModel)
+        public async Task<IActionResult> CreateProduct(CreateProductViewModel createProductViewModel)
         {
             if (!ModelState.IsValid)
             {
-                productViewModel.CategoryList = await _dropdownHelper.GetCategoryDropdownAsync();
-                return View(productViewModel);
+                createProductViewModel.CategoryList = await _dropdownHelper.GetCategoryDropdownAsync();
+                return View(createProductViewModel);
             }
-            var createProductDto = _mapper.Map<CreateProductDto>(productViewModel);
+
+            CreateProductDto createProductDto = _mapper.Map<CreateProductDto>(createProductViewModel);
             createProductDto.ProductStatus = true;
             await _productApiService.CreateAsync(createProductDto);
             return RedirectToAction("ProductList");
@@ -63,23 +67,26 @@ namespace SignalRWebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateProduct(int id)
         {
-            var value = await _productApiService.GetByIdAsync(id);
-            if (value is null) return NotFound();
-            var viewModel = _mapper.Map<ProductViewModel>(value);
-            viewModel.CategoryList = await _dropdownHelper.GetCategoryDropdownAsync();
-            return View(viewModel);
+            GetProductDto getProductDto = await _productApiService.GetByIdAsync(id);
+            if (getProductDto is null) return NotFound();
+
+            UpdateProductViewModel updateProductViewModel = _mapper.Map<UpdateProductViewModel>(getProductDto);
+            updateProductViewModel.CategoryList = await _dropdownHelper.GetCategoryDropdownAsync();
+
+            return View(updateProductViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateProduct(int id, ProductViewModel productViewModel)
+        public async Task<IActionResult> UpdateProduct(int id, UpdateProductViewModel updateProductViewModel)
         {
             if (!ModelState.IsValid)
             {
-                productViewModel.CategoryList = await _dropdownHelper.GetCategoryDropdownAsync();
-                return View(productViewModel);
+                updateProductViewModel.CategoryList = await _dropdownHelper.GetCategoryDropdownAsync();
+                return View(updateProductViewModel);
             }
-            var dto = _mapper.Map<UpdateProductDto>(productViewModel);
-            await _productApiService.UpdateAsync(id, dto);
+
+            UpdateProductDto updateProductDto = _mapper.Map<UpdateProductDto>(updateProductViewModel);
+            await _productApiService.UpdateAsync(id, updateProductDto);
             return RedirectToAction("ProductList");
         }
     }

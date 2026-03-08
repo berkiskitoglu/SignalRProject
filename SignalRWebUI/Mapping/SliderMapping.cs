@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SignalRWebUI.Dtos.SliderDtos;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.SliderViewModels;
 
 namespace SignalRWebUI.Mapping
 {
@@ -8,8 +8,10 @@ namespace SignalRWebUI.Mapping
     {
         public SliderMapping()
         {
-            CreateMap<ResultSliderDto, SliderViewModel>();
-            CreateMap<GetSliderDto, UpdateSliderDto>();
+            CreateMap<ResultSliderDto, ResultSliderViewModel>();
+            CreateMap<GetSliderDto, UpdateSliderViewModel>();
+            CreateMap<CreateSliderViewModel, CreateSliderDto>();
+            CreateMap<UpdateSliderViewModel, UpdateSliderDto>();
         }
     }
 }

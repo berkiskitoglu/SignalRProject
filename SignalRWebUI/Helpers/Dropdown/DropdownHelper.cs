@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using SignalRWebUI.Services.Abstract;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.ProductViewModels;
 
 namespace SignalRWebUI.Helpers.Dropdown
 {
@@ -23,11 +23,20 @@ namespace SignalRWebUI.Helpers.Dropdown
             }).ToList();
         }
 
-        public async Task<ProductViewModel> BuildProductViewModelAsync()
+        public async Task<CreateProductViewModel> BuildCreateProductViewModelAsync()
         {
-            return new ProductViewModel
+            return new CreateProductViewModel
             {
-                ProductStatus = true,                
+                ProductStatus = true,
+                CategoryList = await GetCategoryDropdownAsync()
+            };
+        }
+
+        public async Task<UpdateProductViewModel> BuildUpdateProductViewModelAsync(int id)
+        {
+            return new UpdateProductViewModel
+            {
+                ProductID = id,
                 CategoryList = await GetCategoryDropdownAsync()
             };
         }

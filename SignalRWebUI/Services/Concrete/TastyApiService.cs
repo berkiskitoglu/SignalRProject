@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SignalRWebUI.Dtos.RapidApiDtos;
 using SignalRWebUI.Services.Abstract;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.RapidApiViewModels;
 
 public class TastyApiService : ITastyApiService
 {

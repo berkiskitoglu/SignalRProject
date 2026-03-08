@@ -1,39 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SignalRWebUI.Dtos.IdentityDtos
+﻿namespace SignalRWebUI.Dtos.IdentityDtos
 {
     public class UserEditDto
     {
-        [Required(ErrorMessage = "Email zorunludur")]
-        [EmailAddress(ErrorMessage = "Geçerli bir email adresi giriniz")]
-        [Display(Name = "Email")]
-        public string Mail { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Ad zorunludur")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "Ad en az 2, en fazla 50 karakter olmalıdır")]
-        [Display(Name = "Ad")]
-        public string Name { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Soyad zorunludur")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "Soyad en az 2, en fazla 50 karakter olmalıdır")]
-        [Display(Name = "Soyad")]
-        public string Surname { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Kullanıcı adı zorunludur")]
-        [StringLength(50, MinimumLength = 3, ErrorMessage = "Kullanıcı adı en az 3, en fazla 50 karakter olmalıdır")]
-        [Display(Name = "Kullanıcı Adı")]
-        public string Username { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Şifre zorunludur")]
-        [StringLength(100, MinimumLength = 6, ErrorMessage = "Şifre en az 6, en fazla 100 karakter olmalıdır")]
-        [DataType(DataType.Password)]
-        [Display(Name = "Şifre")]
-        public string Password { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Şifre tekrarı zorunludur")]
-        [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Şifreler eşleşmiyor")]
-        [Display(Name = "Şifre Tekrarı")]
-        public string ConfirmPassword { get; set; } = string.Empty;
+        public string? Mail { get; set; }
+        public string? Name { get; set; }
+        public string? Surname { get; set; }
+        public string? Username { get; set; }
+        public string? Password { get; set; }
+        public string? ConfirmPassword { get; set; }
     }
 }

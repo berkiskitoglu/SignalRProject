@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SignalRWebUI.Dtos.DiscountDtos;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.DiscountViewModels;
 
 namespace SignalRWebUI.Mapping
 {
@@ -8,8 +8,10 @@ namespace SignalRWebUI.Mapping
     {
         public DiscountMapping()
         {
-            CreateMap<ResultDiscountDto, DiscountViewModel>();
-            CreateMap<GetDiscountDto, UpdateDiscountDto>();
+            CreateMap<ResultDiscountDto, ResultDiscountViewModel>();
+            CreateMap<GetDiscountDto, UpdateDiscountViewModel>();
+            CreateMap<CreateDiscountViewModel, CreateDiscountDto>();
+            CreateMap<UpdateDiscountViewModel, UpdateDiscountDto>();
         }
     }
 }

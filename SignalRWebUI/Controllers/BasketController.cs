@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using SignalRWebUI.Dtos.BasketDtos;
 using SignalRWebUI.Services.Abstract;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.BasketViewModels;
 
 namespace SignalRWebUI.Controllers
 {
@@ -20,19 +21,15 @@ namespace SignalRWebUI.Controllers
 
         public async Task<IActionResult> Index(int id = 1)
         {
-
-            var baskets = await _basketApiService.GetByIdAsync(id);
-            var dto = _mapper.Map<IEnumerable<BasketViewModel>>(baskets);
-
-            return View(dto);
-
+            List<ResultBasketDto> resultBasketDtos = await _basketApiService.GetByIdAsync(id);
+            List<ResultBasketViewModel> resultBasketViewModels = _mapper.Map<List<ResultBasketViewModel>>(resultBasketDtos);
+            return View(resultBasketViewModels);
         }
-        public async Task<IActionResult> DeleteBasketProduct(int basketId,int productId)
+
+        public async Task<IActionResult> DeleteBasketProduct(int basketId, int productId)
         {
-           await _basketProductApiService.DeleteBasketProduct(basketId,productId);
-           return RedirectToAction("Index");
+            await _basketProductApiService.DeleteBasketProduct(basketId, productId);
+            return RedirectToAction("Index");
         }
-      
-   
     }
 }

@@ -5,8 +5,6 @@ using SignalR.BusinessLayer.Abstract;
 using SignalR.DtoLayer.CategoryDtos;
 using SignalR.EntityLayer.Entities;
 using SignalRApi.Hubs;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SignalRApi.Controllers
 {

@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
 using SignalR.DtoLayer.ProductDtos;
 using SignalR.EntityLayer.Entities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SignalRApi.Controllers
 {
@@ -74,7 +72,7 @@ namespace SignalRApi.Controllers
             var product = await _productService.TGetByIDAsync(id);
             if (product == null)
                 return NotFound();
-            var dto = _mapper.Map<ResultProductDto>(product);
+            var dto = _mapper.Map<GetProductDto>(product);
             return Ok(dto);
         }
 

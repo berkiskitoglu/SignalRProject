@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SignalRWebUI.Dtos.MenuTableDtos;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.MenuTableViewModels;
 
 namespace SignalRWebUI.Mapping
 {
@@ -8,9 +8,10 @@ namespace SignalRWebUI.Mapping
     {
         public MenuTableMapping()
         {
-
-            CreateMap<ResultMenuTableDto, MenuTableViewModel>();
-            CreateMap<GetMenuTableDto, UpdateMenuTableDto>();
+            CreateMap<ResultMenuTableDto, ResultMenuTableViewModel>();
+            CreateMap<GetMenuTableDto, UpdateMenuTableViewModel>();
+            CreateMap<CreateMenuTableViewModel, CreateMenuTableDto>();
+            CreateMap<UpdateMenuTableViewModel, UpdateMenuTableDto>();
         }
     }
 }

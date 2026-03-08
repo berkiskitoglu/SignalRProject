@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SignalRWebUI.Dtos.CategoryDtos;
 using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.CategoryViewModels;
 
 namespace SignalRWebUI.Mapping
 {
@@ -8,8 +9,10 @@ namespace SignalRWebUI.Mapping
     {
         public CategoryMapping()
         {
-            CreateMap<ResultCategoryDto, CategoryViewModel>();
-            CreateMap<GetCategoryDto, UpdateCategoryDto>();
+            CreateMap<ResultCategoryDto, ResultCategoryViewModel>();
+            CreateMap<GetCategoryDto, UpdateCategoryViewModel>();
+            CreateMap<CreateCategoryViewModel, CreateCategoryDto>();
+            CreateMap<UpdateCategoryViewModel, UpdateCategoryDto>();
 
         }
     }

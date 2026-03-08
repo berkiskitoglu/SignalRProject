@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
 using SignalR.DtoLayer.TestimonialDtos;
 using SignalR.EntityLayer.Entities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SignalRApi.Controllers
 {

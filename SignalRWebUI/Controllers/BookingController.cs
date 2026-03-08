@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SignalRWebUI.Dtos.BookingDtos;
 using SignalRWebUI.Services.Abstract;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.BookingViewModels;
 
 namespace SignalRWebUI.Controllers
 {
@@ -19,24 +19,22 @@ namespace SignalRWebUI.Controllers
             _configuration = configuration;
         }
 
-        public async Task<IActionResult> BookingList()
+        public IActionResult BookingList()
         {
             ViewBag.HubUrl = _configuration["ApiSettings:BaseUrl"] + "SignalRHub";
             return View();
         }
 
         [HttpGet]
-        public IActionResult CreateBooking()
-        {
-            return View();
-        }
+        public IActionResult CreateBooking() => View();
 
         [HttpPost]
-        public async Task<IActionResult> CreateBooking(CreateBookingDto createBookingDto)
+        public async Task<IActionResult> CreateBooking(CreateBookingViewModel createBookingViewModel)
         {
             if (!ModelState.IsValid)
-                return View(createBookingDto);
+                return View(createBookingViewModel);
 
+            CreateBookingDto createBookingDto = _mapper.Map<CreateBookingDto>(createBookingViewModel);
             createBookingDto.Description = "Rezervasyon Alındı";
             await _bookingApiService.CreateAsync(createBookingDto);
             return RedirectToAction("BookingList");
@@ -51,17 +49,19 @@ namespace SignalRWebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateBooking(int id)
         {
-            var value = await _bookingApiService.GetByIdAsync(id);
-            if (value is null) return NotFound();
-            var dto = _mapper.Map<UpdateBookingDto>(value);
-            return View(dto);
+            GetBookingDto getBookingDto = await _bookingApiService.GetByIdAsync(id);
+            if (getBookingDto is null) return NotFound();
+            UpdateBookingViewModel updateBookingViewModel = _mapper.Map<UpdateBookingViewModel>(getBookingDto);
+            return View(updateBookingViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateBooking(int id, UpdateBookingDto updateBookingDto)
+        public async Task<IActionResult> UpdateBooking(int id, UpdateBookingViewModel updateBookingViewModel)
         {
             if (!ModelState.IsValid)
-                return View(updateBookingDto);
+                return View(updateBookingViewModel);
+
+            UpdateBookingDto updateBookingDto = _mapper.Map<UpdateBookingDto>(updateBookingViewModel);
             updateBookingDto.Description = "Rezervasyon Alındı";
             await _bookingApiService.UpdateAsync(id, updateBookingDto);
             return RedirectToAction("BookingList");

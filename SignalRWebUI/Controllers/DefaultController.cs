@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SignalRWebUI.Dtos.MessageDtos;
 using SignalRWebUI.Services.Abstract;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.MessageViewModels;
 
 namespace SignalRWebUI.Controllers
 {
@@ -17,28 +17,20 @@ namespace SignalRWebUI.Controllers
             _mapper = mapper;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
 
         [HttpGet]
-        public PartialViewResult SendMessage()
-        {
-            return PartialView();
-        }
+        public PartialViewResult SendMessage() => PartialView();
 
         [HttpPost]
-        public async Task<IActionResult> SendMessage(MessageViewModel messageViewModel)
+        public async Task<IActionResult> SendMessage(CreateMessageViewModel createMessageViewModel)
         {
             if (!ModelState.IsValid)
-            {
-                return PartialView(messageViewModel);
-            }
+                return PartialView(createMessageViewModel);
 
-            messageViewModel.MessageSendDate = DateTime.Now;
-            messageViewModel.Status = true;
-            var createMessageDto = _mapper.Map<CreateMessageDto>(messageViewModel);
+            CreateMessageDto createMessageDto = _mapper.Map<CreateMessageDto>(createMessageViewModel);
+            createMessageDto.MessageSendDate = DateTime.Now;
+            createMessageDto.Status = true;
             await _messageApiService.CreateAsync(createMessageDto);
             return Json(new { success = true, message = "Mesaj başarıyla gönderildi" });
         }

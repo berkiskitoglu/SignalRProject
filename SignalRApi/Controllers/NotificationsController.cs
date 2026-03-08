@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
-using SignalR.DtoLayer.AboutDtos;
 using SignalR.DtoLayer.NotificationDtos;
 using SignalR.EntityLayer.Entities;
 

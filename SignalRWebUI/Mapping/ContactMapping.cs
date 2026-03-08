@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SignalRWebUI.Dtos.ContactDtos;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.ContactViewModels;
 
 namespace SignalRWebUI.Mapping
 {
@@ -8,8 +8,10 @@ namespace SignalRWebUI.Mapping
     {
         public ContactMapping()
         {
-            CreateMap<ResultContactDto, ContactViewModel>();
-            CreateMap<GetContactDto, UpdateContactDto>();
+            CreateMap<ResultContactDto, ResultContactViewModel>();
+            CreateMap<GetContactDto, UpdateContactViewModel>();
+            CreateMap<CreateContactViewModel, CreateContactDto>();
+            CreateMap<UpdateContactViewModel, UpdateContactDto>();
         }
     }
 }

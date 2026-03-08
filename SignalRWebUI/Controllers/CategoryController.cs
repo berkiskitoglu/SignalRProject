@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SignalRWebUI.Dtos.CategoryDtos;
 using SignalRWebUI.Services.Abstract;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.CategoryViewModels;
 
 namespace SignalRWebUI.Controllers
 {
@@ -19,23 +19,21 @@ namespace SignalRWebUI.Controllers
 
         public async Task<IActionResult> CategoryList()
         {
-            var values = await _categoryApiService.GetAllAsync();
-            var viewModels = _mapper.Map<List<CategoryViewModel>>(values);
-            return View(viewModels);
+            List<ResultCategoryDto> values = await _categoryApiService.GetAllAsync();
+            List<ResultCategoryViewModel> resultCategoryViewModels = _mapper.Map<List<ResultCategoryViewModel>>(values);
+            return View(resultCategoryViewModels);
         }
 
         [HttpGet]
-        public IActionResult CreateCategory()
-        {
-            return View();
-        }
+        public IActionResult CreateCategory() => View();
 
         [HttpPost]
-        public async Task<IActionResult> CreateCategory(CreateCategoryDto createCategoryDto)
+        public async Task<IActionResult> CreateCategory(CreateCategoryViewModel createCategoryViewModel)
         {
             if (!ModelState.IsValid)
-                return View(createCategoryDto);
+                return View(createCategoryViewModel);
 
+            CreateCategoryDto createCategoryDto = _mapper.Map<CreateCategoryDto>(createCategoryViewModel);
             createCategoryDto.Status = true;
             await _categoryApiService.CreateAsync(createCategoryDto);
             return RedirectToAction("CategoryList");
@@ -50,18 +48,19 @@ namespace SignalRWebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateCategory(int id)
         {
-            var value = await _categoryApiService.GetByIdAsync(id);
-            if (value is null) return NotFound();
-            var dto = _mapper.Map<UpdateCategoryDto>(value);
-            return View(dto);
+            GetCategoryDto getCategoryDto = await _categoryApiService.GetByIdAsync(id);
+            if (getCategoryDto is null) return NotFound();
+            UpdateCategoryViewModel updateCategoryViewModel = _mapper.Map<UpdateCategoryViewModel>(getCategoryDto);
+            return View(updateCategoryViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateCategory(int id, UpdateCategoryDto updateCategoryDto)
+        public async Task<IActionResult> UpdateCategory(int id, UpdateCategoryViewModel updateCategoryViewModel)
         {
             if (!ModelState.IsValid)
-                return View(updateCategoryDto);
+                return View(updateCategoryViewModel);
 
+            UpdateCategoryDto updateCategoryDto = _mapper.Map<UpdateCategoryDto>(updateCategoryViewModel);
             updateCategoryDto.Status = true;
             await _categoryApiService.UpdateAsync(id, updateCategoryDto);
             return RedirectToAction("CategoryList");

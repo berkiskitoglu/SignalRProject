@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SignalRWebUI.Dtos.SocialMediaDtos;
-using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.SocialMediaViewModels;
 
 namespace SignalRWebUI.Mapping
 {
@@ -8,8 +8,10 @@ namespace SignalRWebUI.Mapping
     {
         public SocialMediaMapping()
         {
-            CreateMap<ResultSocialMediaDto, SocialMediaViewModel>();
-            CreateMap<GetSocialMediaDto, UpdateSocialMediaDto>();
+            CreateMap<ResultSocialMediaDto, ResultSocialMediaViewModel>();
+            CreateMap<GetSocialMediaDto, UpdateSocialMediaViewModel>();
+            CreateMap<CreateSocialMediaViewModel, CreateSocialMediaDto>();
+            CreateMap<UpdateSocialMediaViewModel, UpdateSocialMediaDto>();
         }
     }
 }
