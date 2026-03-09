@@ -71,7 +71,7 @@ namespace SignalRWebUI.Controllers
         public IActionResult TableListByStatus()
         {
             ViewBag.HubUrl = _configuration["ApiSettings:BaseUrl"] + "SignalRHub";
-            return View();
+            return View(new List<ResultMenuTableViewModel>());
         }
     }
 }

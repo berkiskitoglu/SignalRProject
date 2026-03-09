@@ -18,6 +18,7 @@
     }
 
     function registerHandlers() {
+        // Metinleri koruyoruz
         connection.on("ReceiveTotalBalance", (val) => $("#totalBalance").text(val));
         connection.on("ReceiveActiveOrderCount", (val) => $("#activeOrderCount").text(val));
         connection.on("ReceiveTableCount", (val) => {
@@ -34,15 +35,20 @@
             $("#productCountByCategoryNameDrink").html(buildProgressBar("İçecek Sayısı", val, "bg-warning"));
         });
         connection.on("ReceiveProductCount", (val) => {
+            // ID çakışmasını önlemek için önce mevcut metni güncelle
+            $("#productCount").text(val);
             $("#productCount").html(buildProgressBar("Ürün Sayısı", val, "bg-dark"));
         });
         connection.on("ReceiveOrderCount", (val) => {
+            $("#orderCount").text(val);
             $("#orderCount").html(buildProgressBar("Sipariş Sayısı", val, "bg-primary"));
         });
         connection.on("ReceiveActiveCategoryCount", (val) => {
+            $("#activeCategoryCount").text(val);
             $("#activeCategoryCount").html(buildProgressBar("Aktif Kategori Sayısı", val, "bg-warning"));
         });
         connection.on("ReceivePassiveCategoryCount", (val) => {
+            $("#passiveCategoryCount").text(val);
             $("#passiveCategoryCount").html(buildProgressBar("Pasif Kategori Sayısı", val, "bg-success"));
         });
     }

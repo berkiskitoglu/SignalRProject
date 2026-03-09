@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using SignalR.BusinessLayer.Abstract;
+using System.Globalization;
 
 namespace SignalRApi.Hubs
 {
@@ -77,13 +78,33 @@ namespace SignalRApi.Hubs
         public async Task SendProgress()
         {
             var totalBalance = await _moneyCaseService.TTotalMoneyCaseAmount();
-            await Clients.All.SendAsync("ReceiveTotalBalance", totalBalance.ToString("0.00" + "₺"));
+            string totalBalanceStr = totalBalance.ToString("C", new CultureInfo("tr-TR"));
+            await Clients.All.SendAsync("ReceiveTotalBalance", totalBalanceStr);
 
             var activeOrderCount = await _orderService.TActiveOrderCount();
             await Clients.All.SendAsync("ReceiveActiveOrderCount", activeOrderCount);
 
-            var activeTableCount = await _orderService.TActiveOrderCount();
-            await Clients.All.SendAsync("ReceiveActiveTableCount", activeTableCount);
+            var tableCount = await _menuTableService.TMenuTableCount();
+            await Clients.All.SendAsync("ReceiveTableCount", tableCount);
+
+            var productCount = await _productService.TProductCount();
+            await Clients.All.SendAsync("ReceiveProductCount", productCount);
+
+            var orderCount = await _orderService.TTotalOrderCount();
+            await Clients.All.SendAsync("ReceiveOrderCount", orderCount);
+
+            var activeCategoryCount = await _categoryService.TActiveCategoryCount();
+            await Clients.All.SendAsync("ReceiveActiveCategoryCount", activeCategoryCount);
+
+            var passiveCategoryCount = await _categoryService.TPassiveCategoryCount();
+            await Clients.All.SendAsync("ReceivePassiveCategoryCount", passiveCategoryCount);
+
+
+            var productCountByCategoryNameHamburger = await _productService.TProductCountByCategoryNameHamburger();
+            await Clients.All.SendAsync("ReceiveProductCountByCategoryNameHamburger", productCountByCategoryNameHamburger);
+
+            var productCountByCategoryNameDrink = await _productService.TProductCountByCategoryNameDrink();
+            await Clients.All.SendAsync("ReceiveProductCountByCategoryNameDrink", productCountByCategoryNameDrink);
         }
 
         public async Task GetBookingList() 
