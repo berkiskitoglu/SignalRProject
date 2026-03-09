@@ -87,6 +87,7 @@ namespace SignalRWebUI.Extensions
             {
                 client.BaseAddress = new Uri(baseUrl);
             });
+            services.AddHttpClient<ITastyApiService, TastyApiService>();
 
             return services;
         }

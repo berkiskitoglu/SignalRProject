@@ -7,11 +7,11 @@
 <!DOCTYPE html>
 <html>
 
-    @await Component.InvokeAsync("_UILayoutHeadComponentPartial");
+    @await Component.InvokeAsync("_UILayoutHeadComponentPartial")
 
 <body class="sub_page">
 
-    @await Component.InvokeAsync("_UILayoutNavbarComponentPartial");
+    @await Component.InvokeAsync("_UILayoutNavbarComponentPartial")
     </div>
 
     <section class="food_section layout_padding">
@@ -22,7 +22,7 @@
                 </h2>
             </div>
 
-            @await Component.InvokeAsync("_MenuCategoryFilterComponentPartial");
+            @await Component.InvokeAsync("_MenuCategoryFilterComponentPartial")
 
          
 
@@ -47,7 +47,7 @@
                                             <h6>
                                                 @item.Price₺
                                             </h6>
-                                            <a href="#" onclick="showProductID(@item.ProductID,'@item.ProductName')">
+                                            <a href="#" onclick="showProductID(@item.ProductID,'@item.ProductName',@ViewBag.v)">
                                                 <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
                                                 <g>
                                                 <g>
@@ -118,21 +118,21 @@
         </div>
     </section>
 
-    @await Component.InvokeAsync("_UILayoutFooterComponentPartial");
-    @await Component.InvokeAsync("_UILayoutScriptComponentPartial");
+    @await Component.InvokeAsync("_UILayoutFooterComponentPartial")
+    @await Component.InvokeAsync("_UILayoutScriptComponentPartial")
 
     <script>
-            function showProductID(id,name) {
-            var productName = name;
-            var productID = id;
+                   function showProductID(id, name, menuTableId) {
             $.ajax({
                 type: "POST",
                 url: "/Menu/AddBasket/" + id,
-                data: {item:productID},
-                contentType: 'json',
-                success: function(){
+                data: {
+                    id: id,
+                    menuTableId: menuTableId
+                },
+                success: function() {
                     Swal.fire({
-                        title: productName,
+                        title: name,
                         text: "Seçtiğiniz Ürün Sepete Eklendi",
                         icon: "success"
                     });

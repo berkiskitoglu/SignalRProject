@@ -10,11 +10,13 @@ namespace SignalRWebUI.Controllers
     {
         private readonly IMenuTableApiService _menuTableApiService;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        public MenuTableController(IMenuTableApiService menuTableApiService, IMapper mapper)
+        public MenuTableController(IMenuTableApiService menuTableApiService, IMapper mapper, IConfiguration configuration)
         {
             _menuTableApiService = menuTableApiService;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         public async Task<IActionResult> MenuTableList()
@@ -66,11 +68,10 @@ namespace SignalRWebUI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> TableListByStatus()
+        public IActionResult TableListByStatus()
         {
-            List<ResultMenuTableDto> values = await _menuTableApiService.GetAllAsync();
-            List<ResultMenuTableViewModel> resultMenuTableViewModels = _mapper.Map<List<ResultMenuTableViewModel>>(values);
-            return View(resultMenuTableViewModels);
+            ViewBag.HubUrl = _configuration["ApiSettings:BaseUrl"] + "SignalRHub";
+            return View();
         }
     }
 }

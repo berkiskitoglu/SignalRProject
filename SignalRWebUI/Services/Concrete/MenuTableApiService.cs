@@ -33,6 +33,16 @@ namespace SignalRWebUI.Services.Concrete
         {
             return await _client.GetFromJsonAsync<GetMenuTableDto>($"api/MenuTables/{id}");
         }
+
+        public async Task TChangeMenuTableStatusToFalse(int id)
+        {
+            await _client.GetAsync($"api/MenuTables/ChangeMenuTableStatusToFalse/{id}");
+        }
+        public async Task TChangeMenuTableStatusToTrue(int id)
+        {
+            await _client.GetAsync($"api/MenuTables/ChangeMenuTableStatusToTrue/{id}");
+        }
+
         public async Task UpdateAsync(int id, UpdateMenuTableDto updateMenuTableDto)
         {
             await _client.PutAsJsonAsync($"api/MenuTables/{id}", updateMenuTableDto);

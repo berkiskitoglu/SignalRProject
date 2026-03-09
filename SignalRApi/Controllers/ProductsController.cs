@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
 using SignalR.DtoLayer.ProductDtos;
@@ -12,47 +13,69 @@ namespace SignalRApi.Controllers
     {
         private readonly IProductService _productService;
         private readonly IMapper _mapper;
+        private readonly IValidator<CreateProductDto> _createValidator;
+        private readonly IValidator<UpdateProductDto> _updateValidator;
 
-        public ProductsController(IProductService productService, IMapper mapper)
+        public ProductsController(
+            IProductService productService,
+            IMapper mapper,
+            IValidator<CreateProductDto> createValidator,
+            IValidator<UpdateProductDto> updateValidator)
         {
             _productService = productService;
             _mapper = mapper;
+            _createValidator = createValidator;
+            _updateValidator = updateValidator;
         }
 
         [HttpGet]
-        public async Task<IActionResult> ProductList() => Ok(_mapper.Map<List<ResultProductDto>>(await _productService.TGetListAllAsync()));
+        public async Task<IActionResult> ProductList()
+            => Ok(_mapper.Map<List<ResultProductDto>>(await _productService.TGetListAllAsync()));
 
         [HttpGet("ProductCount")]
-        public async Task<IActionResult> ProductCount() => Ok(await _productService.TProductCount());
+        public async Task<IActionResult> ProductCount()
+            => Ok(await _productService.TProductCount());
 
         [HttpGet("ProductCountByDrink")]
-        public async Task<IActionResult> ProductCountByDrink() => Ok(await _productService.TProductCountByCategoryNameDrink());
+        public async Task<IActionResult> ProductCountByDrink()
+            => Ok(await _productService.TProductCountByCategoryNameDrink());
 
         [HttpGet("ProductCountByHamburger")]
-        public async Task<IActionResult> ProductCountByHamburger() => Ok(await _productService.TProductCountByCategoryNameHamburger());
+        public async Task<IActionResult> ProductCountByHamburger()
+            => Ok(await _productService.TProductCountByCategoryNameHamburger());
 
         [HttpGet("ProductNameByMaxPrice")]
-        public async Task<IActionResult> ProductNameByMaxPrice() => Ok(await _productService.TProductNameByMaxPrice());
+        public async Task<IActionResult> ProductNameByMaxPrice()
+            => Ok(await _productService.TProductNameByMaxPrice());
 
         [HttpGet("ProductNameByMinPrice")]
-        public async Task<IActionResult> ProductNameByMinPrice() => Ok(await _productService.TProductNameByMinPrice());
+        public async Task<IActionResult> ProductNameByMinPrice()
+            => Ok(await _productService.TProductNameByMinPrice());
 
         [HttpGet("ProductPriceAverage")]
-        public async Task<IActionResult> ProductPriceAverage() => Ok(await _productService.TProductPriceAverage());
+        public async Task<IActionResult> ProductPriceAverage()
+            => Ok(await _productService.TProductPriceAverage());
 
         [HttpGet("AverageProductPriceHamburger")]
-        public async Task<IActionResult> AverageProductPriceHamburger() => Ok(await _productService.TAverageProductPriceHamburger());
+        public async Task<IActionResult> AverageProductPriceHamburger()
+            => Ok(await _productService.TAverageProductPriceHamburger());
 
         [HttpGet("ProductListWithCategory")]
-        public async Task<IActionResult> ProductListWithCategory() => Ok(_mapper.Map<List<ResultProductWithCategory>>(await _productService.TGetProductsWithCategoriesAsync()));
-
-
+        public async Task<IActionResult> ProductListWithCategory()
+            => Ok(_mapper.Map<List<ResultProductWithCategory>>(await _productService.TGetProductsWithCategoriesAsync()));
 
         [HttpPost]
         public async Task<IActionResult> CreateProduct(CreateProductDto createProductDto)
         {
-            var product = _mapper.Map<Product>(createProductDto);
-            await _productService.TAddAsync(product);
+            var validationResult = await _createValidator.ValidateAsync(createProductDto);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors
+                    .Select(e => new { Field = e.PropertyName, Message = e.ErrorMessage });
+                return BadRequest(errors);
+            }
+
+            await _productService.TAddAsync(_mapper.Map<Product>(createProductDto));
             return Ok("Ürün Eklendi");
         }
 
@@ -62,6 +85,7 @@ namespace SignalRApi.Controllers
             var itemToDelete = await _productService.TGetByIDAsync(id);
             if (itemToDelete == null)
                 return NotFound("Ürün bulunamadı");
+
             await _productService.TDeleteAsync(itemToDelete);
             return Ok("Ürün Silindi");
         }
@@ -71,17 +95,26 @@ namespace SignalRApi.Controllers
         {
             var product = await _productService.TGetByIDAsync(id);
             if (product == null)
-                return NotFound();
-            var dto = _mapper.Map<GetProductDto>(product);
-            return Ok(dto);
+                return NotFound("Ürün bulunamadı");
+
+            return Ok(_mapper.Map<GetProductDto>(product));
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(int id, UpdateProductDto updateProductDto)
         {
+            var validationResult = await _updateValidator.ValidateAsync(updateProductDto);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors
+                    .Select(e => new { Field = e.PropertyName, Message = e.ErrorMessage });
+                return BadRequest(errors);
+            }
+
             var product = await _productService.TGetByIDAsync(id);
             if (product == null)
                 return NotFound("Ürün bulunamadı");
+
             _mapper.Map(updateProductDto, product);
             await _productService.TUpdateAsync(product);
             return Ok("Ürün Güncellendi");

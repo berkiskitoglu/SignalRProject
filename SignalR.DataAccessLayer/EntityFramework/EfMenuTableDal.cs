@@ -12,7 +12,22 @@ namespace SignalR.DataAccessLayer.EntityFramework
         {
         }
 
+        public async Task ChangeMenuTableStatusToFalse(int id)
+        {
+          var value =  await _context.MenuTables.Where(x => x.MenuTableID == id).FirstOrDefaultAsync();
+          value.Status = false;
+        }
+        
+
+        public async Task ChangeMenuTableStatusToTrue(int id)
+        {
+            var value = await _context.MenuTables.Where(x => x.MenuTableID == id).FirstOrDefaultAsync();
+            value.Status = true;
+        }
+
+
         public async Task<int> MenuTableCount() => await _context.MenuTables.CountAsync();
 
+      
     }
 }

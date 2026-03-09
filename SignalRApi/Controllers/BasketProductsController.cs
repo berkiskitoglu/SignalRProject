@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
 using SignalR.DtoLayer.BasketProductDtos;
@@ -12,11 +13,16 @@ namespace SignalRApi.Controllers
     {
         private readonly IBasketProductService _basketProductService;
         private readonly IMapper _mapper;
+        private readonly IValidator<CreateBasketProductDto> _createValidator;
 
-        public BasketProductsController(IBasketProductService basketProductService, IMapper mapper)
+        public BasketProductsController(
+            IBasketProductService basketProductService,
+            IMapper mapper,
+            IValidator<CreateBasketProductDto> createValidator)
         {
             _basketProductService = basketProductService;
             _mapper = mapper;
+            _createValidator = createValidator;
         }
 
         [HttpGet("{id}")]
@@ -26,27 +32,31 @@ namespace SignalRApi.Controllers
             return Ok(_mapper.Map<List<ResultBasketProductDto>>(result));
         }
 
-
         [HttpPost]
         public async Task<IActionResult> AddProductToBasket(CreateBasketProductDto dto)
         {
-            // 1️⃣ Sepetteki ürünleri al
+      
+            var validationResult = await _createValidator.ValidateAsync(dto);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors
+                    .Select(e => new { Field = e.PropertyName, Message = e.ErrorMessage });
+                return BadRequest(errors);
+            }
+
             var basketProducts = await _basketProductService
                 .TGetBasketProductsByBasketIdAsync(dto.BasketID);
 
-            // 2️⃣ Aynı ürün var mı?
             var existingProduct = basketProducts
                 .FirstOrDefault(x => x.ProductID == dto.ProductID);
 
             if (existingProduct != null)
             {
-                // ✅ VAR → ADET ARTIR
                 existingProduct.Quantity += dto.Quantity == 0 ? 1 : dto.Quantity;
                 await _basketProductService.TUpdateAsync(existingProduct);
             }
             else
             {
-                // ❌ YOK → YENİ EKLE
                 var basketProduct = new BasketProduct
                 {
                     BasketID = dto.BasketID,
@@ -54,26 +64,22 @@ namespace SignalRApi.Controllers
                     Quantity = dto.Quantity == 0 ? 1 : dto.Quantity,
                     Price = dto.Price
                 };
-
                 await _basketProductService.TAddAsync(basketProduct);
             }
 
             return Ok("Ürün sepete eklendi");
         }
+
         [HttpDelete("{basketId}/{productId}")]
         public async Task<IActionResult> DeleteBasketProduct(int basketId, int productId)
         {
             var basketProduct =
                 await _basketProductService.TGetByBasketAndProductIdAsync(basketId, productId);
-
             if (basketProduct == null)
                 return NotFound("Ürün sepette bulunamadı");
 
             await _basketProductService.TDeleteAsync(basketProduct);
             return Ok("Ürün sepetten silindi");
         }
-
-
-
     }
 }

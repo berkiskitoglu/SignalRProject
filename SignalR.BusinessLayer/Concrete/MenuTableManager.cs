@@ -25,5 +25,10 @@ namespace SignalR.BusinessLayer.Concrete
 
         public async Task<int> TMenuTableCount() => await _menuTableDal.MenuTableCount();
 
+        public async Task TChangeMenuTableStatusToTrue(int id) => await _menuTableDal.ChangeMenuTableStatusToTrue(id);
+
+
+        public async Task TChangeMenuTableStatusToFalse (int id) => await _menuTableDal.ChangeMenuTableStatusToFalse(id);
+
     }
 }

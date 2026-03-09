@@ -7,8 +7,7 @@ namespace SignalR.BusinessLayer.ValidationRules.BasketProductValidators
     {
         public CreateBasketProductValidator()
         {
-            RuleFor(x => x.BasketID)
-                .GreaterThan(0).WithMessage("Sepet ID geçerli olmalıdır.");
+          
 
             RuleFor(x => x.ProductID)
                 .GreaterThan(0).WithMessage("Ürün ID geçerli olmalıdır.");
@@ -20,8 +19,7 @@ namespace SignalR.BusinessLayer.ValidationRules.BasketProductValidators
             RuleFor(x => x.Price)
                 .GreaterThan(0).WithMessage("Fiyat 0'dan büyük olmalıdır.");
 
-            RuleFor(x => x.TotalPrice)
-                .GreaterThan(0).WithMessage("Toplam fiyat 0'dan büyük olmalıdır.");
+         
         }
     }
 }

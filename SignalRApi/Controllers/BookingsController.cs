@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
 using SignalR.DtoLayer.BookingDtos;
@@ -12,11 +13,19 @@ namespace SignalRApi.Controllers
     {
         private readonly IBookingService _bookingService;
         private readonly IMapper _mapper;
+        private readonly IValidator<CreateBookingDto> _createValidator;
+        private readonly IValidator<UpdateBookingDto> _updateValidator;
 
-        public BookingsController(IBookingService bookingService, IMapper mapper)
+        public BookingsController(
+            IBookingService bookingService,
+            IMapper mapper,
+            IValidator<CreateBookingDto> createValidator,
+            IValidator<UpdateBookingDto> updateValidator)
         {
             _bookingService = bookingService;
             _mapper = mapper;
+            _createValidator = createValidator;
+            _updateValidator = updateValidator;
         }
 
         [HttpGet]
@@ -26,8 +35,15 @@ namespace SignalRApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBooking(CreateBookingDto createBookingDto)
         {
-            var booking = _mapper.Map<Booking>(createBookingDto);
-            await _bookingService.TAddAsync(booking);
+            var validationResult = await _createValidator.ValidateAsync(createBookingDto);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors
+                    .Select(e => new { Field = e.PropertyName, Message = e.ErrorMessage });
+                return BadRequest(errors);
+            }
+
+            await _bookingService.TAddAsync(_mapper.Map<Booking>(createBookingDto));
             return Ok("Rezervasyon Bilgisi Eklendi");
         }
 
@@ -37,6 +53,7 @@ namespace SignalRApi.Controllers
             var itemToDelete = await _bookingService.TGetByIDAsync(id);
             if (itemToDelete == null)
                 return NotFound("Rezervasyon bulunamadı");
+
             await _bookingService.TDeleteAsync(itemToDelete);
             return Ok("Rezervasyon Bilgisi Silindi");
         }
@@ -45,16 +62,27 @@ namespace SignalRApi.Controllers
         public async Task<IActionResult> GetBooking(int id)
         {
             var booking = await _bookingService.TGetByIDAsync(id);
-            var dto = _mapper.Map<ResultBookingDto>(booking);
-            return Ok(dto);
+            if (booking == null)
+                return NotFound("Rezervasyon bulunamadı");
+
+            return Ok(_mapper.Map<ResultBookingDto>(booking));
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBooking(int id, UpdateBookingDto updateBookingDto)
         {
+            var validationResult = await _updateValidator.ValidateAsync(updateBookingDto);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors
+                    .Select(e => new { Field = e.PropertyName, Message = e.ErrorMessage });
+                return BadRequest(errors);
+            }
+
             var booking = await _bookingService.TGetByIDAsync(id);
             if (booking == null)
                 return NotFound("Rezervasyon bulunamadı");
+
             _mapper.Map(updateBookingDto, booking);
             await _bookingService.TUpdateAsync(booking);
             return Ok("Rezervasyon Bilgisi Güncellendi");
@@ -63,9 +91,10 @@ namespace SignalRApi.Controllers
         [HttpGet("BookingStatusApproved/{id}")]
         public async Task<IActionResult> BookingStatusApproved(int id)
         {
-           await _bookingService.TBookingStatusApproved(id);
-           return Ok("Rezervasyon Açıklaması Onaylandı Olarak Güncellendi");
+            await _bookingService.TBookingStatusApproved(id);
+            return Ok("Rezervasyon Açıklaması Onaylandı Olarak Güncellendi");
         }
+
         [HttpGet("BookingStatusCancelled/{id}")]
         public async Task<IActionResult> BookingStatusCancelled(int id)
         {

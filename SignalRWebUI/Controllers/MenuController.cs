@@ -9,20 +9,23 @@ namespace SignalRWebUI.Controllers
     {
         private readonly IProductApiService _productApiService;
         private readonly IBasketApiService _basketApiService;
+        private readonly IMenuTableApiService _menuTableApiService;
 
-        public MenuController(IProductApiService productApiService, IBasketApiService basketApiService)
+        public MenuController(IProductApiService productApiService, IBasketApiService basketApiService, IMenuTableApiService menuTableApiService)
         {
             _productApiService = productApiService;
             _basketApiService = basketApiService;
+            _menuTableApiService = menuTableApiService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int id)
         {
+            ViewBag.v = id;
             var values = await _productApiService.GetProductsWithCategoryAsync();
             return View(values);
         }
         [HttpPost]
-        public async Task<IActionResult> AddBasket(int id)
+        public async Task<IActionResult> AddBasket(int id, int menuTableId)
         {
             var product = await _productApiService.GetByIdAsync(id);
             if (product == null)
@@ -30,7 +33,7 @@ namespace SignalRWebUI.Controllers
 
             var createBasketDto = new CreateBasketDto
             {
-                MenuTableID = 1,
+                MenuTableID = menuTableId,
                 Status = "Aktif",
                 Products = new List<CreateBasketProductDto>
         {
@@ -43,7 +46,7 @@ namespace SignalRWebUI.Controllers
             }
         }
             };
-
+            await _menuTableApiService.TChangeMenuTableStatusToTrue(menuTableId);
             await _basketApiService.CreateAsync(createBasketDto);
             return Ok();
         }

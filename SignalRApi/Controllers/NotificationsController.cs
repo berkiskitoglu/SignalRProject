@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using SignalR.BusinessLayer.Abstract;
 using SignalR.DtoLayer.NotificationDtos;
@@ -12,36 +13,47 @@ namespace SignalRApi.Controllers
     {
         private readonly INotificationService _notificationService;
         private readonly IMapper _mapper;
+        private readonly IValidator<CreateNotificationDto> _createValidator;
+        private readonly IValidator<UpdateNotificationDto> _updateValidator;
 
-        public NotificationsController(INotificationService notificationService, IMapper mapper)
+        public NotificationsController(
+            INotificationService notificationService,
+            IMapper mapper,
+            IValidator<CreateNotificationDto> createValidator,
+            IValidator<UpdateNotificationDto> updateValidator)
         {
             _notificationService = notificationService;
             _mapper = mapper;
+            _createValidator = createValidator;
+            _updateValidator = updateValidator;
         }
 
         [HttpGet]
-        public async Task<IActionResult> NotificationsList() => Ok(_mapper.Map<List<ResultNotificationDto>>(await _notificationService.TGetListAllAsync()));
+        public async Task<IActionResult> NotificationsList()
+            => Ok(_mapper.Map<List<ResultNotificationDto>>(await _notificationService.TGetListAllAsync()));
 
         [HttpGet("GetUnreadNotificationCountAsync")]
         public async Task<IActionResult> GetUnreadNotificationCountAsync()
-        {
-            var count = await _notificationService.TGetUnreadNotificationCountAsync();
-            return Ok(count);
-        }
+            => Ok(await _notificationService.TGetUnreadNotificationCountAsync());
 
         [HttpGet("GetAllUnreadNotificationsAsync")]
         public async Task<IActionResult> GetAllUnreadNotificationsAsync()
-        {
-            var unreadNotifications = await _notificationService.TGetlAllUnreadNotificationAsync();
-            return Ok(unreadNotifications);
-        }
+            => Ok(await _notificationService.TGetlAllUnreadNotificationAsync());
+
         [HttpPost]
         public async Task<IActionResult> CreateNotification(CreateNotificationDto createNotificationDto)
         {
+            var validationResult = await _createValidator.ValidateAsync(createNotificationDto);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors
+                    .Select(e => new { Field = e.PropertyName, Message = e.ErrorMessage });
+                return BadRequest(errors);
+            }
+
             createNotificationDto.Date = DateTime.Now;
-            var notification = _mapper.Map<Notification>(createNotificationDto);
-            await _notificationService.TAddAsync(notification);
-            return Ok("Bildirim Başarıyla eklendi");
+            await _notificationService.TAddAsync(_mapper.Map<Notification>(createNotificationDto));
+            return Ok("Bildirim Başarıyla Eklendi");
         }
 
         [HttpDelete("{id}")]
@@ -49,9 +61,10 @@ namespace SignalRApi.Controllers
         {
             var itemToDelete = await _notificationService.TGetByIDAsync(id);
             if (itemToDelete == null)
-                return NotFound("Hakkımda bilgisi bulunamadı");
+                return NotFound("Bildirim bulunamadı");
+
             await _notificationService.TDeleteAsync(itemToDelete);
-            return Ok("Hakkımda Bilgisi Silindi");
+            return Ok("Bildirim Silindi");
         }
 
         [HttpGet("{id}")]
@@ -59,22 +72,31 @@ namespace SignalRApi.Controllers
         {
             var notification = await _notificationService.TGetByIDAsync(id);
             if (notification == null)
-                return NotFound();
-            var dto = _mapper.Map<ResultNotificationDto>(notification);
-            return Ok(dto);
+                return NotFound("Bildirim bulunamadı");
+
+            return Ok(_mapper.Map<ResultNotificationDto>(notification));
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateNotification(int id, UpdateNotificationDto updateNotificationDto)
         {
+            var validationResult = await _updateValidator.ValidateAsync(updateNotificationDto);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors
+                    .Select(e => new { Field = e.PropertyName, Message = e.ErrorMessage });
+                return BadRequest(errors);
+            }
+
             var notification = await _notificationService.TGetByIDAsync(id);
             if (notification == null)
-                return NotFound("Hakkımda bilgisi bulunamadı");
+                return NotFound("Bildirim bulunamadı");
+
             updateNotificationDto.Date = DateTime.Now;
             updateNotificationDto.Status = true;
             _mapper.Map(updateNotificationDto, notification);
             await _notificationService.TUpdateAsync(notification);
-            return Ok("Bildirim  Güncellendi");
+            return Ok("Bildirim Güncellendi");
         }
 
         [HttpGet("NotificationChangeToTrue/{id}")]
@@ -83,6 +105,7 @@ namespace SignalRApi.Controllers
             await _notificationService.TNotificationChangeToTrue(id);
             return Ok("Bildirim durumu okundu olarak değiştirildi");
         }
+
         [HttpGet("NotificationChangeToFalse/{id}")]
         public async Task<IActionResult> NotificationChangeToFalse(int id)
         {

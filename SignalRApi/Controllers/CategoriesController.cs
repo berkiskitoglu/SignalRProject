@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using SignalR.BusinessLayer.Abstract;
@@ -15,11 +16,21 @@ namespace SignalRApi.Controllers
         private readonly ICategoryService _categoryService;
         private readonly IMapper _mapper;
         private readonly IHubContext<SignalRHub> _hubContext;
-        public CategoriesController(ICategoryService categoryService, IMapper mapper, IHubContext<SignalRHub> hubContext)
+        private readonly IValidator<CreateCategoryDto> _createValidator;
+        private readonly IValidator<UpdateCategoryDto> _updateValidator;
+
+        public CategoriesController(
+            ICategoryService categoryService,
+            IMapper mapper,
+            IHubContext<SignalRHub> hubContext,
+            IValidator<CreateCategoryDto> createValidator,
+            IValidator<UpdateCategoryDto> updateValidator)
         {
             _categoryService = categoryService;
             _mapper = mapper;
             _hubContext = hubContext;
+            _createValidator = createValidator;
+            _updateValidator = updateValidator;
         }
 
         [HttpGet]
@@ -41,9 +52,17 @@ namespace SignalRApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCategory(CreateCategoryDto createCategoryDto)
         {
+            var validationResult = await _createValidator.ValidateAsync(createCategoryDto);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors
+                    .Select(e => new { Field = e.PropertyName, Message = e.ErrorMessage });
+                return BadRequest(errors);
+            }
+
             var category = _mapper.Map<Category>(createCategoryDto);
             category.Status = true;
-            await _categoryService.TAddAsync(category);   
+            await _categoryService.TAddAsync(category);
             return Ok("Kategori Eklendi");
         }
 
@@ -53,6 +72,7 @@ namespace SignalRApi.Controllers
             var itemToDelete = await _categoryService.TGetByIDAsync(id);
             if (itemToDelete == null)
                 return NotFound("Kategori bulunamadı");
+
             await _categoryService.TDeleteAsync(itemToDelete);
             return Ok("Kategori Silindi");
         }
@@ -62,17 +82,26 @@ namespace SignalRApi.Controllers
         {
             var category = await _categoryService.TGetByIDAsync(id);
             if (category == null)
-                return NotFound();
-            var dto = _mapper.Map<ResultCategoryDto>(category);
-            return Ok(dto);
+                return NotFound("Kategori bulunamadı");
+
+            return Ok(_mapper.Map<ResultCategoryDto>(category));
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCategory(int id, UpdateCategoryDto updateCategoryDto)
         {
+            var validationResult = await _updateValidator.ValidateAsync(updateCategoryDto);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors
+                    .Select(e => new { Field = e.PropertyName, Message = e.ErrorMessage });
+                return BadRequest(errors);
+            }
+
             var category = await _categoryService.TGetByIDAsync(id);
             if (category == null)
                 return NotFound("Kategori bulunamadı");
+
             _mapper.Map(updateCategoryDto, category);
             await _categoryService.TUpdateAsync(category);
             return Ok("Kategori güncellendi");

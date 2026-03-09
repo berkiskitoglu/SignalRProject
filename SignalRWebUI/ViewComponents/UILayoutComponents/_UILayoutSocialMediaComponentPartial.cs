@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SignalRWebUI.Services.Abstract;
 using SignalRWebUI.ViewModels;
+using SignalRWebUI.ViewModels.SocialMediaViewModels;
 
 namespace SignalRWebUI.ViewComponents.UILayoutComponents
 {
@@ -19,7 +20,7 @@ namespace SignalRWebUI.ViewComponents.UILayoutComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var socialMediaDto = await _socialMediaApiService.GetAllAsync();
-            var viewModels = _mapper.Map<List<SocialMediaViewModel>>(socialMediaDto);
+            var viewModels = _mapper.Map<List<ResultSocialMediaViewModel>>(socialMediaDto);
             return View(viewModels);
         }
     }
