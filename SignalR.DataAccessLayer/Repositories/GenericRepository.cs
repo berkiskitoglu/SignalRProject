@@ -33,12 +33,16 @@ namespace SignalR.DataAccessLayer.Repositories
 
         public async Task<T?> GetByIDAsync(int id)
         {
-            return await _context.Set<T>().FindAsync(id);
+            return await _context.Set<T>()
+                                 .AsNoTracking()
+                                 .FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
         }
 
         public async Task<List<T>> GetListAllAsync()
         {
-            return await _context.Set<T>().ToListAsync();
+            return await _context.Set<T>()
+                                 .AsNoTracking()
+                                 .ToListAsync();
         }
     }
 }
