@@ -2,7 +2,7 @@
 
 **Eğitmen:** Murat Yücedağ  
 
-Uzun süredir üzerinde çalıştığım bu kursu tamamlamış bulunuyorum. Bu projede, **Asp.Net Core 6.0** ile geliştirilmiş admin ve vitrin panelleri bulunan, **SignalR kütüphanesiyle gerçek zamanlı (real-time) işlevler** eklenmiş kapsamlı bir sipariş yönetimi uygulamasını inceledim ve uyguladım.  
+Uzun süredir üzerinde çalıştığım bu kursu tamamlamış bulunuyorum. Bu projede, **Asp.Net Core 8.0** ile geliştirilmiş admin ve vitrin panelleri bulunan, **SignalR kütüphanesiyle gerçek zamanlı (real-time) işlevler** eklenmiş kapsamlı bir sipariş yönetimi uygulamasını inceledim ve uyguladım.  
 
 > ⚠️ Kursa başlamadan önce Asp.Net Core ile çalışmış olmanız önerilir. Sadece C# bilenler için proje biraz zorlayıcı olabilir.
 
