@@ -41,7 +41,7 @@ Projeyi geliştirirken eğitmenimiz Murat Yücedağ’ın yönlendirmeleri doğr
 
 ## 🖼️ Proje Görselleri
 
-### Annasayfa
+### Anasayfa
 ![](https://github.com/berkiskitoglu/SignalRProject/blob/master/SignalRWebUI/wwwroot/signalr-image/Default.png)
 
 ### Yemek Listesi - Rapid Api
